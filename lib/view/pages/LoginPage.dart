@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
 import 'package:projeto_mobile_clinica/model/utils/bubble_indication_painter.dart';
 import 'package:flutter/services.dart';
+import 'package:projeto_mobile_clinica/view/widgets/LoginMedicoWidget.dart';
+import 'package:projeto_mobile_clinica/view/widgets/LoginPacienteWidget.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
+  
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final FocusNode myFocusNodeEmailLogin = FocusNode();
@@ -19,18 +22,16 @@ class _LoginPageState extends State<LoginPage>
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeName = FocusNode();
 
-  TextEditingController loginEmailController = new TextEditingController();
-  TextEditingController loginPasswordController = new TextEditingController();
+  TextEditingController _pacienteEmailField = new TextEditingController();
+  TextEditingController _pacientePasswordField = new TextEditingController();
 
-  bool _obscureTextLogin = true;
-  bool _obscureTextSignup = true;
-  bool _obscureTextSignupConfirm = true;
+  bool _obscureTextPaciente = true;
+  bool _obscureTextMedico = true;
+  bool _obscureTextMedicoConfirm = true;
 
-  TextEditingController signupEmailController = new TextEditingController();
-  TextEditingController signupNameController = new TextEditingController();
-  TextEditingController signupPasswordController = new TextEditingController();
-  TextEditingController signupConfirmPasswordController =
-      new TextEditingController();
+  TextEditingController _medicoEmailField = new TextEditingController();
+  TextEditingController _medicoCrmField = new TextEditingController();
+  TextEditingController _medicoPasswordField = new TextEditingController();
 
   PageController _pageController;
 
@@ -54,18 +55,19 @@ class _LoginPageState extends State<LoginPage>
                 begin: Alignment.topRight,
                 end: Alignment.bottomRight,
                 stops: [0.3, 1], //de acordo com o numero de cores!
-                colors: [blueLogin3, blueLogin1],
+                colors: [Color(0xFF6CD8F0), blueLogin1],
               ),
             ),
             child: Container(
+              //Container para centralizar
               alignment: Alignment.center,
               margin: const EdgeInsets.only(
-                  top: 10, left: 16.0, right: 16.0, bottom: 10.0),
+                  top: 30, left: 20, right: 20, bottom: 10.0),
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height >= 775.0
+                height: MediaQuery.of(context).size.height >= 520
                     ? MediaQuery.of(context).size.height
-                    : 775.0,
+                    : 520,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
@@ -73,7 +75,6 @@ class _LoginPageState extends State<LoginPage>
                       padding: EdgeInsets.only(top: 20.0),
                       child: _buildMenuBar(context),
                     ),
-                    
                     Expanded(
                       flex: 2,
                       child: PageView(
@@ -92,8 +93,10 @@ class _LoginPageState extends State<LoginPage>
                           }
                         },
                         children: <Widget>[
-                          _paciente(context),
-                          _paciente(context)
+                          LoginPacienteWidget.buildLoginPaciente(context,_pacienteEmailField,_pacientePasswordField,myFocusNodePassword,
+                          _obscureTextPaciente,_toggleLoginPaciente),
+                          LoginMedicoWidget.buildLoginMedico(context,_medicoEmailField,_medicoCrmField,_medicoPasswordField,myFocusNodePassword,
+                          _obscureTextMedico,_toggleLoginMedico)
                         ],
                       ),
                     ),
@@ -107,159 +110,7 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
-  Widget _paciente(BuildContext context) {//Login Paciente
-   
-    return SingleChildScrollView(
-      child: Stack(
-        children: <Widget>[
-          Container(//Quadrado branco
-
-            margin: const EdgeInsets.only(top: 30),
-            padding: const EdgeInsets.only(top: 80.0, left: 16.0, right: 16.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.0),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: <Widget>[
-                Container(height: 100,),
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.person_pin),
-                    const SizedBox(width: 10.0),
-                    Expanded(
-                      child: TextField(
-                        decoration:
-                            InputDecoration(hintText: "Email ou telefone"),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.lock),
-                    const SizedBox(width: 10.0),
-                    Expanded(
-                      child: TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            hintText: "Senha",
-                            suffixIcon: GestureDetector(
-                              child: Icon(Icons.remove_red_eye),
-                              onTap: () {},
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30.0),
-                Container(
-                  height: 60,
-                  alignment: Alignment.topCenter,
-
-                  // margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                  // width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.centerRight,
-                      stops: [0.3, 1], //de acordo com o numero de cores!
-                      colors: [blueLogin3, blueLogin1],
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(360)),
-                  ),
-                  child: SizedBox.expand(
-                    child: FlatButton(
-                      textColor: Colors.white,
-                      child: Text("Login".toUpperCase()),
-                      onPressed: () =>
-                          Navigator.pushReplacementNamed(context, '/'), //Mudar
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20.0),
-                GestureDetector(
-                  child: Text(
-                    "Esqueceu a senha?".toUpperCase(),
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, 'recover');
-                  },
-                ),
-                const SizedBox(height: 20.0),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Divider(
-                        color: blueLogin3,
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    Text(
-                      "Ainda não possui cadastro?",
-                      style: TextStyle(fontSize: 12.0),
-                    ),
-                    const SizedBox(width: 10.0),
-                    Expanded(
-                        child: Divider(
-                      color: blueLogin1,
-                    )),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                GestureDetector(
-                  //so pr pegar o metodo tap
-                  child: Text(
-                    "Crie sua conta".toUpperCase(),
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, 'register');
-                  },
-                ),
-                const SizedBox(height: 20.0),
-              ],
-            ),
-          ),
-            Container(
-                  //Logo
-                  //trocar pela logo!
-                  margin: const EdgeInsets.only(top: 70, left: 117 ),
-                  alignment: Alignment.center,
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: blueLogin3,
-                    // gradient: LinearGradient(
-                    //   begin: Alignment.topLeft,
-                    //   end: Alignment.centerRight,
-                    //   stops: [0.3, 1], //de acordo com o numero de cores!
-                    //   colors: [blueLogin3, blueLogin1],
-                    // ),
-                    borderRadius: BorderRadius.all(Radius.circular(360)),
-                  ),
-                  child: SizedBox(
-                    
-                    height: 80,
-                    width: 80,
-                    child: FlutterLogo(),
-                    //     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Star_of_life.svg/1200px-Star_of_life.svg.png'),
-                  ),
-                  // child: Image.asset(
-                  //   logo,
-                  //   fit: BoxFit.contain,
-                ),
-        ],
-      ),
-    );
-  }
-
+  
   Widget _buildMenuBar(BuildContext context) {
     return Container(
       width: 300.0,
@@ -289,6 +140,7 @@ class _LoginPageState extends State<LoginPage>
               ),
             ),
             //Container(height: 33.0, width: 1.0, color: Colors.white),
+            
             Expanded(
               child: FlatButton(
                 splashColor: Colors.transparent,
@@ -328,6 +180,8 @@ class _LoginPageState extends State<LoginPage>
     _pageController = PageController();
   }
 
+  void _loginMedicoPressed() {}
+
   void _onSignInButtonPress() {
     _pageController.animateToPage(0,
         duration: Duration(milliseconds: 500), curve: Curves.decelerate);
@@ -338,21 +192,21 @@ class _LoginPageState extends State<LoginPage>
         duration: Duration(milliseconds: 500), curve: Curves.decelerate);
   }
 
-  void _toggleLogin() {
+  void _toggleLoginPaciente() {
     setState(() {
-      _obscureTextLogin = !_obscureTextLogin;
+      _obscureTextPaciente = !_obscureTextPaciente;
     });
   }
 
-  void _toggleSignup() {
+  void _toggleLoginMedico() {
     setState(() {
-      _obscureTextSignup = !_obscureTextSignup;
+      _obscureTextMedico = !_obscureTextMedico;
     });
   }
 
   void _toggleSignupConfirm() {
     setState(() {
-      _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
+      _obscureTextMedicoConfirm = !_obscureTextMedicoConfirm;
     });
   }
 }

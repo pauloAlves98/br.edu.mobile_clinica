@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'model/Cores.dart';
 import 'view/pages/LoginPage.dart';
+import 'view/pages/MedicoCadastroPage.dart';
+import 'view/pages/PacienteCadastroPage.dart';
 
 void main() => runApp(MyApp());
 //Falta colocar e nome da clinica e substituir a logo na tela de login!
@@ -15,6 +17,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primaryColor: blueLogin3, accentColor: accent),
       routes: {
         "/": (_) => LoginPage(),
+        "/pacienteCadastroPage": (_) => PacienteCadastroPage(),
+        "/medicoCadastroPage": (_) => MedicoCadastroPage(),
       },
     );
   }
