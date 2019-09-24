@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_mobile_clinica/view/pages/AgendarConsulta.dart';
+import 'package:projeto_mobile_clinica/view/pages/PacienteHomePage.dart';
 import 'model/Cores.dart';
 import 'view/pages/LoginPage.dart';
 import 'view/pages/MedicoCadastroPage.dart';
 import 'view/pages/PacienteCadastroPage.dart';
-
-void main() => runApp(MyApp());
+import 'package:intl/date_symbol_data_local.dart';
+void main() {
+   initializeDateFormatting().then((_) => runApp(MyApp()));}
 //Falta colocar e nome da clinica e substituir a logo na tela de login!
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -19,6 +22,8 @@ class MyApp extends StatelessWidget {
         "/": (_) => LoginPage(),
         "/pacienteCadastroPage": (_) => PacienteCadastroPage(),
         "/medicoCadastroPage": (_) => MedicoCadastroPage(),
+        "/pacienteHomePage": (_) => PacienteHomePage(),
+        "/agendarConsulta": (_) => AgendarConsultaPage(),
       },
     );
   }
