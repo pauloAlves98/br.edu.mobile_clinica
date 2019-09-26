@@ -17,6 +17,20 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
     _calendarController = new CalendarController(
       
     );
+    _containers.add(
+        Stack(
+          children: [
+          Positioned(
+            //alignment: Alignment(-0.9, -0.9),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                icon: Icon(Icons.person),
+                hintText: 'What do people call you?',
+                labelText: 'Name *',
+              ),
+          )  
+        )]
+    ));
     _containers.add(Container(
       
      
@@ -104,8 +118,22 @@ Text("Ana Paula",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold ),),
 
               },
               child: Text("Agendar consulta"),) )
-          ],)
-         
+          ],),
+          Row(children: <Widget>[
+          Expanded(child: Container(
+            height: 5,
+            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomRight,
+                stops: [0.3, 1], //de acordo com o numero de cores!
+                colors: [Color(0xFF6CD8F0), blueLogin1],
+              ),
+                      //         borderRadius: BorderRadius.all(Radius.circular(100))
+                            ),
+                )),
+          ]),  
+          Padding(padding: EdgeInsets.only(top: 5),)
         ],
       ),
     ));
@@ -122,7 +150,7 @@ Text("Ana Paula",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold ),),
                   width: 100,
                   height: 100,
                   child: CircleAvatar(
-                    radius: 80,
+                    radius: 35,
                   ),
                 ),
               ),
@@ -196,8 +224,9 @@ Text("Ana Paula",style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold ),),
 
               },
               child: Text("Agendar consulta"),) )
-          ],)
-         
+          ],),
+        
+
         ],
       ),
     ));

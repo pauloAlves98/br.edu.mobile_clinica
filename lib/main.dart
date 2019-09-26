@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/view/pages/AgendarConsulta.dart';
 import 'package:projeto_mobile_clinica/view/pages/PacienteHomePage.dart';
+import 'package:projeto_mobile_clinica/view/pages/PerfilPage.dart';
 import 'model/Cores.dart';
 import 'view/pages/LoginPage.dart';
 import 'view/pages/MedicoCadastroPage.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         "/medicoCadastroPage": (_) => MedicoCadastroPage(),
         "/pacienteHomePage": (_) => PacienteHomePage(),
         "/agendarConsulta": (_) => AgendarConsultaPage(),
-      },
+        "/perfilPage": (_) => PerfilPage()     },
     );
   }
 }

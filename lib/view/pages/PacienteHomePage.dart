@@ -21,7 +21,7 @@ class _PacienteHomePageState extends State<PacienteHomePage> {
             builder: (BuildContext context) {
               return GestureDetector(
                   onTap: () {
-                          
+                        Navigator.pushReplacementNamed(context, '/perfilPage');    
                   },
                   child:Padding(
                     padding: EdgeInsets.all(5),
