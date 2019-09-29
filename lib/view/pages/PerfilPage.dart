@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
 import "dart:io";
+
 class PerfilPage extends StatefulWidget {
   @override
   _PerfilPageState createState() => _PerfilPageState();
@@ -694,7 +695,7 @@ Padding(
             ),
             
             opcoes[op],  
-          ])), 
+          ],),), 
       // CustomScrollView(
       //   slivers: <Widget>[
       //     SliverAppBar(
@@ -748,7 +749,7 @@ Padding(
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.lock,color: Colors.white,size: 30,),
-                        title: Text('')
+                        title: Text(''),
           ),
         ],
         currentIndex: op,
@@ -761,8 +762,7 @@ Padding(
           setState(() {
              op=i;
              title=temp;
-          });
-         
+          }); 
         },
       ));
     

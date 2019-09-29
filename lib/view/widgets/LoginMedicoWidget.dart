@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
 
 class LoginMedicoWidget {
   
@@ -110,7 +111,7 @@ class LoginMedicoWidget {
                       textColor: Colors.white,
                       child: Text("Login".toUpperCase()),
                       onPressed: () =>
-                          Navigator.pushReplacementNamed(context, '/'), //Mudar
+                          Navigator.pushReplacementNamed(context, '/medicoHomePage'), //Mudar
                     ),
                   ),
                 ),
@@ -185,7 +186,7 @@ class LoginMedicoWidget {
               child: SizedBox(
                 height: 80,
                 width: 80,
-                child: FlutterLogo(),
+                child: FlutterLogo(colors: MaterialColor(0xFF880E4F, LoginPage.color)),
                 //     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Star_of_life.svg/1200px-Star_of_life.svg.png'),
               ),
               // child: Image.asset(

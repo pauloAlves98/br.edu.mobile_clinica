@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
 
 class LoginPacienteWidget {
  
@@ -163,7 +164,7 @@ class LoginPacienteWidget {
               child: SizedBox(
                 height: 80,
                 width: 80,
-                child: FlutterLogo(),
+                child: FlutterLogo(colors: MaterialColor(0xFF880E4F, LoginPage.color)),
               ),
             ),
           ),

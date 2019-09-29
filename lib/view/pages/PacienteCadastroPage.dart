@@ -56,17 +56,16 @@ class _PacienteCadastroPageState extends State<PacienteCadastroPage> {
                   setState(() {
                     print("A exceção 1");
                     currentIndex = index;
-                    _modificaAltura(currentIndex);
+                    //_modificaAltura(currentIndex);
                      print("A exceção 2");
                   });
-
                 },
                 itemBuilder: (context, index) {
                   print("Contexto sizes:" +
                       MediaQuery.of(context).size.height.toString());
                   print("Contexto sizes:" + index.toString());
 
-                  // _modificaAltura(index);
+                 // _modificaAltura(currentIndex);
                   Widget pagina = _buildPage(context, index);
 
                   //         _altura = MediaQuery.of(context).size.height -
@@ -163,7 +162,7 @@ class _PacienteCadastroPageState extends State<PacienteCadastroPage> {
       _altura = 662 - 662 * 0.10;
     } else if (index == 1) {
       print("No 1");
-      _altura = 662 - 662 * 0.20+15;
+      _altura = 662 - 662 * 0.20 + 15;
     } else if (index == 2) {
       _altura = 662 - 662 * 0.10 + 90; //90 pegado do overflow
     } else if (index == 3) {

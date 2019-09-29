@@ -11,7 +11,7 @@ class MedicoCadastroPage extends StatefulWidget {
 class _MedicoCadastroPageState extends State<MedicoCadastroPage> {
   int currentIndex;
   double _altura = 0;
-  List<String> introItems = [" P1", "P2", "P3", "P4"]; //4 paginas!
+  List<String> introItems = [" P1", "P2", "P3", "P4","P5"]; //4 paginas!
   final SwiperController _controller = SwiperController();
 
   @override
@@ -164,15 +164,17 @@ class _MedicoCadastroPageState extends State<MedicoCadastroPage> {
     } else if (index == 1) {
       print("No 1");
       _altura = 662 - 662 * 0.20+15;
-    } else if (index == 2) {
-      _altura = 662 - 662 * 0.10 + 90; //90 pegado do overflow
     } else if (index == 3) {
+      _altura = 662 - 662 * 0.10 + 90; //90 pegado do overflow
+    } else if (index == 4) {
       _altura = 662 - 662 * 0.20 + 19.5;
+    }else if (index == 2) {
+      _altura = 662 - 662 * 0.20;
     }
     print(" ltura aggr:" + _altura.toString());
   }
 
   Widget _buildPage(BuildContext context, int index) {//index é o nº da pagina atual
-    return CadastroMedicoWidget.builderCadastroPaciente(context, index);
+    return CadastroMedicoWidget.builderCadastroMedico(context, index);
   }
 }

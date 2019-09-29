@@ -1,13 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
 
 
 
 class CadastroMedicoWidget {
   
   static List<DropdownMenuItem<String>> _ufs = [
+    new DropdownMenuItem(value: "AC", child: new Text("AC")),
+    new DropdownMenuItem(value: "AL", child: new Text("AL")),
+    new DropdownMenuItem(value: "AP", child: new Text("AP")),
+    new DropdownMenuItem(value: "AM", child: new Text("AM")),
+    new DropdownMenuItem(value: "BA", child: new Text("BA")),
+    new DropdownMenuItem(value: "CE", child: new Text("CE")),
+    new DropdownMenuItem(value: "DF", child: new Text("DF")),
+    new DropdownMenuItem(value: "ES", child: new Text("ES")),
+    new DropdownMenuItem(value: "GO", child: new Text("GO")),
+    new DropdownMenuItem(value: "MA", child: new Text("MA")),
+    new DropdownMenuItem(value: "MT", child: new Text("MT")),
+    new DropdownMenuItem(value: "MS", child: new Text("MS")),
+    new DropdownMenuItem(value: "PE", child: new Text("MS")),
+    new DropdownMenuItem(value: "MG", child: new Text("MG")),
+    new DropdownMenuItem(value: "PA", child: new Text("PA")),
+    new DropdownMenuItem(value: "PB", child: new Text("PB")),
+    new DropdownMenuItem(value: "PR", child: new Text("PR")),
     new DropdownMenuItem(value: "PE", child: new Text("PE")),
-    new DropdownMenuItem(value: "PB", child: new Text("PB"))
+    new DropdownMenuItem(value: "PI", child: new Text("PI")),
+    new DropdownMenuItem(value: "PE", child: new Text("PE")),
+    new DropdownMenuItem(value: "RJ", child: new Text("RJ")),
+    new DropdownMenuItem(value: "RN", child: new Text("RN")),
+    new DropdownMenuItem(value: "RS", child: new Text("RS")),
+    new DropdownMenuItem(value: "RO", child: new Text("RO")),
+    new DropdownMenuItem(value: "RR", child: new Text("RR")),
+    new DropdownMenuItem(value: "SC", child: new Text("SC")),
+    new DropdownMenuItem(value: "SP", child: new Text("SP")),
+    new DropdownMenuItem(value: "SE", child: new Text("SE")),
+    new DropdownMenuItem(value: "TO", child: new Text("TO")),
   ];
   static String _currentUf = _ufs[0].value;
  
@@ -66,11 +94,11 @@ class CadastroMedicoWidget {
             ),
             child: DropdownButton(
               underline:
-                  Container(), //Criar um metodo iniciareventos q receb um evento e criar
+                  Container(), //Criar um metodo iniciar eventos q receb um evento e criar
               value: _currentUf,
               items: _ufs,
               onChanged: (String value) {
-                print("AA");
+                print("$value");
               },
             ),
           ),
@@ -92,10 +120,45 @@ class CadastroMedicoWidget {
    SizedBox(height: 10.0),
   _builderField("Email",false, iconLeft: Icon(Icons.email, color: Colors.white, size: 40), tip: TextInputType.emailAddress),
   SizedBox(height: 10.0),//Colocar um bootao para finalizar o cadastroo!
+   
+   Container(
+                  height: 50,
+                  width: 100,
+                  alignment: Alignment.topCenter,
+
+                  // margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  // width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.centerRight,
+                      stops: [0.3, 1], //de acordo com o numero de cores!
+                      colors: [Colors.white,Colors.white],
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(360)),
+                  ),
+                  child: SizedBox.expand(
+                    child: FlatButton(
+                      textColor: Colors.white,
+                      child: Text("Finalizar".toUpperCase(),style: TextStyle(color: Colors.blueGrey[600],fontSize: 12)),
+                      // onPressed: () =>
+                      //    // Navigator.pushReplacementNamed(context, '/medicoHomePage'), //Mudar
+                    ),
+                  ),
+                ),
   ];
 
+  static List<Widget> builderFieldListP5 = [//Pessoais
+  _builderField("CRM", false, iconLeft: Icon(Icons.sim_card, color: Colors.white, size: 40), tip: TextInputType.number),
+  SizedBox(height: 10.0),
+  _builderField("Area de atuação",false, iconLeft: Icon(Icons.work, color: Colors.white, size: 40), tip: TextInputType.text),
+   SizedBox(height: 10.0),
+  _builderField("Especialidade",false, iconLeft: Icon(Icons.local_hospital, color: Colors.white, size: 40), tip: TextInputType.text),
+  
+  ];
    
-  static Widget builderCadastroPaciente(BuildContext context, int parte) {
+  static Widget builderCadastroMedico(BuildContext context, int parte) {
+    print("Parte "+parte.toString());
     return buiderRetorno(parte,context);
   }
 
@@ -106,11 +169,16 @@ class CadastroMedicoWidget {
     }else if(parte == 1){
       return  builderCadastroMedicoBuilder(
             context, "Pessoal", builderFieldListP2);
-    }else if(parte == 2){
+    }
+     else if(parte == 2){
+      return  builderCadastroMedicoBuilder(
+            context, "Profissional", builderFieldListP5);
+    }
+    else if(parte == 3){
       return  builderCadastroMedicoBuilder(
             context, "Endereço", builderFieldListP3);
     }
-    else if(parte == 3){
+    else if(parte == 4){
       return  builderCadastroMedicoBuilder(
             context, "Contato", builderFieldListP4);
     }
@@ -150,7 +218,7 @@ Widget builderCadastroMedicoBuilder(
               child: SizedBox(
                 height: 80,
                 width: 80,
-                child: FlutterLogo(),
+                child:FlutterLogo(colors: MaterialColor(0xFF880E4F, LoginPage.color)),
               ),
             ),
           ),

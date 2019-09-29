@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
 
 
 
@@ -92,6 +93,31 @@ class CadastroPacienteWidget {
    SizedBox(height: 10.0),
   _builderField("Email",false, iconLeft: Icon(Icons.email, color: Colors.white, size: 40), tip: TextInputType.emailAddress),
   SizedBox(height: 10.0),//Colocar um bootao para finalizar o cadastroo!
+  Container(
+                  height: 50,
+                  width: 100,
+                  alignment: Alignment.topCenter,
+
+                  // margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  // width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.centerRight,
+                      stops: [0.3, 1], //de acordo com o numero de cores!
+                      colors: [Colors.white,Colors.white],
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(360)),
+                  ),
+                  child: SizedBox.expand(
+                    child: FlatButton(
+                      textColor: Colors.white,
+                      child: Text("Finalizar".toUpperCase(),style: TextStyle(color: Colors.blueGrey[600],fontSize: 12)),
+                      // onPressed: () =>
+                      //    // Navigator.pushReplacementNamed(context, '/medicoHomePage'), //Mudar
+                    ),
+                  ),
+                ),
   ];
 
    
@@ -150,7 +176,7 @@ Widget builderCadastroPacienteBuilder(
               child: SizedBox(
                 height: 80,
                 width: 80,
-                child: FlutterLogo(),
+                child: FlutterLogo(colors: MaterialColor(0xFF880E4F, LoginPage.color)),
               ),
             ),
           ),

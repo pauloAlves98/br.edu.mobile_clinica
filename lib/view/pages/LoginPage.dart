@@ -6,13 +6,25 @@ import 'package:projeto_mobile_clinica/view/widgets/LoginMedicoWidget.dart';
 import 'package:projeto_mobile_clinica/view/widgets/LoginPacienteWidget.dart';
 
 class LoginPage extends StatefulWidget {
+  static  Map<int, Color> color = {
+    50: Colors.white,
+    100: Colors.white,
+    200:Colors.white,
+    300: Colors.white,
+    400:Colors.white,
+    500: Colors.white,
+    600: Colors.white,
+    700: Colors.white,
+    800: Colors.white,
+    900: Colors.white,
+  };
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
-  
+ 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final FocusNode myFocusNodeEmailLogin = FocusNode();
@@ -41,6 +53,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       // backgroundColor: blueLogin,
       key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(

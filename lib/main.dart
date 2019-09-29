@@ -4,7 +4,11 @@ import 'package:projeto_mobile_clinica/view/pages/PacienteHomePage.dart';
 import 'package:projeto_mobile_clinica/view/pages/PerfilPage.dart';
 import 'model/Cores.dart';
 import 'view/pages/LoginPage.dart';
-import 'view/pages/MedicoCadastroPage.dart';
+import 'view/pages/MedicoPage/ConsultaMedicoPage.dart';
+import 'view/pages/MedicoPage/GerenciaConsultaMedicoPage.dart';
+import 'view/pages/MedicoPage/GerenciaLaudoMedicoPage.dart';
+import 'view/pages/MedicoPage/MedicoCadastroPage.dart';
+import 'view/pages/MedicoPage/MedicoHomePage.dart';
 import 'view/pages/PacienteCadastroPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 void main() {
@@ -25,7 +29,13 @@ class MyApp extends StatelessWidget {
         "/medicoCadastroPage": (_) => MedicoCadastroPage(),
         "/pacienteHomePage": (_) => PacienteHomePage(),
         "/agendarConsulta": (_) => AgendarConsultaPage(),
-        "/perfilPage": (_) => PerfilPage()     },
+        "/medicoHomePage": (_) => MedicoHomePage(),
+        "/gerenciaLaudoMedicoPage": (_) => GerenciaLaudoMedicoPage(),
+         "/gerenciaConsultaMedicoPage": (_) => GerenciaConsultaMedicoPage(),
+        "/consultaMedicoPage": (_) => ConsultaMedicoPage(),
+        "/perfilPage": (_) => PerfilPage()     
+        },
     );
   }
 }
+
