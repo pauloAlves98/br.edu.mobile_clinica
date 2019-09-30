@@ -17,6 +17,7 @@ class _PacienteHomePageState extends State<PacienteHomePage> {
       length: 3,
       child:Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blue,
           leading:Builder(
             builder: (BuildContext context) {
               return GestureDetector(
@@ -38,6 +39,7 @@ class _PacienteHomePageState extends State<PacienteHomePage> {
               );
             }),
           bottom: TabBar(
+            
             tabs: <Widget>[
               Row(
                 children: <Widget>[
@@ -57,20 +59,16 @@ class _PacienteHomePageState extends State<PacienteHomePage> {
             ],
           ),
         ),
-        body: TabBarView(
+        body: 
+        TabBarView(
+          
           children: <Widget>[
             ConsultaPage(),
             ChatPage(),
             LaudosPage(),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-             Navigator.pushReplacementNamed(context, '/agendarConsulta');
-           },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.green,
-        ),
+        
       )
     );
   }

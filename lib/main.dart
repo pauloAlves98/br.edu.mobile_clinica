@@ -11,6 +11,9 @@ import 'view/pages/MedicoPage/MedicoCadastroPage.dart';
 import 'view/pages/MedicoPage/MedicoHomePage.dart';
 import 'view/pages/PacienteCadastroPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:projeto_mobile_clinica/view/pages/ConversaPrivadaPage.dart';
+import 'package:projeto_mobile_clinica/view/pages/VizualisarEditarConsultaPage.dart';
+
 void main() {
    initializeDateFormatting().then((_) => runApp(MyApp()));}
 //Falta colocar e nome da clinica e substituir a logo na tela de login!
@@ -33,7 +36,9 @@ class MyApp extends StatelessWidget {
         "/gerenciaLaudoMedicoPage": (_) => GerenciaLaudoMedicoPage(),
          "/gerenciaConsultaMedicoPage": (_) => GerenciaConsultaMedicoPage(),
         "/consultaMedicoPage": (_) => ConsultaMedicoPage(),
-        "/perfilPage": (_) => PerfilPage()     
+        "/perfilPage": (_) => PerfilPage(),    
+        "/conversaPrivada": (_) => ConversaPrivadaPage(),
+        "/vizualisarEditarConsulta":(_)=>VizualisarEditarConsultaPage(),
         },
     );
   }
