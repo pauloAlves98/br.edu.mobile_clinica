@@ -9,6 +9,7 @@ import 'view/pages/MedicoPage/GerenciaConsultaMedicoPage.dart';
 import 'view/pages/MedicoPage/GerenciaLaudoMedicoPage.dart';
 import 'view/pages/MedicoPage/MedicoCadastroPage.dart';
 import 'view/pages/MedicoPage/MedicoHomePage.dart';
+import 'view/pages/MedicoPage/MedicoPerfilPage.dart';
 import 'view/pages/PacienteCadastroPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:projeto_mobile_clinica/view/pages/ConversaPrivadaPage.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         "/perfilPage": (_) => PerfilPage(),    
         "/conversaPrivada": (_) => ConversaPrivadaPage(),
         "/vizualisarEditarConsulta":(_)=>VizualisarEditarConsultaPage(),
+         "/medicoPerfilPage":(_) => MedicoPerfilPage(),
         },
     );
   }

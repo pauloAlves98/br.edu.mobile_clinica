@@ -19,7 +19,7 @@ class _GerenciaLaudoMedicoPageState extends State<GerenciaLaudoMedicoPage> {
         backgroundColor: Colors.greenAccent,
         child: Icon(Icons.save_alt, color: Colors.white),
         onPressed: (){
-          Navigator.pushReplacementNamed(context, '/medicoHomePage'); //Mudar
+          Navigator.pop(context);//Mudar
         },
       ),
       bottomNavigationBar: BottomAppBar(

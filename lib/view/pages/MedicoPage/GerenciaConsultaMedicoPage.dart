@@ -15,13 +15,14 @@ class _GerenciaConsultaMedicoPageState
   //String texto
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.greenAccent,
         child: Icon(Icons.save_alt, color: Colors.white),
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/medicoHomePage'); //Mudar
+          Navigator.pop(context,); //Mudar
         },
       ),
       bottomNavigationBar: BottomAppBar(

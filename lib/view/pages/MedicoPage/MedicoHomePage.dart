@@ -96,7 +96,7 @@ class _MedicoHomePageState extends State<MedicoHomePage> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/perfilPage');
+              Navigator.pushNamed(context, '/medicoPerfilPage');
             },
             child: Padding(
               padding: EdgeInsets.all(1),

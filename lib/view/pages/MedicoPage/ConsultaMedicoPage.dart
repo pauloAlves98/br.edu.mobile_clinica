@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
 class ConsultaMedicoPage extends StatefulWidget {
   @override
@@ -7,6 +8,7 @@ class ConsultaMedicoPage extends StatefulWidget {
 }
 
 class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
+  DateTime selectedDate = DateTime.now();
   List<String> _laudos = ["1", "2", "3", "4", "4", "4", "4"];
   int _paginaBotton = 0;
   @override
@@ -53,6 +55,12 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
+                      //Data Inicial
+                      onPressed: () {
+                        setState(() {
+                          selectDate(context, selectedDate);
+                        });
+                      },
                       icon: Icon(
                         Icons.date_range,
                         color: Colors.white,
@@ -86,8 +94,14 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
+                      onPressed:() {
+                        setState(() {
+                          selectDate(context, selectedDate);
+                        });
+                      },
                       //data 2
                       icon: Icon(
+                        //data final
                         Icons.date_range,
                         color: Colors.white,
                       ),
@@ -214,45 +228,59 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-              Container(
+            Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(10),bottomLeft: Radius.circular(10)),
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10)),
                 color: Colors.blueGrey,
               ),
               height: 20,
               child: Row(
                 children: <Widget>[
-                  Expanded(flex:2, child: Text("Consulta",
-                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
+                  Expanded(
+                      flex: 2,
+                      child: Text(
+                        "Consulta",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12),
+                        textAlign: TextAlign.center,
+                      )),
                 ],
               ),
-
             ),
             ListTile(
               leading: Icon(Icons.person_add, size: 40, color: Colors.white),
               title: Text('Paciente', style: TextStyle(color: Colors.white)),
-              subtitle: 
-                  Text("Kakashi hatake $idd",
-                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
-                
-                 
+              subtitle: Text(
+                "Kakashi hatake $idd",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+                textAlign: TextAlign.left,
+              ),
               trailing: Text("ID: $idd", style: TextStyle(color: Colors.white)),
             ),
-            
+
             //Divider(),
-             ListTile(
+            ListTile(
               leading: Icon(Icons.date_range, size: 40, color: Colors.white),
               title: Text('28/09/2019', style: TextStyle(color: Colors.white)),
-              subtitle: 
-                  Text("19:00 h",
-                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
-                
-                 
+              subtitle: Text(
+                "19:00 h",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+                textAlign: TextAlign.left,
+              ),
               trailing: Text("Agendada", style: TextStyle(color: Colors.white)),
             ),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(90),bottomLeft: Radius.circular(0), bottomRight: Radius.circular(10)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(90),
+                    bottomLeft: Radius.circular(0),
+                    bottomRight: Radius.circular(10)),
                 color: Colors.blueGrey,
               ),
               height: 50,
@@ -260,10 +288,10 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                 children: <Widget>[
                   // Expanded(flex:2, child: Text("Data: 28/09/2019",
                   // style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
-                  
-                   Expanded(
-                     flex: 2,
-                     child: FlatButton(
+
+                  Expanded(
+                    flex: 2,
+                    child: FlatButton(
                       child: Row(
                         children: <Widget>[
                           Text(
@@ -273,15 +301,14 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                           )
                         ],
                       ),
-                      onPressed: () { Navigator.pushNamed(context, "/gerenciaConsultaMedicoPage");},
-                    ), 
-                   ),
-                   
-                  
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, "/gerenciaConsultaMedicoPage");
+                      },
+                    ),
+                  ),
                 ],
               ),
-        
-             
             )
           ],
         ),

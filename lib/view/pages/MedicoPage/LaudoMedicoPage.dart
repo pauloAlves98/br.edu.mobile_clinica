@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
 class LaudoMedicoPage extends StatefulWidget {
   @override
@@ -56,6 +57,11 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
+                        onPressed: () {
+                        setState(() {
+                          selectDate(context, DateTime.now());
+                        });
+                      },
                       icon: Icon(
                         Icons.date_range,
                         color: Colors.white,
@@ -89,6 +95,11 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
+                       onPressed: () {
+                        setState(() {
+                          selectDate(context, DateTime.now());
+                        });
+                      },
                       //data 2
                       icon: Icon(
                         Icons.date_range,

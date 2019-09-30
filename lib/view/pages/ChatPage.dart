@@ -87,8 +87,9 @@ class _ChatPageState extends State<ChatPage> {
               top:100,
               child: Container(
                  width: MediaQuery.of(context).size.width,
-        height:MediaQuery.of(context).size.height-160 ,
-        child:ListView.builder(
+        height:MediaQuery.of(context).size.height-160,
+        child: ListView.builder(
+          
           itemCount: conversasTasks.length,
           itemBuilder: (context,position){
             return listConversas(conversasTasks[position].nome, conversasTasks[position].tempo,conversasTasks[position].status, conversasTasks[position].tema);
@@ -116,28 +117,28 @@ class _ChatPageState extends State<ChatPage> {
         ),
 
 
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/agendarConsulta');
-            },
-            child: Icon(Icons.add),
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
-        shape: CircularNotchedRectangle(),
-        child: Row(
-          children: <Widget>[
+      //   floatingActionButton: FloatingActionButton(
+      //       onPressed: () {
+      //         Navigator.pushReplacementNamed(context, '/agendarConsulta');
+      //       },
+      //       child: Icon(Icons.add),
+      //       backgroundColor: Colors.blue,
+      //       foregroundColor: Colors.white,
+      //     ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // bottomNavigationBar: BottomAppBar(
+      //   color: Colors.blue,
+      //   shape: CircularNotchedRectangle(),
+      //   child: Row(
+      //     children: <Widget>[
             
-              Container(
-                height: 50,
-              ),
+      //         Container(
+      //           height: 50,
+      //         ),
             
-          ],
-        ),
-      ),
+      //     ],
+      //   ),
+      // ),
     );
   }
   Widget listConversas(String nome,String tempo,String status,Color tema){
@@ -151,7 +152,7 @@ class _ChatPageState extends State<ChatPage> {
           shadowColor: Color(0x802196F3),
           child:GestureDetector(
             onTap: (){
-                Navigator.pushReplacementNamed(context, '/conversaPrivada');
+                Navigator.pushNamed(context, '/conversaPrivada');
             },
             child: Container(
             child: Row(
