@@ -111,7 +111,7 @@ class LoginMedicoWidget {
                       textColor: Colors.white,
                       child: Text("Login".toUpperCase()),
                       onPressed: () =>
-                          Navigator.pushReplacementNamed(context, '/medicoHomePage'), //Mudar
+                          Navigator.pushNamed(context, '/medicoHomePage'), //Mudar
                     ),
                   ),
                 ),

@@ -24,8 +24,10 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          
           Positioned(
             top: 0,
+            
             child: Container(
               color: Colors.blue,
               width: MediaQuery.of(context).size.width,
@@ -35,9 +37,9 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
               Row(
                 children: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.arrow_back),
+                      icon: Icon(Icons.arrow_back,color: Colors.white,),
                       onPressed: (){
-                        //Navigator.popAndPushNamed(context, routeName);
+                        Navigator.pop(context);
                       },
                       
                     ),
@@ -53,13 +55,13 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            child: Text("Felipe Antonio",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+                            child: Text("Felipe Antonio",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:Colors.white)),
                           ),
                         ),
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: Container(
-                            child: Text("Online",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black87)),
+                            child: Text("Online",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white)),
                           ),
                         ),
                         
@@ -135,7 +137,7 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
                       child: Row(
                         children: <Widget>[
                           SizedBox(width: 8.0),
-                          Icon(Icons.insert_emoticon,
+                          Icon(Icons.keyboard,
                               size: 30.0, color: Theme.of(context).hintColor),
                           SizedBox(width: 8.0),
                           Expanded(

@@ -165,28 +165,16 @@ class _ConsultaPageState extends State<ConsultaPage> {
       
 
       Positioned(
-      top: 100,
+      top: 90,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height:MediaQuery.of(context).size.height-160 ,
+        height:MediaQuery.of(context).size.height/2.55 ,
         child:ListView.builder(
           itemCount: tasks.length,
           itemBuilder: (context,position){
-            return Dismissible(
-              key: Key(tasks[position].toString()),
-              background: _background(tasks[position].tema),
-              child: _listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
-              onDismissed: (direction){
-                if(direction==DismissDirection.startToEnd){
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("delete"),));
-                    if(direction==DismissDirection.endToStart){
-                        setState(() {
-                          tasks.remove(tasks.removeAt(position));
-                        });
-                    }
-                }
-              },
-            );
+              return _builderCardLaudos(tasks[position].medico,position,tasks[position].area);//_listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
+              
+            
           },
 
         )
@@ -195,7 +183,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
     ),
     floatingActionButton: FloatingActionButton(
           onPressed: () {
-             Navigator.pushReplacementNamed(context, '/agendarConsulta');
+             Navigator.pushNamed(context, '/agendarConsulta');
            },
           child: Icon(Icons.add),
           backgroundColor: Colors.blue,
@@ -265,11 +253,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
           child: Container(
             child: Row(
               children: <Widget>[
-                Container(
-                  width: 10,
-                  height: 80,
-                  color: tema,
-                ),
+                
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.all(8),
@@ -309,7 +293,101 @@ class _ConsultaPageState extends State<ConsultaPage> {
       ),
     ));
   }
+   Widget _builderCardLaudos(String medico,int index,String area) {
+    String idd = index.toString();
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        color: Colors.white,
+        elevation: 10,
+        child:Row(children: <Widget>[
+          
+          Expanded(
+         
+          child:Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+              Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(10),bottomLeft: Radius.circular(10)),
+                color: Colors.blueGrey,
+              ),
+              height: 20,
+              child: Row(
+                children: <Widget>[
+                  Expanded(flex:2, child: Text("Consulta",
+                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
+                ],
+              ),
+
+            ),
+            ListTile(
+              leading: Icon(Icons.person_add, size: 40, color: Colors.blue),
+              title: Text('Medico', style: TextStyle(color: Colors.blue)),
+              subtitle: 
+                  Text(medico,
+                  style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
+                
+                 
+              trailing: Text(area, style: TextStyle(color: Colors.blue)),
+            ),
+            
+            //Divider(),
+             ListTile(
+              leading: Icon(Icons.date_range, size: 40, color: Colors.blue),
+              title: Text('28/09/2019', style: TextStyle(color: Colors.blue)),
+              subtitle: 
+                  Text("19:00 h",
+                  style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
+                
+                 
+              trailing: Text("Agendada", style: TextStyle(color: Colors.blue)),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(90),bottomLeft: Radius.circular(0), bottomRight: Radius.circular(10)),
+                color: Colors.blueGrey,
+              ),
+              height: 50,
+              child: Row(
+                children: <Widget>[
+                  // Expanded(flex:2, child: Text("Data: 28/09/2019",
+                  // style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
+                  
+                   Expanded(
+                     flex: 2,
+                     child: FlatButton(
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            'Ver/Editar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                      onPressed: () { vizualizarConsulta();
+},
+                    ), 
+                   ),
+                   
+                  
+                ],
+              ),
+        
+             
+            )
+          ],
+        )),
+        ],)
+         
+      ),
+    );
+  }
   void vizualizarConsulta(){
-    Navigator.pushReplacementNamed(context, '/vizualisarEditarConsulta');
+    Navigator.pushNamed(context, '/vizualisarEditarConsulta');
   }
 }

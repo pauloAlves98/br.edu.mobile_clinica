@@ -160,49 +160,16 @@ class _LaudosPageState extends State<LaudosPage> {
         child:ListView.builder(
           itemCount: tasks.length,
           itemBuilder: (context,position){
-            return Dismissible(
-              key: Key(tasks[position].toString()),
-              background: _background(tasks[position].tema),
-              child: _listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
-              onDismissed: (direction){
-                if(direction==DismissDirection.startToEnd){
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("delete"),));
-                    if(direction==DismissDirection.endToStart){
-                        setState(() {
-                          tasks.remove(tasks.removeAt(position));
-                        });
-                    }
-                }
-              },
-            );
+              return _builderCardLaudos(position, tasks[position].medico, tasks[position].area);//_listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
+
           },
 
         )
       ),
     )]
     ),
-    floatingActionButton: FloatingActionButton(
-          onPressed: () {
-             Navigator.pushReplacementNamed(context, '/agendarConsulta');
-           },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-        ),
-    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    bottomNavigationBar: BottomAppBar(
-      color: Colors.blue,
-      shape: CircularNotchedRectangle(),
-      child: Row(
-        children: <Widget>[
-          
-             Container(
-               height: 50,
-             ),
-          
-        ],
-      ),
-    ),
+    
+    
     );
   }
   Widget _background(Color cor){
@@ -293,4 +260,65 @@ class _LaudosPageState extends State<LaudosPage> {
       ),
     );
   }
+    Widget _builderCardLaudos(int index,String medico,String area) {
+    String idd = index.toString();
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        color: Colors.white,
+        elevation: 10,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.library_books, size: 40, color: Colors.blue),
+              title: Text('Medico', style: TextStyle(color: Colors.blue)),
+              subtitle: 
+                  Text(medico,
+                  style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
+                
+                 
+              trailing: Text(area, style: TextStyle(color: Colors.blue)),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Colors.blueGrey,
+              ),
+              height: 50,
+              child: Row(
+                children: <Widget>[
+                  Expanded(flex:2, child: Text("Data: 28/09/2019",
+                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
+                  
+                   Expanded(
+                     flex: 2,
+                     child: FlatButton(
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            'Ver',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                      onPressed: () { Navigator.pushNamed(context,'/vizualisarLaudo');},
+                    ), 
+                   ),
+                   
+                  
+                ],
+              ),
+            
+             
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 }

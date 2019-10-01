@@ -11,6 +11,33 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.keyboard_backspace,
+                color: Colors.white, size: 20),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          )
+        ],
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.library_books,
+                  color: Colors.white, size: 40),
+              // onPressed: () { Scaffold.of(context).openDrawer(); },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
+        title: Text(
+          "Consulta",
+          style: TextStyle(fontSize: 15),
+        ),
+      ),
       body:Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -26,167 +53,245 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
         children: <Widget>[
          
 
-          Positioned(
-            top:10,
+          // Positioned(
+          //   top:10,
            
-            child:Padding(
-              padding: EdgeInsets.all(10),
-              child:Container(
-              width: MediaQuery.of(context).size.width/1.05,
-              height:MediaQuery.of(context).size.height/6.5 ,
-              color:Colors.white,
-              child:Column(children: <Widget>[SizedBox(height: 10,),
-              Text("Consulta".toUpperCase(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-              ])),)
-           ),
+          //   child:Padding(
+          //     padding: EdgeInsets.all(10),
+          //     child:Container(
+          //     width: MediaQuery.of(context).size.width/1.05,
+          //     height:MediaQuery.of(context).size.height/6.5 ,
+          //     color:Colors.white,
+          //     child:Column(children: <Widget>[SizedBox(height: 10,),
+          //     Text("Consulta".toUpperCase(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+          //     ])),)
+          //  ),
 
-           Positioned(
-            top:15 ,
-            left: 10,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back,size: 30,),
-              onPressed: (){
-                  Navigator.popAndPushNamed(context,'/pacienteHomePage');
-              },
-            ),
-          ),
+          //  Positioned(
+          //   top:15 ,
+          //   left: 10,
+          //   child: IconButton(
+          //     icon: Icon(Icons.arrow_back,size: 30,),
+          //     onPressed: (){
+          //         Navigator.popAndPushNamed(context,'/pacienteHomePage');
+          //     },
+          //   ),
+          // ),
 
           Positioned(
-            top: (MediaQuery.of(context).size.height/5.5) ,
+            top: 5 ,
             child:Padding(
               padding: EdgeInsets.all(10),
               child: Container(
               width: MediaQuery.of(context).size.width/1.05,
-              height:MediaQuery.of(context).size.height/1.35,
+              height:MediaQuery.of(context).size.height/1.25,
               color: Colors.white,
               child: Padding(
                 padding: EdgeInsets.only(
                   left: 10,
                   right: 10,
-                  top:50,
+                  top:0,
                   bottom: 10
                 ),
-                child: Column(
-                  children: <Widget>[
-                    Text("Felipe Antonio",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                    SizedBox(height: 20,),
-                    Text("Dados Do Medico",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                    Container(
-                        
-                        height: 146,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border:Border.all(color: Colors.black)) ,
-                        
-                        child:Center(child:Column(
-                          children: <Widget>[
-                              Row(children: <Widget>[
-                                Icon(Icons.location_city),
-                                Text("Profissão:",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)) ,
-                                Text("Dermatologista",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))
-                              ],),
-                              Row(children: <Widget>[
-                                Icon(Icons.location_city),
-                                Text("Rua:",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)) ,
-                                Text("O Cassete come",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))
-                              ],),
-                              Row(children: <Widget>[
-                                Icon(Icons.location_city),
-                                Text("Clinica:",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)) ,
-                                Text("Maria gode de santana",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))
-                              ],),
-                              Row(children: <Widget>[
-                                Icon(Icons.location_city),
-                                Text("N° da Sala:",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)) ,
-                                Text("12",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))
-                              ],),
-                              Container(
-                                alignment: Alignment.bottomRight,
-                                child:Center(child:IconButton(
-                                icon: Icon(Icons.edit,color: Colors.white,),
-                                  alignment: Alignment.centerRight,
-                                  onPressed: (){
-                                      editDados(Icons.person, "Profissao", "Rua", "Clinica", "N° da Sala");
-                                  },
-                              )),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                ),
-                            )
-                          ],
+                child:SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+              //height: MediaQuery.of(context).size.height - 100,
+              child: Center(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.blue,
+              // elevation: 5,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                   ListTile(
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                    leading:
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 25,
                         ),
-                      ) ), 
-                    //SizedBox(height: 10,),
-                    SizedBox(height: 20,),
-                    Text("Dados Da Consulta",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                   Container(
-                     alignment: Alignment.bottomRight,
-                     decoration: BoxDecoration(
-                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border:Border.all(color: Colors.black)) ,
-                     child:Column(children: <Widget>[
-                     Row(children: <Widget>[
-                      Icon(Icons.location_city),
-                      Text("Data do Agendamento:",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)) ,
-                      Text("10/05/1999",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))
-                    ],),
-                    Row(children: <Widget>[
-                      Icon(Icons.location_city),
-                      Text("Data da Consulta:",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)) ,
-                      Text("15/02/1999",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))
-                    ],),
-                    Row(children: <Widget>[
-                      Icon(Icons.location_city),
-                      Text("Horario:",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)) ,
-                      Text("15:30",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))
-                    ],),
-                   Container(
-                     alignment: Alignment.bottomRight,
-                     child:Center(child:IconButton(
-                                icon: Icon(Icons.edit,color: Colors.white,),
-                                  alignment: Alignment.center,
-                                  onPressed: (){
-
-                                  },
-                                )),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                ),
-                            )
-                   ],)
-                    
+                    title: Text('Medico',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w600)),
+                    subtitle: Text('Ana Paula',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w300)),
+                    //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
+                  ),
+                  _divisor(),
+                   ListTile(
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.info,
+                        color: Colors.white,
+                      ),
+                      onPressed:(){
+                        editDados(Icons.date_range,'Data da Consulta');
+                      },
+                    ),
+                    leading:
+                        Icon(Icons.date_range, size: 50, color: Colors.white),
+                    title: Text('Data da Consulta',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w600)),
+                    subtitle: Text('28/09/2019',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w300)),
+                    //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
+                  ),
+                  _divisor(),
+                  ListTile(
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        editDados(Icons.timer,'Horario');
+                      },
+                    ),
+                    leading:
+                        Icon(Icons.timer, size: 50, color: Colors.white),
+                    title: Text('Horario',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w600)),
+                    subtitle: Text('19:00 h',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w300)),
+                    //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
+                  ),
+                   _divisor(),
                   
-            )]))))    
+                  ListTile(
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        editDados(Icons.label, 'Tipo de Consulta');
+                      },
+                    ),
+                    leading:
+                        Icon(Icons.label, size: 50, color: Colors.white),
+                    title: Text('Tipo de Consulta',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w600)),
+                    subtitle: Text('Retorno',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w300)),
+                    //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
+                  ),
+                  _divisor(),
+                   ListTile(
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        editDados(Icons.warning,'Situação da Consulta');
+                      },
+                    ),
+                    leading:
+                        Icon(Icons.warning, size: 50, color: Colors.white),
+                    title: Text('Situação da Consulta',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w600)),
+                    subtitle: Text('Agendada',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w300)),
+                    //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
+                  ),
+                  _divisor(),
+                  ListTile(
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.info,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        
+                      },
+                    ),
+                    leading: Icon(
+                      Icons.book,
+                      size: 45,
+                      color: Colors.white,
+                    ),
+                    title: Text('Laudo',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w600)),
+                  ),
+                  Container(
+                    height: 60,
+                    //width: 110,
+                  ),
+                ],
+              ),
+            ),
+          )),
+        ),),
+  
+      ), 
+  
+            )    
               
             
           ),
-          Positioned(
-            top: 60,
-            left:MediaQuery.of(context).size.width/2.75 ,
-            child: Center(
-              child:Container(
-                child: CircleAvatar(
+          ),
+          // Positioned(
+          //   top: 0,
+          //   left:MediaQuery.of(context).size.width/2.75 ,
+          //   child: Center(
+          //     child:Container(
+          //       child: CircleAvatar(
 
-                  radius: 50,
-                ),
-              ) ,),
-          )
+          //         radius: 50,
+          //       ),
+          //     ) ,),
+          // )
         ],
       ),
-            ), 
+                ), 
+    floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.greenAccent,
+        child: Icon(Icons.save_alt, color: Colors.white),
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, '/pacienteHomePage'); //Mudar
+        },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        //hasNotch: true,
+        shape: CircularNotchedRectangle(),
+        color: Colors.blue,
+        child: Container(
+          height: 50,
+        ),
+      ),
     );   
     
   }
-   void editDados(IconData icone, String profissao,String rua,String clinica, String numero){
+  void editDados(IconData icone, String title){
      showDialog(
         context: context,
                                     builder: (BuildContext context){
                                         return Stack(children: <Widget>[ 
                                         Positioned(
                                           left: -39,
-                                          top:foco ?-35 :MediaQuery.of(context).size.height-400,
+                                          top:foco ?MediaQuery.of(context).size.height-460 :MediaQuery.of(context).size.height-220,
                                           child:Container(
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.all(new Radius.circular(360))
@@ -194,7 +299,7 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                                             child:AlertDialog(
                                           content: Container(
                                             width:MediaQuery.of(context).size.width-39,
-                                            height: 240,
+                                            height: 60,
                                             
                                             child: Column(
                                               children: <Widget>[
@@ -206,61 +311,7 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                                                 Expanded(
                                                   child: TextField(
                                                     decoration: InputDecoration(
-                                                      labelText: profissao
-                                                    ),
-                                                    onTap: (){
-                                                        setState(() {
-                                                         foco=true; 
-                                                        });
-                                                    },
-                                                  ),
-                                                ),
-                                                ]),
-                                                Row(children: <Widget>[
-                                                Icon(icone),
-                                                Padding(
-                                                  padding: EdgeInsets.only(left: 10)
-                                                ),
-                                                Expanded(
-                                                  child: TextField(
-                                                    decoration: InputDecoration(
-                                                      labelText: clinica
-                                                    ),
-                                                    onTap: (){
-                                                        setState(() {
-                                                         foco=true; 
-                                                        });
-                                                    },
-                                                  ),
-                                                ),
-                                                ]),
-                                                Row(children: <Widget>[
-                                                Icon(icone),
-                                                Padding(
-                                                  padding: EdgeInsets.only(left: 10)
-                                                ),
-                                                Expanded(
-                                                  child: TextField(
-                                                    decoration: InputDecoration(
-                                                      labelText: rua
-                                                    ),
-                                                    onTap: (){
-                                                        setState(() {
-                                                         foco=true; 
-                                                        });
-                                                    },
-                                                  ),
-                                                ),
-                                                ]),
-                                                Row(children: <Widget>[
-                                                Icon(icone),
-                                                Padding(
-                                                  padding: EdgeInsets.only(left: 10)
-                                                ),
-                                                Expanded(
-                                                  child: TextField(
-                                                    decoration: InputDecoration(
-                                                      labelText: numero
+                                                      labelText: title
                                                     ),
                                                     onTap: (){
                                                         setState(() {
@@ -277,9 +328,7 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                                           actions: <Widget>[
                                             FlatButton(child: Text("Salvar"),
                                             onPressed: (){
-                                              setState(() {
-                                               foco=false; 
-                                              });
+
                                             },
                                             )
                                           ],
@@ -287,4 +336,17 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                                     }
                                   );
   }
+  
+  
+    Widget _divisor() {
+    return Container(
+      height: 10,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(60), bottomRight: Radius.circular(60)),
+        color: Colors.white,
+      ),
+    );
+  }
+
 }

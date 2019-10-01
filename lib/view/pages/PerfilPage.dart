@@ -740,7 +740,7 @@ Padding(
               left: 2,
               child: IconButton(icon:Icon( Icons.arrow_back,size: 25,color: Colors.white,),
               onPressed: (){
-                  Navigator.popAndPushNamed(context, '/pacienteHomePage');
+                  Navigator.pop(context);
               },
               ),
             ),

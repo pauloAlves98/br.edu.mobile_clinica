@@ -120,7 +120,7 @@ class _PacienteHomePageState extends State<PacienteHomePage> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.pop(context);
             },
             child: Icon(Icons.exit_to_app, color: Colors.white, size: 30),
           ),
@@ -136,7 +136,7 @@ class _PacienteHomePageState extends State<PacienteHomePage> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/perfilPage');
+              Navigator.pushNamed(context, '/perfilPage');
             },
             child: Padding(
               padding: EdgeInsets.all(1),

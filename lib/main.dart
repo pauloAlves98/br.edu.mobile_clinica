@@ -14,6 +14,7 @@ import 'view/pages/PacienteCadastroPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:projeto_mobile_clinica/view/pages/ConversaPrivadaPage.dart';
 import 'package:projeto_mobile_clinica/view/pages/VizualisarEditarConsultaPage.dart';
+import 'package:projeto_mobile_clinica/view/pages/VisualizarLaudo.dart';
 
 void main() {
    initializeDateFormatting().then((_) => runApp(MyApp()));}
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         "/conversaPrivada": (_) => ConversaPrivadaPage(),
         "/vizualisarEditarConsulta":(_)=>VizualisarEditarConsultaPage(),
          "/medicoPerfilPage":(_) => MedicoPerfilPage(),
+         "/vizualisarLaudo": (_) => VisualizarLaudo()
         },
     );
   }

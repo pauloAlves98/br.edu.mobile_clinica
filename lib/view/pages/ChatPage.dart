@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/utils/ConversaTask.dart';
 
@@ -32,7 +33,7 @@ class _ChatPageState extends State<ChatPage> {
         child:Container(
           //color: Colors.blue,
           width: MediaQuery.of(context).size.width,
-          height: 91,
+          height: 50,
           child:Material(
             //color: Colors.blue,
             elevation: 14,
@@ -73,7 +74,11 @@ class _ChatPageState extends State<ChatPage> {
                       borderRadius: BorderRadius.all(Radius.circular(100))
                     ),
                     ),)),
-              
+                    IconButton(icon: Icon(Icons.search),
+                      onPressed: (){
+
+                      },
+                    )      
                  ]))),
                
               
@@ -84,15 +89,16 @@ class _ChatPageState extends State<ChatPage> {
             ),
 
             Positioned(
-              top:100,
+              top:51,
               child: Container(
-                 width: MediaQuery.of(context).size.width,
-        height:MediaQuery.of(context).size.height-160,
-        child: ListView.builder(
-          
-          itemCount: conversasTasks.length,
-          itemBuilder: (context,position){
-            return listConversas(conversasTasks[position].nome, conversasTasks[position].tempo,conversasTasks[position].status, conversasTasks[position].tema);
+                width: MediaQuery.of(context).size.width,
+                height:MediaQuery.of(context).size.height/1.95 ,
+                child:ListView.builder(
+                  dragStartBehavior:DragStartBehavior.start,
+                  itemCount: conversasTasks.length,
+                  itemBuilder: (context,position){
+                    return listConversas(conversasTasks[position].nome, conversasTasks[position].tempo,conversasTasks[position].status, conversasTasks[position].tema);
+                  
             // return Dismissible(
             //   key: Key(tasks[position].toString()),
             //   background: _background(tasks[position].tema),
@@ -117,49 +123,30 @@ class _ChatPageState extends State<ChatPage> {
         ),
 
 
-      //   floatingActionButton: FloatingActionButton(
-      //       onPressed: () {
-      //         Navigator.pushReplacementNamed(context, '/agendarConsulta');
-      //       },
-      //       child: Icon(Icons.add),
-      //       backgroundColor: Colors.blue,
-      //       foregroundColor: Colors.white,
-      //     ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // bottomNavigationBar: BottomAppBar(
-      //   color: Colors.blue,
-      //   shape: CircularNotchedRectangle(),
-      //   child: Row(
-      //     children: <Widget>[
-            
-      //         Container(
-      //           height: 50,
-      //         ),
-            
-      //     ],
-      //   ),
-      // ),
+        
     );
   }
   Widget listConversas(String nome,String tempo,String status,Color tema){
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: Container(
-        height: 80,
+    return  Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black26)
+        ),
+        height: 96,
         child: Material(
           color: Colors.white,
-          elevation: 14,
+         // elevation: 1,
           shadowColor: Color(0x802196F3),
           child:GestureDetector(
             onTap: (){
                 Navigator.pushNamed(context, '/conversaPrivada');
             },
-            child: Container(
+            child:Column(children:<Widget>[
+             Container(
             child: Row(
               children: <Widget>[
                 Container(
                   width: 10,
-                  height: 80,
+                  height: 94,
                   color: tema,
                 ),
                 Padding(padding: EdgeInsets.only(left:4),),
@@ -173,18 +160,18 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left:8,right: 8,top:16),
+                    padding: EdgeInsets.only(left:8,right: 8,top:2,bottom:0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: Alignment.topLeft,
                           child: Container(
                             child: Text(nome,style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
                           ),
                         ),
                         Align(
-                          alignment: Alignment.bottomLeft,
+                          alignment: Alignment.centerLeft,
                           child: Container(
                             child: Text(status,style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black87)),
                           ),
@@ -206,8 +193,9 @@ class _ChatPageState extends State<ChatPage> {
               ],
             ),
           ),
-        ))
-      ),
+          
+          ])))
+            
     );
   }
    Widget _background(Color cor){

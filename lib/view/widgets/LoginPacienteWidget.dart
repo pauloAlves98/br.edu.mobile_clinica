@@ -96,7 +96,7 @@ class LoginPacienteWidget {
                       textColor: Colors.white,
                       child: Text("Login".toUpperCase()),
                       onPressed: () =>
-                          Navigator.popAndPushNamed(context, '/pacienteHomePage'), //Mudar
+                          Navigator.pushNamed(context, '/pacienteHomePage'), //Mudar
                     ),
                   ),
                 ),

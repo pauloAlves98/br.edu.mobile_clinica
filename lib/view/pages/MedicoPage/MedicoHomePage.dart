@@ -80,7 +80,7 @@ class _MedicoHomePageState extends State<MedicoHomePage> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.pop(context);
             },
             child: Icon(Icons.exit_to_app, color: Colors.white, size: 30),
           ),
