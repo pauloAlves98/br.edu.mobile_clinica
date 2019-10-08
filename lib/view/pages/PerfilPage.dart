@@ -707,6 +707,7 @@ Padding(
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
+                  
                       onTap: ()async{
                         String caminho; 
                         caminho = await FilePicker.getFilePath(type: FileType.IMAGE);

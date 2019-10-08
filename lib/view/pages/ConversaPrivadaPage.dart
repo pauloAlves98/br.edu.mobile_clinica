@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 class ConversaPrivadaPage extends StatefulWidget {
@@ -22,65 +23,32 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          
-          Positioned(
-            top: 0,
-            
-            child: Container(
-              color: Colors.blue,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height/6.5,
-              child:Padding(padding: EdgeInsets.only(top:10), 
-              child:
-              Row(
-                children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.arrow_back,color: Colors.white,),
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      
-                    ),
-                    CircleAvatar(
+      body: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                CircleAvatar(
                       radius: 25,
-                    ),
-                     Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left:8,right: 8,top:25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            child: Text("Felipe Antonio",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:Colors.white)),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Container(
-                            child: Text("Online",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white)),
-                          ),
-                        ),
-                        
-                      ],
-                    ),
-                  ),
                 ),
-                ],
-              ),
+                Expanded(
+                child:ListTile(
+                  title: Text("Felipe Antonio",style:TextStyle(color:Colors.white,fontSize: 15),),
+                  subtitle: Text("Online",style:TextStyle(color:Colors.white)),
+                ),
+                ),
+                IconButton(
+                  icon:Icon(Icons.exit_to_app),
+                  onPressed: (){
+
+                  },
+                  )  
+              ],
             ),
-          )
-          ),
-          Positioned(
-              top:MediaQuery.of(context).size.height/6.5,
-              child:Container(
-                width:MediaQuery.of(context).size.width ,
-                height: 400,
-                 child: ListView.builder(
-                      itemCount: mensagens.length,
+            Expanded(
+              child:Padding(
+                padding: EdgeInsets.only(top:4),
+                child:ListView.builder(
+                itemCount: mensagens.length,
                       itemBuilder: (context, index) { 
                         return Padding(padding: EdgeInsets.only(left:40,bottom:5,right: 5),
                          child:Container(
@@ -110,18 +78,9 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
                           ])));
                         
                       },
-                    
-                 
-                 ),
-              ) ,
-              
-          ),
-
-          Positioned(
-            top: selecionado ? MediaQuery.of(context).size.height/2.15  :MediaQuery.of(context).size.height-64,
-            child:Padding(
-          padding: EdgeInsets.only(top:4,bottom: 4),
-          child:Container(
+              )),
+            ),
+            Container(
             color: Colors.blue,
             height: 60,
             width:MediaQuery.of(context).size.width ,
@@ -180,6 +139,7 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
                     //color:Colors.white,
                     child: IconButton(
                         icon: Icon(Icons.send),
+                        
                         onPressed: (){
                           setState(() {
                            foco = false;
@@ -194,12 +154,114 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
                 )
               ],
             ),)
-          ) 
-       )
-          )
-        ],
           
+          )
+          ],
       ),
+      
+      // body: Stack(
+      //   children: <Widget>[
+          
+      //     Positioned(
+      //       top: 0,
+            
+      //       child: Container(
+      //         color: Colors.blue,
+      //         width: MediaQuery.of(context).size.width,
+      //         height: MediaQuery.of(context).size.height/6.5,
+      //         child:Padding(padding: EdgeInsets.only(top:10), 
+      //         child:
+      //         Row(
+      //           children: <Widget>[
+      //               IconButton(
+      //                 icon: Icon(Icons.arrow_back,color: Colors.white,),
+      //                 onPressed: (){
+      //                   Navigator.pop(context);
+      //                 },
+                      
+      //               ),
+      //               CircleAvatar(
+      //                 radius: 25,
+      //               ),
+      //                Expanded(
+      //             child: Padding(
+      //               padding: EdgeInsets.only(left:8,right: 8,top:25),
+      //               child: Column(
+      //                 mainAxisAlignment: MainAxisAlignment.start,
+      //                 children: <Widget>[
+      //                   Align(
+      //                     alignment: Alignment.centerLeft,
+      //                     child: Container(
+      //                       child: Text("Felipe Antonio",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:Colors.white)),
+      //                     ),
+      //                   ),
+      //                   Align(
+      //                     alignment: Alignment.bottomLeft,
+      //                     child: Container(
+      //                       child: Text("Online",style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white)),
+      //                     ),
+      //                   ),
+                        
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //           ],
+      //         ),
+      //       ),
+      //     )
+      //     ),
+      //     Positioned(
+      //         top:MediaQuery.of(context).size.height/6.5,
+      //         child:Container(
+      //           width:MediaQuery.of(context).size.width ,
+      //           height: 400,
+      //            child: ListView.builder(
+      //                 itemCount: mensagens.length,
+      //                 itemBuilder: (context, index) { 
+      //                   return Padding(padding: EdgeInsets.only(left:40,bottom:5,right: 5),
+      //                    child:Container(
+      //                  // width: 150,
+      //                  alignment: Alignment.topRight,
+      //                   child:Column(
+      //                     children:<Widget>[
+      //                     ClipPath(
+      //                       clipper: ClipRThread(r),
+      //                       //clipBehavior: Clip.antiAlias,
+      //                       child: ClipRRect(
+      //                         borderRadius: BorderRadius.all(Radius.circular(r)),
+      //                         child: Container(
+      //                           //width: 150,
+      //                           // constraints: BoxConstraints.loose(MediaQuery.of(context).size * 0.8),
+      //                            padding: EdgeInsets.fromLTRB(8.0 + 2 * r, 8.0, 8.0, 8.0),
+      //                           color: Colors.deepOrange,
+      //                           child: Transform(
+      //                             transform: Matrix4.diagonal3Values(1.0, 1.0, 1.0),
+      //                             child: mensagens[index],
+      //                             alignment: Alignment.topRight,
+      //                           ),
+      //                         ),
+      //                       ),)
+                         
+                        
+      //                     ])));
+                        
+      //                 },
+                    
+                 
+      //            ),
+      //         ) ,
+              
+      //     ),
+
+      //     Positioned(
+      //       top: selecionado ? MediaQuery.of(context).size.height/2.15  :MediaQuery.of(context).size.height-64,
+      //       child:Padding(
+      //     padding: EdgeInsets.only(top:4,bottom: 4),
+      //     child:
+      //   ],
+          
+      // ),
           
       // bottomNavigationBar: BottomAppBar(
       //   color: Colors.blue,
@@ -221,7 +283,7 @@ class ClipRThread extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
-    path.lineTo(0.0, chatRadius);
+    path.lineTo(size.width, chatRadius);
     // path.lineTo(chatRadius, chatRadius + chatRadius / 2);
     final r = chatRadius;
     final angle = 0.785;
@@ -233,9 +295,9 @@ class ClipRThread extends CustomClipper<Path> {
       1,
     );
     final moveIn = 2 * r; // need to be > 2 * r
-    path.lineTo(moveIn, r + moveIn * tan(angle));
+    path.lineTo(size.width- moveIn, r + moveIn * tan(angle));
     
-    path.lineTo(moveIn, size.height - chatRadius);
+    path.lineTo(size.width-moveIn, size.height - chatRadius);
 
     path.conicTo(
       moveIn + r - r * cos(angle),
@@ -244,8 +306,8 @@ class ClipRThread extends CustomClipper<Path> {
       size.height,
       1,
     );
-    path.lineTo(size.width, size.height);
-    path.lineTo(size.width, 0.0);
+    path.lineTo(0.0, 0.0);
+    path.lineTo(0.0, size.height);
     path.close();
     return path;
   }

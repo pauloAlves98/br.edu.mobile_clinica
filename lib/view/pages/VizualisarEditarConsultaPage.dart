@@ -133,7 +133,7 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                    ListTile(
                     trailing: IconButton(
                       icon: Icon(
-                        Icons.info,
+                        Icons.edit,
                         color: Colors.white,
                       ),
                       onPressed:(){
