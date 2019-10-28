@@ -16,6 +16,8 @@ import 'package:projeto_mobile_clinica/view/pages/ConversaPrivadaPage.dart';
 import 'package:projeto_mobile_clinica/view/pages/VizualisarEditarConsultaPage.dart';
 import 'package:projeto_mobile_clinica/view/pages/VisualizarLaudo.dart';
 
+import 'view/pages/Splash.dart';
+
 void main() {
    initializeDateFormatting().then((_) => runApp(MyApp()));}
 //Falta colocar e nome da clinica e substituir a logo na tela de login!
@@ -28,8 +30,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       color: primary,
       theme: ThemeData(primaryColor: blueLogin3, accentColor: accent),
+
       routes: {
-        "/": (_) => LoginPage(),
+        "/": (_) => Splash(),
+        "/login": (_) => LoginPage(),
         "/pacienteCadastroPage": (_) => PacienteCadastroPage(),
         "/medicoCadastroPage": (_) => MedicoCadastroPage(),
         "/pacienteHomePage": (_) => PacienteHomePage(),
@@ -44,6 +48,7 @@ class MyApp extends StatelessWidget {
          "/medicoPerfilPage":(_) => MedicoPerfilPage(),
          "/vizualisarLaudo": (_) => VisualizarLaudo()
         },
+      
     );
   }
 }
