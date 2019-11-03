@@ -23,19 +23,20 @@ def index(request):
 @csrf_exempt
 def login(request):
     print(request)
-    if request.method == 'GET':
-        print("asdads")
-        login = request.GET.get('login')
-        senha = request.GET.get('senha')
+    if request.method == 'POST':#para get so mudar aqui.
+        login = request.POST.get('login')#para get so mudar aqui.
+        senha = request.POST.get('senha')#para get so mudar aqui.
+        print("Login"+login);
+        print("Senha:"+senha);
         if login and senha:
             usuario = Paciente.objects.filter(nome_usuario=login, senha=senha)
             if usuario.exists():
                 print("Usuario:")
                 #print(usuario.first().get_json())
-                return JsonResponse({'response': True, 'usuario': usuario.first().get_json()})
+                return JsonResponse({'response': True, 'paciente': usuario.first().get_json()})
 
 
-    # if request.method == 'POST':
+    # if request.method == 'GET':
     #     pass
 
     return JsonResponse({'response': False})

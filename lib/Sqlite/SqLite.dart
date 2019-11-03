@@ -29,13 +29,14 @@ class SqlHelper {
   }
 
   void create(Database db, int newVersion) async {
-    print("Criou");
+    print("CREATE");
     await db.execute(TabelaContato.createTable);
     await db.execute(TabelaEndereco.createTable);
     await db.execute(TabelaPaciente.createTable);
   }
 
   void update(Database db, int oldVersion, int newVersion) async {
+    print("UPDATE");
 //    await db.execute(TabelaUsuario.createTable);
   }
 }

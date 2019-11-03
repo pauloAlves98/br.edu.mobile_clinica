@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/model/bin/Paciente.dart';
 import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
 
 class LoginPacienteWidget {
- 
+  
+  
   static Widget buildLoginPaciente(//Metodo!
     BuildContext context,
-    pacienteEmailField,
-    pacientePasswordField,
+    TextEditingController pacienteEmailField,
+    TextEditingController  pacientePasswordField,
     myFocusNodePassword,
     obscureTextPaciente,
     toggleLoginPaciente
   ) {
+    bool flagErro = false;
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     //Login Paciente
     return SingleChildScrollView(
       child: Stack(
@@ -35,14 +40,25 @@ class LoginPacienteWidget {
                     Icon(Icons.email),
                     const SizedBox(width: 10.0),
                     Expanded(
-                      child: TextField(
+                      child: TextFormField(
                         controller: pacienteEmailField,
+                        
                         decoration: InputDecoration(
     //                       contentPadding: const EdgeInsets.all(20),
     // border: OutlineInputBorder(
     //     borderRadius: BorderRadius.circular(30),
     // ),
                           hintText: "Login"),
+                        //  validator: (value) {
+                        //   value = value.trim();
+                        //   if (value.isEmpty) {
+                        //     return "CAMPO OBIRGATÓRIO";
+                        //   }
+                        //   if (flagErro) {
+                        //     return "login ou senha inválido";
+                        //   }
+                        //   return null;
+                        // },
                       ),
                     ),
                   ],
@@ -95,8 +111,12 @@ class LoginPacienteWidget {
                     child: FlatButton(
                       textColor: Colors.white,
                       child: Text("Login".toUpperCase()),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/pacienteHomePage'), //Mudar
+                      onPressed: () { 
+                        String login = pacienteEmailField.text;
+                        String senha = pacientePasswordField.text;
+                        _logar(login,senha,context); 
+                      },
+                         
                     ),
                   ),
                 ),
@@ -187,5 +207,16 @@ class LoginPacienteWidget {
         ],
       ),
     );
+  }
+  static _logar(login, senha, context) async {
+    print("Login:"+login.toString());
+    print("senha:"+senha.toString());
+    Paciente p = await WebService.getPacienteLoginSenha(login, senha);
+    if(p!=null){
+      print("Nome: "+p.nome_usuario);
+      Navigator.pushNamed(context, '/pacienteHomePage'); //Mudar
+    }else{
+      print("Não Achou!");
+    }
   }
 }

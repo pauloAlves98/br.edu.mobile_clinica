@@ -6,7 +6,7 @@ import 'package:projeto_mobile_clinica/view/widgets/LoginMedicoWidget.dart';
 import 'package:projeto_mobile_clinica/view/widgets/LoginPacienteWidget.dart';
 
 class LoginPage extends StatefulWidget {
-  static  Map<int, Color> color = {
+  static  Map<int, Color> color = {//Criar uma classe Constantes
     50: Colors.white,
     100: Colors.white,
     200:Colors.white,
@@ -26,14 +26,12 @@ class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
  
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   final FocusNode myFocusNodeEmailLogin = FocusNode();
   final FocusNode myFocusNodePasswordLogin = FocusNode();
-
   final FocusNode myFocusNodePassword = FocusNode();
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeName = FocusNode();
-
+  
   TextEditingController _pacienteEmailField = new TextEditingController();
   TextEditingController _pacientePasswordField = new TextEditingController();
 

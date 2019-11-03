@@ -10,7 +10,7 @@ class Paciente {
   bool ativo = false;
   int cpf;
   int rg;
-  String nome_paciente; //Login
+  String nome_usuario; //Login
   String nome;
   DateTime data_nascimento;
   String senha;
@@ -27,23 +27,24 @@ class Paciente {
   // }
 
   Paciente.fromMapWeb(Map map) {
+    
     id = map["id"];
     cpf = map["cpf"];
     rg = map["rg"];
-    nome_paciente = map["nome_paciente"];
+    nome_usuario = map["nome_usuario"];
     nome = map["nome"];
     data_nascimento = DateTime.parse(map["data_nascimento"]);
     senha = map["senha"];
     sexo = map["sexo"];
-    contato =  Contato.fromMapWeb(map["contato"]);
-    endereco = Endereco.fromMapWeb(map["endereco"]);
+    contato =  Contato.fromMapWeb(map["id_contato"]);
+    endereco = Endereco.fromMapWeb(map["id_endereco"]);
   }
 
   Paciente.fromMapSqLite(Map map) {
     id = map[TabelaPaciente.COL_ID];
     cpf = map[TabelaPaciente.COL_CPF];
     rg = map[TabelaPaciente.COL_RG];
-    nome_paciente = map[TabelaPaciente.COL_NOME_PACIENTE];
+    nome_usuario = map[TabelaPaciente.COL_NOME_PACIENTE];
     nome = map[TabelaPaciente.COL_NOME];
     data_nascimento = DateTime.parse(map[TabelaPaciente.COL_DATA_NASCIMENTO]);
     senha = map[TabelaPaciente.COL_SENHA];
@@ -60,7 +61,7 @@ class Paciente {
       TabelaPaciente.COL_ID: id,
       TabelaPaciente.COL_CPF: cpf,
       TabelaPaciente.COL_RG: rg,
-      TabelaPaciente.COL_NOME_PACIENTE: nome_paciente,
+      TabelaPaciente.COL_NOME_PACIENTE: nome_usuario,
       TabelaPaciente.COL_NOME: nome,
       TabelaPaciente.COL_DATA_NASCIMENTO:data_nascimento,//Talvez tenha que converter em String
       TabelaPaciente.COL_SENHA: senha,
