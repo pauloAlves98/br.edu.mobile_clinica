@@ -283,7 +283,7 @@ class ClipRThread extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
-    path.lineTo(size.width, chatRadius);
+    path.lineTo(0.0, chatRadius);
     // path.lineTo(chatRadius, chatRadius + chatRadius / 2);
     final r = chatRadius;
     final angle = 0.785;
@@ -295,9 +295,9 @@ class ClipRThread extends CustomClipper<Path> {
       1,
     );
     final moveIn = 2 * r; // need to be > 2 * r
-    path.lineTo(size.width- moveIn, r + moveIn * tan(angle));
+    path.lineTo(moveIn, r + moveIn * tan(angle));
     
-    path.lineTo(size.width-moveIn, size.height - chatRadius);
+    path.lineTo(moveIn, size.height - chatRadius);
 
     path.conicTo(
       moveIn + r - r * cos(angle),
@@ -306,8 +306,8 @@ class ClipRThread extends CustomClipper<Path> {
       size.height,
       1,
     );
-    path.lineTo(0.0, 0.0);
-    path.lineTo(0.0, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0.0);
     path.close();
     return path;
   }

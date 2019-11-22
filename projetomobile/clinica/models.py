@@ -31,6 +31,8 @@ class Contato(models.Model):
     fone1 = models.CharField(max_length=14, null=False, blank=False)
     fone2 = models.CharField(max_length=14)
     email = models.EmailField(max_length=100)
+    
+    
 
     def __str__(self):
         return self.email

@@ -2,13 +2,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_mobile_clinica/model/utils/ConversaTask.dart';
 
+ List<ConversasTask> conversasTasks = new List<ConversasTask>();
+
 class ChatPage extends StatefulWidget {
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List<ConversasTask> conversasTasks = new List<ConversasTask>();
+  //List<ConversasTask> conversasTasks = new List<ConversasTask>();
 
 @override
   void initState() {

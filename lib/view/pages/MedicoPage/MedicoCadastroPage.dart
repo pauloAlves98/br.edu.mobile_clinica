@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/model/utils/ConversaTask.dart';
+import 'package:projeto_mobile_clinica/view/pages/ChatPage.dart';
 import 'package:projeto_mobile_clinica/view/widgets/CadastroMedicoWidget.dart';
 
 import '../../../model/Cores.dart';
@@ -15,9 +17,10 @@ class _MedicoCadastroPageState extends State<MedicoCadastroPage> {
   double _altura = 0;
   List<String> introItems = [" P1", "P2", "P3", "P4","P5"]; //4 paginas!
   final SwiperController _controller = SwiperController();
-
+  
   @override
   void initState() {
+    
     currentIndex = 0;
     _altura = 662 - 662 * 0.10;
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
@@ -87,6 +90,7 @@ class _MedicoCadastroPageState extends State<MedicoCadastroPage> {
       ),
       body: Column(
         children: <Widget>[
+          
           Expanded(
             child: Swiper(
                 //scrollDirection: Axis.vertical,

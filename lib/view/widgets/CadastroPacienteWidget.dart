@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/model/bin/Contato.dart';
 import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
 
 
@@ -113,7 +115,13 @@ class CadastroPacienteWidget {
                     child: FlatButton(
                       textColor: Colors.white,
                       child: Text("Finalizar".toUpperCase(),style: TextStyle(color: Colors.blueGrey[600],fontSize: 12)),
-                      // onPressed: () =>
+                       onPressed: () async{
+                         Contato contato =await WebService.contatoCadastro('email', '123456789', '123456789');
+                          if (contato !=null){
+                            print("asasadscmdvçndvndvçnaçvonasovnasovn");
+                          }
+                          
+                       }
                       //    // Navigator.pushReplacementNamed(context, '/medicoHomePage'), //Mudar
                     ),
                   ),
