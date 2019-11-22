@@ -47,9 +47,7 @@ def cadastroContato(request):
     form =ContatoForm(request.POST)
     if form.is_valid():
         form.save
-        fone = request.POST.get('fone1')
-        contato=Contato.objects.filter(fone1=fone);
-        return JsonResponse({'response': True, 'contato': contato.first().get_json()})
+     
 
 def cadastroConversa(request):
     form =ConversaForm(request.POST)

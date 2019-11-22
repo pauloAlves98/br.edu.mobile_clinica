@@ -31,7 +31,7 @@ class WebService {
       return null;
     }
   }
-  static Future<Contato> contatoCadastro(
+  static void contatoCadastro(
       String email, String fone1,String fone2) async {
     try {
       //Se GET
@@ -40,15 +40,7 @@ class WebService {
       http.Response responser = await http.post(URL + '/clinica/cadastroContato?cadastroContato',
           body: {'email': email.toString(), 'fone1': fone1.toString(),'fone2':fone2.toString()});
       //print("RESPOSER" + responser.toString());
-      String body = responser.body;
-      Map valueMap = json.decode(body);
-      print(valueMap['response']);
-      if (valueMap['response'] == false) {
-        print("Response False");
-        return null;
-      } else {
-        return Contato.fromMapWeb(valueMap['contato']);
-      }
+    
     } catch (e) {
       print("Exceccao!" + e.toString());
       return null;
