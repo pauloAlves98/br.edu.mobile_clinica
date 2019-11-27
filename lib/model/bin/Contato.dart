@@ -39,7 +39,14 @@ class Contato{
     };
     return map;
   }
-
+   Map toMapSave() {
+    Map<String, dynamic> map = {
+      TabelaContato.COL_FONE1: fone1,
+      TabelaContato.COL_FONE2: fone2,
+      TabelaContato.COL_EMAIL: email
+    };
+    return map;
+  }
   Future save() async {
     Database dataBase = await SqlHelper().db;
     int valor = await dataBase.insert(TabelaContato.NOME_TABELA, toMap());

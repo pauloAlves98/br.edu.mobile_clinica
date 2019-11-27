@@ -12,6 +12,7 @@ from django.contrib.auth.models import User, Group
 from django.core import serializers
 #import pickle
 from clinica.models import Paciente
+from clinica.models import Contato
 from .form import PacienteForm
 from .form import ClinicaForm
 from .form import ConsultaForm
@@ -27,58 +28,116 @@ def index(request):
     #context = {'latest_question_list': latest_question_list}
     #return render(request, 'polls/index.html', context)
     return HttpResponse("HELLO WORLD")
+@csrf_exempt
+def contatoSaveEdit(request):#vai ser save e edit
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui
+        # do outro jeito tem que fazer cas no request.get
+        form = ContatoForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
 
-def cadastroPaciente(request):
-    form =PacienteForm(request.POST)
-    if form.is_valid():
-        form.save
+        return JsonResponse({'response': True})
 
-def cadastroClinica(request):
-    form = ClinicaForm(request.POST)
-    if form.is_valid():
-        form.save
+@csrf_exempt
+def clinicaSaveEdit(request):
+     if request.method == 'POST':#para get so mudar aqui
+        form = ClinicaForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
 
-def cadastroConsulta(request):
-    form = ConsultaForm(request.POST)
-    if form.is_valid():
-        form.save
+        return JsonResponse({'response': True})
 
-def cadastroContato(request):
-    form =ContatoForm(request.POST)
-    if form.is_valid():
-        form.save
-     
+@csrf_exempt
+def consultaSaveEdit(request):
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui
+        form = ConsultaForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
 
-def cadastroConversa(request):
-    form =ConversaForm(request.POST)
-    if form.is_valid():
-        form.save
+        return JsonResponse({'response': True})
+@csrf_exempt
+def conversaSaveEdit(request):
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui
+        form = ConversaForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
 
-def cadastroEndereco(request):
-    form =EnderecoForm(request.POST)
-    if form.is_valid():
-        form.save
+        return JsonResponse({'response': True})
+@csrf_exempt
+def enderecoSaveEdit(request):
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui
+        form = EnderecoForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
 
-def cadastroLaudo(request):
-    form =LaudoForm(request.POST)
-    if form.is_valid():
-        form.save
+        return JsonResponse({'response': True})
+@csrf_exempt
+def laudoSaveEdit(request):
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui
+        form = LaudoForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
 
-def cadastroMedico(request):
-    form =MedicoForm(request.POST)
-    if form.is_valid():
-        form.save
+        return JsonResponse({'response': True})
+@csrf_exempt
+def medicoSaveEdit(request):
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui
+        form = MedicoForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
 
-def cadastroMensagem(request):
-    form =MensagemForm(request.POST)
-    if form.is_valid():
-        form.save
+        return JsonResponse({'response': True})
+@csrf_exempt
+def mensagemSaveEdit(request):
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui
+        form = MensagemForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
 
-
+        return JsonResponse({'response': True})
 
 @csrf_exempt
 def login(request):
-    
+
     print(request)
     if request.method == 'POST':#para get so mudar aqui.
         login = request.POST.get('login')#para get so mudar aqui.
