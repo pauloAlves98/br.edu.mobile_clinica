@@ -11,7 +11,7 @@ class Endereco{
   String cidade;
   String estado;
   String cep;
-  String uf;
+  String uf = "PE";
     
   Endereco();
   // @override
@@ -45,6 +45,19 @@ class Endereco{
   Map toMap() {
     Map<String, dynamic> map = {
       TabelaEndereco.COL_ID: id,
+      TabelaEndereco.COL_RUA: rua,
+      TabelaEndereco.COL_NUMERO: numero,
+      TabelaEndereco.COL_COMPLEMENTO: complemento,
+      TabelaEndereco.COL_BAIRRO: bairro,
+      TabelaEndereco.COL_CIDADE: cidade,
+      TabelaEndereco.COL_ESTADO: estado,
+      TabelaEndereco.COL_CEP: cep,
+      TabelaEndereco.COL_UF: uf,
+    };
+    return map;
+  }
+   Map toMapSave() {
+    Map<String, dynamic> map = {
       TabelaEndereco.COL_RUA: rua,
       TabelaEndereco.COL_NUMERO: numero,
       TabelaEndereco.COL_COMPLEMENTO: complemento,

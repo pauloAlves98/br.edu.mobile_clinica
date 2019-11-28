@@ -8,11 +8,11 @@ import 'Endereco.dart';
 class Paciente {
   int id;
   bool ativo = false;
-  int cpf;
-  int rg;
+  String cpf;
+  String  rg;
   String nome_usuario; //Login
   String nome;
-  DateTime data_nascimento;
+  DateTime data_nascimento = new DateTime.now();
   String senha;
   String sexo;
   Contato contato;
@@ -63,10 +63,25 @@ class Paciente {
       TabelaPaciente.COL_RG: rg,
       TabelaPaciente.COL_NOME_PACIENTE: nome_usuario,
       TabelaPaciente.COL_NOME: nome,
-      TabelaPaciente.COL_DATA_NASCIMENTO:data_nascimento,//Talvez tenha que converter em String
+      TabelaPaciente.COL_DATA_NASCIMENTO:data_nascimento.toString(),//Talvez tenha que converter em String
       TabelaPaciente.COL_SENHA: senha,
       TabelaPaciente.COL_SEXO: sexo,
       TabelaPaciente.COL_ATIVO: ativo,
+    };
+    return map;
+  }
+   Map toMapSave() {
+    Map<String, dynamic> map = {
+      TabelaPaciente.COL_CPF: cpf,
+      TabelaPaciente.COL_RG: rg,
+      TabelaPaciente.COL_NOME_PACIENTE: nome_usuario,
+      TabelaPaciente.COL_NOME: nome,
+      //TabelaPaciente.COL_DATA_NASCIMENTO: data_nascimento,//Talvez tenha que converter em String
+      TabelaPaciente.COL_SENHA: senha,
+      TabelaPaciente.COL_SEXO: sexo,
+      //TabelaPaciente.COL_ATIVO: ativo,
+      // "id_endereco": endereco.toMapSave(),
+      // "id_contato": contato.toMapSave()
     };
     return map;
   }

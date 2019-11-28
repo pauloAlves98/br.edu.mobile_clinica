@@ -122,6 +122,19 @@ def medicoSaveEdit(request):
 
         return JsonResponse({'response': True})
 @csrf_exempt
+def pacienteSaveEdit(request):
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui
+        form = PacienteForm(request.POST)
+        print("Entrou")
+        if form.is_valid():
+            print("Salva")
+            form.save()
+        else:
+              return JsonResponse({'response': False})
+
+        return JsonResponse({'response': True})
+@csrf_exempt
 def mensagemSaveEdit(request):
     print(request)
     if request.method == 'POST':#para get so mudar aqui

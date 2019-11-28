@@ -7,7 +7,7 @@ urlpatterns = [
     # ex: /polls/
     path('', views.index, name='index'),
     path('login', views.login, name='login'),
-    #path('paciente', views.paciente, name='paciente'),
+    path('pacienteSaveEdit', views.pacienteSaveEdit, name='pacienteSaveEdit'),
     path('mensagemSaveEdit',views.mensagemSaveEdit, name='mensagemSaveEdit'),
     path('medicoSaveEdit',views.medicoSaveEdit, name='medicoSaveEdit'),
     path('laudoSaveEdit',views.laudoSaveEdit, name='laudoSaveEdit'),

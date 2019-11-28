@@ -43,7 +43,7 @@ class TabelaPaciente {
   static const String COL_ID = "id";
   static const String COL_CPF = "cpf";
   static const String COL_RG = "rg";
-  static const String COL_NOME_PACIENTE = "nome_paciente";
+  static const String COL_NOME_PACIENTE = "nome_usuario";
   static const String COL_DATA_NASCIMENTO = "data_nascimento";
   static const String COL_SENHA = "senha";
   static const String COL_SEXO = "sexo";

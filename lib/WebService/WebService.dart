@@ -7,6 +7,7 @@ import 'package:projeto_mobile_clinica/model/bin/Paciente.dart';
 class WebService {
   //static final String URL = "http://172.24.40.74:8000";
   //static final String URL = 'http://192.168.0.105:8000';
+  
   static final String URL = "http://192.168.0.115:8000";
 
   static Future<Paciente> getPacienteLoginSenha(
@@ -33,6 +34,8 @@ class WebService {
     }
   }
   static Future<bool> classeSaveEdit(c, String src) async {//
+    print(c.toString()+ " String");
+    print("AAA");
     try {
       http.Response responser = await http.post(URL + src.toString(),
         body:(c.id == null)? c.toMapSave():c.toMap());
