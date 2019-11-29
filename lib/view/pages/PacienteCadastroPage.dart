@@ -133,12 +133,6 @@ class _PacienteCadastroPageState extends State<PacienteCadastroPage> {
                     //     context, "Endereço", builderFieldListP3);
                   }else
                     currentIndex = index;
-                  // } else if (parte == 3) {
-                  //   if(!contatoPage.validarCampos())
-                  //     currentIndex = index > 0 ? index - 1 : 0;
-                  //   else
-                  //   currentIndex = index;
-                  // }
                   _modificaAltura(currentIndex);
                   print("A exceção 2");
                 });

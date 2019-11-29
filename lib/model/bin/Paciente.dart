@@ -3,8 +3,11 @@ import 'package:projeto_mobile_clinica/Sqlite/SqLite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'Contato.dart';
 import 'Endereco.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'Paciente.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 class Paciente {
   int id;
   bool ativo = false;
@@ -14,9 +17,9 @@ class Paciente {
   String nome;
   DateTime data_nascimento = new DateTime.now();
   String senha;
-  String sexo;
-  Contato contato;
-  Endereco endereco;
+  String sexo="M";
+  Contato id_contato;
+  Endereco id_endereco;
 
   Paciente();
 
@@ -36,8 +39,8 @@ class Paciente {
     data_nascimento = DateTime.parse(map["data_nascimento"]);
     senha = map["senha"];
     sexo = map["sexo"];
-    contato =  Contato.fromMapWeb(map["id_contato"]);
-    endereco = Endereco.fromMapWeb(map["id_endereco"]);
+    id_contato =  Contato.fromMapWeb(map["id_contato"]);
+    id_endereco = Endereco.fromMapWeb(map["id_endereco"]);
   }
 
   Paciente.fromMapSqLite(Map map) {
@@ -73,18 +76,22 @@ class Paciente {
    Map toMapSave() {
     Map<String, dynamic> map = {
       TabelaPaciente.COL_CPF: cpf,
-      TabelaPaciente.COL_RG: rg,
-      TabelaPaciente.COL_NOME_PACIENTE: nome_usuario,
+      //TabelaPaciente.COL_RG: rg,
+      //TabelaPaciente.COL_NOME_PACIENTE: nome_usuario,
       TabelaPaciente.COL_NOME: nome,
       //TabelaPaciente.COL_DATA_NASCIMENTO: data_nascimento,//Talvez tenha que converter em String
       TabelaPaciente.COL_SENHA: senha,
-      TabelaPaciente.COL_SEXO: sexo,
+      //TabelaPaciente.COL_SEXO: sexo,
       //TabelaPaciente.COL_ATIVO: ativo,
       // "id_endereco": endereco.toMapSave(),
       // "id_contato": contato.toMapSave()
     };
+   
     return map;
   }
+  factory Paciente.fromJson(Map<String, dynamic> json) => _$PacienteFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PacienteToJson(this);
 
   Future save() async {
     Database dataBase = await SqlHelper().db;

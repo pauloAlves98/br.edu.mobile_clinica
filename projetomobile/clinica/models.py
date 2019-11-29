@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import date
 # Create your models here.
 class Endereco(models.Model):
     rua = models.CharField(max_length=200, null=False, blank=False)
@@ -13,7 +13,16 @@ class Endereco(models.Model):
 
     def __str__(self):
         return self.rua
-
+    def from_json(self, dit):
+        self.pk = dit['id']
+        self.rua = dit['rua']
+        self.numero = dit['numero']
+        self.complemento = dit['complemento']
+        self.bairro = dit['bairro']
+        self.cidade = dit['cidade']
+        self.estado = dit['estado']
+        self.cep = dit['cep']
+        self.uf  = dit['uf']
     def get_json(self):
         return dict(
             id=self.pk,
@@ -34,7 +43,11 @@ class Contato(models.Model):
 
     def __str__(self):
         return self.email
-
+    def from_json(self, dit):
+        self.pk = dit['id']
+        self.fone1 = dit['fone1']
+        self.fone2 = dit['fone2']
+        self.email = dit['email']
     def get_json(self):
         return dict(
             id=self.pk,
@@ -98,6 +111,17 @@ class Paciente(models.Model):
 
     def __str__(self):
         return self.nome
+    def from_json(self, dit):
+        self.pk = dit['id']
+        self.cpf = dit['cpf']
+        self.rg = dit['rg']
+        self.nome_usuario = dit['nome_usuario']
+        self.nome = dit['nome']
+        self.data_nascimento = date.today()
+        self.senha = dit['senha']
+        self.sexo = dit['sexo']
+        # self.id_contato = Contato().from_json(dit['contato'])
+        # self.id_endereco = Endereco().from_json(dit['endereco'])
 
     def get_json(self):
         return dict(

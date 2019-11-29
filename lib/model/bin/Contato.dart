@@ -1,10 +1,14 @@
 import 'package:projeto_mobile_clinica/Sqlite/SQLUtil.dart';
 import 'package:projeto_mobile_clinica/Sqlite/SqLite.dart';
 import 'package:sqflite/sqlite_api.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'Contato.g.dart';
+
+@JsonSerializable()
 class Contato{
   int id;
-  String fone1;
+  String fone1 ;
   String fone2 ;
   String email ;
 
@@ -47,6 +51,9 @@ class Contato{
     };
     return map;
   }
+  factory Contato.fromJson(Map<String, dynamic> json) => _$ContatoFromJson(json);
+  Map<String, dynamic> toJson() => _$ContatoToJson(this);
+
   Future save() async {
     Database dataBase = await SqlHelper().db;
     int valor = await dataBase.insert(TabelaContato.NOME_TABELA, toMap());

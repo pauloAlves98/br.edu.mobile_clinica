@@ -48,6 +48,27 @@ class WebService {
       return false;
     }
   }
+  static Future<bool> pacienteSaveEdit(Paciente c, String src) async {//
+    print(c.toString()+ " String");
+    c.sexo="M";//Esqueci de colocar esse campo!
+    String d = json.encode(c);
+    print(d+ "Encode");
+    print(c.toJson());
+    //flutter pub run build_runner watch comando para criar os serialzier json
+    try {
+      http.Response responser = await http.post(URL + src.toString(),
+        body:{"Paciente":d});
+      String body = responser.body;
+      Map valueMap = json.decode(body);
+      print(valueMap['response']);
+      return valueMap['response'];
+    } catch (e) {
+      print("Exceccao!" + e.toString());
+      return false;
+    }
+  }
 }
+
+
 
 

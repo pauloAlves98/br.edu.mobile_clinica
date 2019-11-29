@@ -5,6 +5,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 #import json
 from django.http import JsonResponse
+import json
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
@@ -13,6 +14,7 @@ from django.core import serializers
 #import pickle
 from clinica.models import Paciente
 from clinica.models import Contato
+from clinica.models import Endereco
 from .form import PacienteForm
 from .form import ClinicaForm
 from .form import ConsultaForm
@@ -125,13 +127,30 @@ def medicoSaveEdit(request):
 def pacienteSaveEdit(request):
     print(request)
     if request.method == 'POST':#para get so mudar aqui
-        form = PacienteForm(request.POST)
-        print("Entrou")
-        if form.is_valid():
-            print("Salva")
-            form.save()
-        else:
-              return JsonResponse({'response': False})
+        print("Entrou1")
+        # form = PacienteForm(request.POST)
+        # print(request.POST.get("Paciente"))
+        pac_dict = json.loads(request.POST.get("Paciente"))
+        print("Vai salvar")
+        c = Contato()
+        e = Endereco(estado="PERNAMBUCO")
+        e.from_json(pac_dict['endereco'])
+        c.from_json(pac_dict['contato'])
+        e.save()
+        c.save()
+        print(pac_dict['contato'])
+        pa = Paciente(nome='killer', id_contato = c, id_endereco= e)
+        pa.from_json(pac_dict)
+        pa.save()
+        print("Salvou")
+        # print(person_dict)
+        # print(person_dict['nome']+"     Nome")
+        # print("Entrou")
+        # if form.is_valid():
+        #     print("Salva")
+        #     form.save()
+        # else:
+        #       return JsonResponse({'response': False})
 
         return JsonResponse({'response': True})
 @csrf_exempt

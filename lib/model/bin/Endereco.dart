@@ -1,7 +1,11 @@
 import 'package:projeto_mobile_clinica/Sqlite/SQLUtil.dart';
 import 'package:projeto_mobile_clinica/Sqlite/SqLite.dart';
 import 'package:sqflite/sqlite_api.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'Endereco.g.dart';
+
+@JsonSerializable()
 class Endereco{
   int id;
   String rua;
@@ -41,7 +45,8 @@ class Endereco{
     cep = map["cep"];
     uf = map["uf"];
   }
-
+  factory Endereco.fromJson(Map<String, dynamic> json) => _$EnderecoFromJson(json);
+  Map<String, dynamic> toJson() => _$EnderecoToJson(this);
   Map toMap() {
     Map<String, dynamic> map = {
       TabelaEndereco.COL_ID: id,

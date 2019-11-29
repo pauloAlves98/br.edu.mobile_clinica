@@ -9,9 +9,35 @@ import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
 
 class CadastroPacienteWidget {
   static Paciente paciente = new Paciente();
+
   static List<DropdownMenuItem<String>> ufs = [
+    new DropdownMenuItem(value: "AC", child: new Text("AC")),
+    new DropdownMenuItem(value: "AL", child: new Text("AL")),
+    new DropdownMenuItem(value: "AP", child: new Text("AP")),
+    new DropdownMenuItem(value: "AM", child: new Text("AM")),
+    new DropdownMenuItem(value: "BA", child: new Text("BA")),
+    new DropdownMenuItem(value: "CE", child: new Text("CE")),
+    new DropdownMenuItem(value: "DF", child: new Text("DF")),
+    new DropdownMenuItem(value: "ES", child: new Text("ES")),
+    new DropdownMenuItem(value: "GO", child: new Text("GO")),
+    new DropdownMenuItem(value: "MA", child: new Text("MA")),
+    new DropdownMenuItem(value: "MT", child: new Text("MT")),
+    new DropdownMenuItem(value: "MS", child: new Text("MS")),
+    new DropdownMenuItem(value: "MG", child: new Text("MG")),
+    new DropdownMenuItem(value: "PA", child: new Text("PA")),
+    new DropdownMenuItem(value: "PB", child: new Text("PB")),
+    new DropdownMenuItem(value: "PR", child: new Text("PR")),
     new DropdownMenuItem(value: "PE", child: new Text("PE")),
-    new DropdownMenuItem(value: "PB", child: new Text("PB"))
+    new DropdownMenuItem(value: "PI", child: new Text("PI")),
+    new DropdownMenuItem(value: "RJ", child: new Text("RJ")),
+    new DropdownMenuItem(value: "RN", child: new Text("RN")),
+    new DropdownMenuItem(value: "RS", child: new Text("RS")),
+    new DropdownMenuItem(value: "RO", child: new Text("RO")),
+    new DropdownMenuItem(value: "RR", child: new Text("RR")),
+    new DropdownMenuItem(value: "SC", child: new Text("SC")),
+    new DropdownMenuItem(value: "SP", child: new Text("SP")),
+    new DropdownMenuItem(value: "SE", child: new Text("SE")),
+    new DropdownMenuItem(value: "TO", child: new Text("TO")),
   ];
   static String currentUf = ufs[0].value;
 }
@@ -285,14 +311,16 @@ class EnderecoPage extends StatefulWidget {
   TextEditingController controladorEstado = TextEditingController();
 
   void preencherCampos(){
-    if(CadastroPacienteWidget.paciente.endereco==null)
+    if(CadastroPacienteWidget.paciente.id_endereco==null)
     return;
-    controladorRua.text = CadastroPacienteWidget.paciente.endereco.rua;
-    controladorCidade.text = CadastroPacienteWidget.paciente.endereco.cidade;
-    controladorN.text ="1234";
-    controladorBairro.text = CadastroPacienteWidget.paciente.endereco.bairro;
-    controladorComplemento.text = CadastroPacienteWidget.paciente.endereco.complemento;
-    controladorCep.text = CadastroPacienteWidget.paciente.endereco.cep;
+    controladorRua.text = CadastroPacienteWidget.paciente.id_endereco.rua;
+    controladorCidade.text = CadastroPacienteWidget.paciente.id_endereco.cidade;
+    controladorBairro.text = CadastroPacienteWidget.paciente.id_endereco.bairro;
+    controladorComplemento.text = CadastroPacienteWidget.paciente.id_endereco.complemento;
+    controladorCep.text = CadastroPacienteWidget.paciente.id_endereco.cep;
+    controladorEstado.text = CadastroPacienteWidget.paciente.id_endereco.estado;
+    controladorN.text = CadastroPacienteWidget.paciente.id_endereco.numero.toString();
+   CadastroPacienteWidget.paciente.id_endereco.uf =  CadastroPacienteWidget.currentUf;
    // controladorNascimento.text = CadastroPacienteWidget.paciente.data_nascimento;
   }
 
@@ -303,11 +331,14 @@ class EnderecoPage extends StatefulWidget {
       Endereco end = new Endereco();
       end.rua = controladorRua.text;
       end.cidade =  controladorCidade.text ;
+      end.estado =  controladorEstado.text ;
       end.numero=1234; 
       end.bairro = controladorBairro.text;
-      end.complemento =controladorComplemento.text;
+      end.complemento = controladorComplemento.text;
       end.cep = controladorCep.text;
-      CadastroPacienteWidget.paciente.endereco = end;
+      end.numero = int.parse(controladorN.text);
+      end.uf = CadastroPacienteWidget.currentUf;
+      CadastroPacienteWidget.paciente.id_endereco = end;
       return true;
     }
     return false;
@@ -371,7 +402,9 @@ class _EnderecoPageState extends State<EnderecoPage > {
               value: CadastroPacienteWidget.currentUf,
               items: CadastroPacienteWidget.ufs,
               onChanged: (String value) {
-                print("AA");
+                 setState(() {
+                     CadastroPacienteWidget.currentUf = value;
+                 });
               },
             ),
           ),
@@ -393,16 +426,19 @@ class _EnderecoPageState extends State<EnderecoPage > {
 }
 
 class ContatoPage extends StatefulWidget {
+  
+
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController controladorFone1 = TextEditingController();
   TextEditingController controladorFone2 = TextEditingController();
   TextEditingController controladorEmail = TextEditingController();
    void preencherCampos(){
-     if(CadastroPacienteWidget.paciente.contato==null)
+     if(CadastroPacienteWidget.paciente.id_contato==null)
     return;
-    controladorFone1.text = CadastroPacienteWidget.paciente.contato.fone1;
-    controladorFone2.text = CadastroPacienteWidget.paciente.contato.fone2;
-    controladorEmail.text = CadastroPacienteWidget.paciente.contato.email;
+    controladorFone1.text = CadastroPacienteWidget.paciente.id_contato.fone1;
+    controladorFone2.text = CadastroPacienteWidget.paciente.id_contato.fone2;
+    controladorEmail.text = CadastroPacienteWidget.paciente.id_contato.email;
   }
 
   bool validarCampos(){
@@ -413,6 +449,8 @@ class ContatoPage extends StatefulWidget {
       contato.fone1 = controladorFone1.text;
       contato.fone2 = controladorFone2.text;
       contato.email = controladorEmail.text;
+      CadastroPacienteWidget.paciente.id_contato = contato;
+      print("COntatooooo"+ contato.fone2);
       return true;
     }
     return false;
@@ -423,11 +461,12 @@ class ContatoPage extends StatefulWidget {
 
 class _ContatoPageState extends State<ContatoPage> {
   bool flagErro = false;
-  void inserir(Paciente p) async {
+  Future<bool> inserir(Paciente p) async {
     print("Iserir");
-    bool l = await WebService.classeSaveEdit(p, EnderecoUrls.PACIENTE_SAVE_EDIT);
+    bool l = await WebService.pacienteSaveEdit(p, EnderecoUrls.PACIENTE_SAVE_EDIT);
     print("Passou paciente");
     print(l);
+    return l;
     // if(p!=null){
     //   print("Nome: "+p.nome_usuario);
     //   Navigator.pushNamed(context, '/pacienteHomePage'); //Mudar
@@ -481,8 +520,12 @@ class _ContatoPageState extends State<ContatoPage> {
             onPressed: () async {
               // await WebService.contatoCadastro('email', '123456789', '123456789');
               if(CadastroPacienteWidget.paciente!=null)
-              print("Não eh  nulo");
-               inserir(CadastroPacienteWidget.paciente);
+               if(widget.validarCampos()){
+                 if(inserir(CadastroPacienteWidget.paciente)==true)
+                 print("Navega");
+                   Navigator.pushReplacementNamed(context, '/login');
+                   CadastroPacienteWidget.paciente = new Paciente();
+               }
                print("Passou inserir");
             }
             //    // Navigator.pushReplacementNamed(context, '/medicoHomePage'), //Mudar
@@ -490,11 +533,10 @@ class _ContatoPageState extends State<ContatoPage> {
       ),
     ),
   ];
-  
     return Form(
       key: widget.formKey,
       child: builderCadastroPacienteBuilder(
-          context, "ContatoPessoal", builderFieldListContato),
+          context, "Contato Pessoal", builderFieldListContato),
     );
   }
 }
