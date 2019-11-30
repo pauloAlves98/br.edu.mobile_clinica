@@ -15,6 +15,9 @@ from django.core import serializers
 from clinica.models import Paciente
 from clinica.models import Contato
 from clinica.models import Endereco
+from clinica.models import Laudo
+from clinica.models import Medico
+from clinica.models import Consulta
 from .form import PacienteForm
 from .form import ClinicaForm
 from .form import ConsultaForm
@@ -188,3 +191,33 @@ def login(request):
     #     pass
 
     return JsonResponse({'response': False})
+
+csrf_exempt
+def madicoSearch(request):
+    m = [obj.get_json() for obj in Medico.objects.filter()]
+    medicos = list(m)
+    return JsonResponse({'medico':medicos}, safe=False)
+
+@csrf_exempt
+def laudoSearchDataNome(request):
+    import datetime as dt
+    start_date = dt.date(2016, 7, 10)
+    end_date = dt.date(2020, 7, 11)
+    laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=2,data_hora__range=(start_date,end_date))] 
+    return JsonResponse({'laudo':laudos}, safe=False)
+@csrf_exempt
+def laudoSearch(request):
+    l = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=2)]
+    laudos = list(l)
+    return JsonResponse({'laudo':laudos}, safe=False)
+
+@csrf_exempt
+def consultaSearch(request):
+    print("Entrou 1")
+    c = [obj.get_json() for obj in Consulta.objects.filter(id_paciente=2)]
+   # c = Consulta.objects.filter()
+    print(c)
+    #print(l)
+    print("Entrou 2")
+ 
+    return JsonResponse({"consulta":c}, safe=False)

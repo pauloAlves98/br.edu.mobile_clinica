@@ -14,5 +14,9 @@ urlpatterns = [
     path('enderecoSaveEdit',views.enderecoSaveEdit, name='enderecoSaveEdit'),
     path('conversaSaveEdit',views.conversaSaveEdit, name='conversaSaveEdit'),
     path('contatoSaveEdit',views.contatoSaveEdit, name='contatoSaveEdit'),
-    path('consultaSaveEdit',views.consultaSaveEdit, name='consultaSaveEdit')
+    path('consultaSaveEdit',views.consultaSaveEdit, name='consultaSaveEdit'),
+    path('consultaSearch',views.consultaSearch, name='consultaSearch'),
+    path('laudoSearch',views.laudoSearch,name='laudoSearch'),
+    path('medicoSearch',views.madicoSearch,name='medicoSearch'),
+    path('laudoSearchDataNome',views.laudoSearchDataNome,name='laudoSearchDataNome')
 ]

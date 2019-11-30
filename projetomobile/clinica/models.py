@@ -92,8 +92,8 @@ class Medico(models.Model):
             especialidade = self.especialidade,
             area = self.area,
             sexo = self.sexo,
-            id_contato = self.id_contato,
-            id_endereco = self.id_endereco,
+            id_contato = self.id_contato.get_json(),
+            id_endereco = self.id_endereco.get_json(),
         )
 
 
@@ -156,8 +156,8 @@ class Consulta(models.Model):
             tipo = self.tipo,
             situacao= self.situacao,
             data_hora =self.data_hora,
-            id_paciente = self.id_paciente,
-            id_medico = self.id_medico,
+            id_paciente = self.id_paciente.get_json(),
+            id_medico = self.id_medico.get_json(),
         )
 
 
@@ -174,8 +174,8 @@ class Laudo(models.Model):
         return dict(
             id = self.pk,
             data_hora =self.data_hora,
-            id_paciente = self.id_paciente,
-            id_medico = self.id_medico,
+            id_paciente = self.id_paciente.get_json(),
+            id_medico = self.id_medico.get_json(),
             descricao =self.descricao
         )
 
@@ -191,8 +191,8 @@ class Conversa(models.Model):
     def get_json(self):
         return dict(
             id = self.pk,
-            id_paciente = self.id_paciente,
-            id_medico = self.id_medico,
+            id_paciente = self.id_paciente.get_json(),
+            id_medico = self.id_medico.get_json(),
         )
 
 
@@ -214,7 +214,7 @@ class Mensagem(models.Model):
             destinatario = self.destinatario,
             emissor = self.emissor,
             dataMsg =self.dataMsg,
-            id_conversa = self.id_conversa,
+            id_conversa = self.id_conversa.get_json(),
         )
 
 class Clinica(models.Model):
@@ -235,8 +235,8 @@ class Clinica(models.Model):
             id = self.pk,
             razao_social = self.razao_social,
             nome_fantasia = self.nome_fantasia,
-            id_endereco = self.id_endereco,
-            id_contato =self.id_contato,
+            id_endereco = self.id_endereco.get_json(),
+            id_contato =self.id_contato.get_json(),
             horarioOpen = self.horarioClose,
             horarioClose = self.horarioClose
         )
