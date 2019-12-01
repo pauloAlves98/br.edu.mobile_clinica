@@ -1,172 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_mobile_clinica/model/utils/Task.dart';
+import 'package:intl/intl.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
+import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
+import 'package:projeto_mobile_clinica/model/bin/Laudo.dart';
+import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 class LaudosPage extends StatefulWidget {
   @override
   _LaudosPageState createState() => _LaudosPageState();
 }
 
 class _LaudosPageState extends State<LaudosPage> {
- List<Task> tasks = new List<Task>();
+
+ List<Laudo>laudos = List<Laudo>();
+  bool vazio = false;
+  String campoData1=" ", campoData2="";
+  TextEditingController filtroController = new TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    tasks.add(new Task("Ana Paula","13:00","Genecologista","Recife-PE",Colors.red));
-    tasks.add(new Task("Rafael","15:00","Dermatologista","Recife-PE",Colors.blue));
-    tasks.add(new Task("Ana Paula","13:00","Genecologista","Recife-PE",Colors.red));
-    tasks.add(new Task("Rafael","15:00","Dermatologista","Recife-PE",Colors.blue));
-    tasks.add(new Task("Ana Paula","13:00","Genecologista","Recife-PE",Colors.red));
-    tasks.add(new Task("Rafael","15:00","Dermatologista","Recife-PE",Colors.blue));
+   
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Stack(children:<Widget>[ 
-      Positioned(
-        top: 0,
-        child: Padding(
-          padding:EdgeInsets.only(top:0),
-        child:Container(
-          color: Colors.blue,
-          width: MediaQuery.of(context).size.width,
-          height: 91,
-          child:Material(
-            color: Colors.blue,
-            elevation: 14,
-            shadowColor:Color(0x802196F3),
-           child:Column(
-             children:<Widget>[
-               Padding(
-                 padding: EdgeInsets.only(left: 8,right: 8,top:3),
-                 child:
-               Row(
-                 children: <Widget>[
-                    Expanded(
-                      
-                      child:Center(child:Container(
-                        height: 40,
-                        child:Center(child: 
-                    TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(),
-                        hintText: "dd/MM/YYYY"
-                      ),
-                    )),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100))
-                    ),
-                    ),)),
-                     Padding(
-                       padding: EdgeInsets.only(left: 2,right: 2),
-                       child:Container(
-                         
-                         decoration: BoxDecoration(
-                           color: Colors.white,
-                           shape: BoxShape.circle
-                         ),
-                         child:Icon(Icons.compare_arrows)),
-                     ),
-                     Expanded(
-                      
-                      child:
-                    Center(child:Container(
-                        height: 40,
-                        child:Center(child: 
-                    TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(),
-                        hintText: "dd/MM/YYYY"
-                      ),
-                    )),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100))
-                    ),
-                    ),)),
-                 ],
-               ),),
-               Padding(
-                 padding: EdgeInsets.only(left: 8,right: 8),
-               child:Padding(
-                 padding: EdgeInsets.only(top: 4),
-                 child:
-               Row(
-                 children:<Widget>[
-                   
-                    Expanded(
-                      flex: 3,
-                      child:
-                    Center(child:Container(
-                        height: 40,
-                        child:Center(child: 
-                    TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(),
-                        hintText: "Nome ou Profissão"
-                      ),
-                    )),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100))
-                    ),
-                    ),)),
-              //       Expanded(child:
-              //       Padding(
-              //         padding: EdgeInsets.only(left:2,right:8),
-              //         child:
-              //       Container(
-              //           height: 40,
-                        
-              //           child:Center(child:
-              //             IconButton(
-              //               icon: Icon(Icons.search),
-              //               onPressed: (){
-
-              //               },
-              //             )
-              //           ),
-              //           decoration: BoxDecoration(
-              //         color: Colors.white,
-              //         borderRadius: BorderRadius.all(Radius.circular(100))
-              //       ),
-              //         ))
-              //       ),
-              //     ]
-              //  )
-              //)
-                 ]))),
-               
-              ]
-            )
-          )
-        ),)
-      ),
-      
-
-      Positioned(
-      top: 100,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height:MediaQuery.of(context).size.height-160 ,
-        child:ListView.builder(
-          itemCount: tasks.length,
-          itemBuilder: (context,position){
-              return _builderCardLaudos(position, tasks[position].medico, tasks[position].area);//_listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
-
-          },
-
-        )
-      ),
-    )]
+      _builderCabecarioBusca(),   
+      _builderListaLaudos(context)
+    ]
     ),
     
     
@@ -203,67 +64,258 @@ class _LaudosPageState extends State<LaudosPage> {
       ),
     );
   }
-
-  Widget _listContainers(String medico,String tempo,String area, String endereco,Color tema){
+    
+ Widget _builderCabecarioBusca() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(0),
       child: Container(
-        height: 80,
-        child: Material(
-          color: Colors.white,
-          elevation: 14,
-          shadowColor: Color(0x802196F3),
-          child: Container(
-            child: Row(
+        height: 140, //MediaQuery.of(context).size.height/2,
+        color: Colors.blue,
+        child: Column(
+          children: <Widget>[
+            Container(
+                height: 25,
+                child: Center(
+                  child: new Text(
+                    'Periodo',
+                    textAlign: TextAlign.center,
+                    style: new TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w200),
+                  ),
+                )),
+            Row(
               children: <Widget>[
-                Container(
-                  width: 10,
-                  height: 80,
-                  color: tema,
-                ),
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            child: Text(medico+"("+area+")",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            child: Text(endereco,style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black87)),
-                          ),
-                        ),
-                        
-                      ],
+                  flex: 1,
+                  child: Container(
+                    width: 20,
+                    child: IconButton(
+                        onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),campodata: campoData1);
+                        setState(()  {
+                        print(d);
+                        DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
+                          campoData1 = f.format(d);
+                        });
+                      },
+                      icon: Icon(
+                        Icons.date_range,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(tempo,style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.lightGreen)),
+                Expanded(
+                  flex: 2,
+                  child: 
+                  Container(
+                    
+                    child: Text(
+                      campoData1,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    // )
                   ),
                 ),
-                Padding(
-                          padding: EdgeInsets.only(right: 8),
-                        )
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Text(
+                      'até',
+                      style: TextStyle(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                    // )
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: 20,
+                    child: IconButton(
+                      onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),campodata: campoData2);
+                        setState(()  {
+                        print(d);
+                        DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
+                          campoData2 = f.format(d);
+                        });
+                      },
+                      //data 2
+                      icon: Icon(
+                        Icons.date_range,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    child: Text(
+                      campoData2,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    // )
+                  ),
+                  // )
+                ),
               ],
             ),
-          ),
-        )
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    color: Colors.blueGrey[600],
+                    child: Icon(
+                      Icons.find_in_page,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                Expanded(
+                    flex: 2,
+                    child: new Theme(
+                      data: new ThemeData(
+                        hintColor: Colors.blueGrey[100],
+                      ),
+                      child: TextField(
+                        controller: filtroController,
+                        autofocus: false,
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: "Filtro",
+                        ),
+                      ),
+                    )
+                    // child: TextField(
+                    //   style: TextStyle(color: Colors.white),
+                    //   decoration: InputDecoration(hintText: "Filtro",fillColor: Colors.white,focusColor: Colors.white,hoverColor: Colors.white),
+                    // ),
+                    ),
+                Expanded(flex: 2, child: _buttomBuscar(context))
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
-    Widget _builderCardLaudos(int index,String medico,String area) {
+
+  Widget _buttomBuscar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 40,
+        alignment: Alignment.topCenter,
+
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        // width: double.infinity,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.centerRight,
+            stops: [0.3, 1], //de acordo com o numero de cores!
+            colors: [Color(0xFF6CD8F0), Colors.black],
+          ),
+          //borderRadius: BorderRadius.all(Radius.circular(360)),
+        ),
+        child: SizedBox.expand(
+          child: FlatButton(
+            textColor: Colors.white,
+            child: Icon(Icons.search),
+            onPressed: ()async{
+              String filtro = filtroController.text.trim();
+              print(campoData1);
+              print(campoData2);
+              print(filtro+ " Filtro");
+              if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length<=0){
+                 laudos = await WebService.consultaLaudoAll(Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+              }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 ){
+                campoData2 = "01/12/2200";
+                campoData1 = "01/01/1900";
+                print("Cond 2");
+                laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+                
+                      //Datas padroes.
+              }
+              else if(campoData2.trim().length<=0){
+                       campoData2 = "01/12/2200";
+                       print("Cond 3");
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+              }else if(campoData1.trim().length<=0){
+                      campoData1 = "01/01/1900";
+                      print("Cond 4");
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+              }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length!=0){
+                       campoData1 = "01/01/1900";
+                       campoData2 = "01/12/2200";
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+                       print("Cond 5");
+              }else
+                 laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+
+              if(laudos.length<=0){
+                    laudos.add(new Laudo());//pra movvimentar o len
+                    vazio = true;
+                }
+              setState(() {
+                laudos;
+              });
+              
+              //Navigator.pushReplacementNamed(context, '/'); //Mudar
+            }
+               
+          ),
+        ),
+      ),
+    );
+  }
+Widget _builderListaLaudos(BuildContext context) {
+
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        margin: EdgeInsets.only(top: 140),
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: laudos.length,
+          //gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemBuilder: (context, index) {
+            print("Chamou Biluder");
+            var obj;
+            if(laudos.length>0 && vazio == false)
+              obj = _builderCardLaudos(index, laudos[index]);
+            else{
+              obj = Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Nenhum Laudo disponivel"),
+              );
+              vazio = false;
+              laudos.clear();
+            }
+            return Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: obj,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _builderCardLaudos(int index, Laudo l) {
     String idd = index.toString();
+    DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');//yyyy-MM-dd hh:mm                  
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: 300,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -274,14 +326,14 @@ class _LaudosPageState extends State<LaudosPage> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.library_books, size: 40, color: Colors.blue),
+              leading: Icon(Icons.library_books, size: 40, color: Colors.white),
               title: Text('Medico', style: TextStyle(color: Colors.blue)),
               subtitle: 
-                  Text(medico,
+                  Text(l.id_medico.nome,
                   style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
                 
                  
-              trailing: Text(area, style: TextStyle(color: Colors.blue)),
+              trailing: Text("ID:"+l.id.toString(), style: TextStyle(color: Colors.white)),
             ),
             Container(
               decoration: BoxDecoration(
@@ -291,7 +343,7 @@ class _LaudosPageState extends State<LaudosPage> {
               height: 50,
               child: Row(
                 children: <Widget>[
-                  Expanded(flex:2, child: Text("Data: 28/09/2019",
+                  Expanded(flex:2, child: Text("Data:"+f.format(l.data_hora),
                   style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
                   
                    Expanded(
@@ -300,19 +352,34 @@ class _LaudosPageState extends State<LaudosPage> {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            'Ver',
+                            'Ver/Editar',
                             style: TextStyle(color: Colors.white),
                           )
                         ],
                       ),
-                      onPressed: () { Navigator.pushNamed(context,'/vizualisarLaudo');},
+                      onPressed: () { Navigator.pushNamed(context, "/vizualisarLaudo");},
                     ), 
                    ),
                    
                   
                 ],
               ),
-            
+              // child: ButtonTheme.bar(
+              //   child: ButtonBar(
+              //     children: <Widget>[
+              //       FlatButton(
+              //         child: Row(
+              //           children: <Widget>[
+              //             Text(
+              //               'Visualizar/Editar',
+              //               style: TextStyle(color: Colors.white),
+              //             )
+              //           ],
+              //         ),
+              //         onPressed: () { Navigator.pushNamed(context, "/cadastroLaudoPage");},
+              //       ),
+              //     ],
+              //   ),
              
             )
           ],
@@ -320,5 +387,4 @@ class _LaudosPageState extends State<LaudosPage> {
       ),
     );
   }
-
 }

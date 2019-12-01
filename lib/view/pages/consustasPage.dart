@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
+import 'package:projeto_mobile_clinica/model/bin/Consulta.dart';
+import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
 import 'package:projeto_mobile_clinica/model/utils/Task.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
 class ConsultaPage extends StatefulWidget {
   @override
@@ -8,6 +13,11 @@ class ConsultaPage extends StatefulWidget {
 }
 
 class _ConsultaPageState extends State<ConsultaPage> {
+  List<Consulta> consultas = List<Consulta>();
+  DateTime selectedDate = DateTime.now();
+   bool vazio = false;
+  String campoData1=" ", campoData2="";
+  TextEditingController filtroController = new TextEditingController();
   List<Task> tasks = new List<Task>();
   @override
   void initState() {
@@ -23,145 +33,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Stack(children:<Widget>[ 
-      Positioned(
-        top: 0,
-        child: Padding(
-          padding:EdgeInsets.only(top:0),
-        child:Container(
-          //color: Colors.blue,
-          width: MediaQuery.of(context).size.width,
-          height: 91,
-          
-          child:Material(
-           // color: Colors.blue,
-            elevation: 14,
-            shadowColor:Color(0x802196F3),
-           child:Container(
-             decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [ Colors.blue,Color(0xFF6CD8F0),],
-                       begin: Alignment.topRight,
-                end: Alignment.bottomRight,
-                stops: [0.3, 1],
-                  ),
-          ),
-             child:Column(
-             children:<Widget>[
-               Padding(
-                 padding: EdgeInsets.only(left: 8,right: 8,top:3),
-                 child:
-               Row(
-                 children: <Widget>[
-                    Expanded(
-                      
-                      child:Center(child:Container(
-                        height: 40,
-                        child:Center(child: 
-                    TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(),
-                        hintText: "dd/MM/YYYY"
-                      ),
-                    )),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100))
-                    ),
-                    ),)),
-                     Padding(
-                       padding: EdgeInsets.only(left: 2,right: 2),
-                       child:Container(
-                         
-                         decoration: BoxDecoration(
-                           color: Colors.white,
-                           shape: BoxShape.circle
-                         ),
-                         child:Icon(Icons.compare_arrows)),
-                     ),
-                     Expanded(
-                      
-                      child:
-                    Center(child:Container(
-                        height: 40,
-                        child:Center(child: 
-                    TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(),
-                        hintText: "dd/MM/YYYY"
-                      ),
-                    )),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100))
-                    ),
-                    ),)),
-                 ],
-               ),),
-               Padding(
-                 padding: EdgeInsets.only(left: 8,right: 8),
-               child:Padding(
-                 padding: EdgeInsets.only(top: 4),
-                 child:
-               Row(
-                 children:<Widget>[
-                   
-                    Expanded(
-                      flex: 3,
-                      child:
-                    Center(child:Container(
-                        height: 40,
-                        child:Center(child: 
-                    TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(),
-                        hintText: "Nome ou Profissão"
-                      ),
-                    )),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100))
-                    ),
-                    ),)),
-              //       Expanded(child:
-              //       Padding(
-              //         padding: EdgeInsets.only(left:2,right:8),
-              //         child:
-              //       Container(
-              //           height: 40,
-                        
-              //           child:Center(child:
-              //             IconButton(
-              //               icon: Icon(Icons.search),
-              //               onPressed: (){
-
-              //               },
-              //             )
-              //           ),
-              //           decoration: BoxDecoration(
-              //         color: Colors.white,
-              //         borderRadius: BorderRadius.all(Radius.circular(100))
-              //       ),
-              //         ))
-              //       ),
-              //     ]
-              //  )
-              //)
-                 ]))),
-               
-              ]
-            )
-          ))
-        ),)
-      ),
+      _builderCabecarioBusca(),
       
 
       Positioned(
@@ -170,9 +42,9 @@ class _ConsultaPageState extends State<ConsultaPage> {
         width: MediaQuery.of(context).size.width,
         height:MediaQuery.of(context).size.height/2.55 ,
         child:ListView.builder(
-          itemCount: tasks.length,
+          itemCount: consultas.length,
           itemBuilder: (context,position){
-              return _builderCardLaudos(tasks[position].medico,position,tasks[position].area);//_listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
+              return _builderCardLaudos(consultas[position],position);//_listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
               
             
           },
@@ -293,8 +165,9 @@ class _ConsultaPageState extends State<ConsultaPage> {
       ),
     ));
   }
-   Widget _builderCardLaudos(String medico,int index,String area) {
+   Widget _builderCardLaudos(Consulta consulta,int index) {
     String idd = index.toString();
+    DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Card(
@@ -328,23 +201,19 @@ class _ConsultaPageState extends State<ConsultaPage> {
               leading: Icon(Icons.person_add, size: 40, color: Colors.blue),
               title: Text('Medico', style: TextStyle(color: Colors.blue)),
               subtitle: 
-                  Text(medico,
+                  Text(consulta.id_medico.nome,
                   style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
                 
                  
-              trailing: Text(area, style: TextStyle(color: Colors.blue)),
+              trailing: Text(consulta.id_medico.area, style: TextStyle(color: Colors.blue)),
             ),
             
             //Divider(),
              ListTile(
               leading: Icon(Icons.date_range, size: 40, color: Colors.blue),
-              title: Text('28/09/2019', style: TextStyle(color: Colors.blue)),
-              subtitle: 
-                  Text("19:00 h",
-                  style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
-                
+              title: Text(f.format(consulta.data_hora), style: TextStyle(color: Colors.blue)),     
                  
-              trailing: Text("Agendada", style: TextStyle(color: Colors.blue)),
+              trailing: Text(consulta.situacao, style: TextStyle(color: Colors.blue)),
             ),
             Container(
               decoration: BoxDecoration(
@@ -390,4 +259,218 @@ class _ConsultaPageState extends State<ConsultaPage> {
   void vizualizarConsulta(){
     Navigator.pushNamed(context, '/vizualisarEditarConsulta');
   }
+
+   Widget _builderCabecarioBusca() {
+    return Padding(
+      padding: const EdgeInsets.all(0),
+      child: Container(
+        height: 140, //MediaQuery.of(context).size.height/2,
+        color: Colors.blueGrey[600],
+        child: Column(
+          children: <Widget>[
+            Container(
+                height: 25,
+                child: Center(
+                  child: new Text(
+                    'Periodo',
+                    textAlign: TextAlign.center,
+                    style: new TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w200),
+                  ),
+                )),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: 20,
+                    child: IconButton(
+                        onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),campodata: campoData1);
+                        setState(()  {
+                        print(d);
+                        DateFormat  f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
+                          campoData1 = f.format(d);
+                        });
+                      },
+                      icon: Icon(
+                        Icons.date_range,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: 
+                  Container(
+                    
+                    child: Text(
+                      campoData1,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    // )
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Text(
+                      'até',
+                      style: TextStyle(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                    // )
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: 20,
+                    child: IconButton(
+                      onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),campodata: campoData2);
+                        setState(()  {
+                        print(d);
+                        DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
+                          campoData2 = f.format(d);
+                        });
+                      },
+                      //data 2
+                      icon: Icon(
+                        Icons.date_range,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    child: Text(
+                      campoData2,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    // )
+                  ),
+                  // )
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    color: Colors.blueGrey[600],
+                    child: Icon(
+                      Icons.find_in_page,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                Expanded(
+                    flex: 2,
+                    child: new Theme(
+                      data: new ThemeData(
+                        hintColor: Colors.blue,
+                      ),
+                      child: TextField(
+                        controller: filtroController,
+                        autofocus: false,
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: "Filtro",
+                        ),
+                      ),
+                    )
+                    // child: TextField(
+                    //   style: TextStyle(color: Colors.white),
+                    //   decoration: InputDecoration(hintText: "Filtro",fillColor: Colors.white,focusColor: Colors.white,hoverColor: Colors.white),
+                    // ),
+                    ),
+                Expanded(flex: 2, child: _buttomBuscar(context))
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buttomBuscar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 40,
+        alignment: Alignment.topCenter,
+
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        // width: double.infinity,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.centerRight,
+            stops: [0.3, 1], //de acordo com o numero de cores!
+            colors: [Color(0xFF6CD8F0), Colors.black],
+          ),
+          //borderRadius: BorderRadius.all(Radius.circular(360)),
+        ),
+        child: SizedBox.expand(
+          child: FlatButton(
+            textColor: Colors.white,
+            child: Icon(Icons.search),
+            onPressed: ()async{
+              String filtro = filtroController.text.trim();
+              print(campoData1);
+              print(campoData2);
+              print(filtro+ " Filtro");
+              if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length<=0){
+                 consultas = await WebService.consultaConsultaAll(Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+              }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 ){
+                campoData2 = "01/12/2200";
+                campoData1 = "01/01/1900";
+                print("Cond 2");
+                consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+                
+                      //Datas padroes.
+              }
+              else if(campoData2.trim().length<=0){
+                       campoData2 = "01/12/2200";
+                       print("Cond 3");
+                       consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+              }else if(campoData1.trim().length<=0){
+                      campoData1 = "01/01/1900";
+                      print("Cond 4");
+                      consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+              }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length!=0){
+                       campoData1 = "01/01/1900";
+                       campoData2 = "01/12/2200";
+                       consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+                       print("Cond 5");
+              }else
+                 consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+
+              if(consultas.length<=0){
+                    consultas.add(new Consulta());//pra movvimentar o len
+                    vazio = true;
+                }
+              setState(() {
+                consultas;
+              });
+              
+              //Navigator.pushReplacementNamed(context, '/'); //Mudar
+            }
+               
+          ),
+        ),
+      ),
+    );
+  }
+
 }

@@ -202,34 +202,67 @@ def login(request):
     return JsonResponse({'response': False})
 
 @csrf_exempt
-def madicoSearch(request):
-    m = [obj.get_json() for obj in Medico.objects.filter()]
-    medicos = list(m)
-    return JsonResponse({'medico':medicos}, safe=False)
+def consultaMedicoAll(request):
+    medicos = [obj.get_json() for obj in Medico.objects.filter()]
+    
+    if(len(medicos)==0):
+        return JsonResponse({'response':False})
+    return JsonResponse({'response':True,'medico':medicos}, safe=False)
 
 @csrf_exempt
-def laudoSearchDataNome(request):
+def consultaMedicoFiltro(request):
+    nome = str(request.POST.get("filtro"));
+    medicos = [obj.get_json() for obj in Medico.objects.filter(id_medico__nome__icontains=nome)]
+    
+    if(len(medicos)==0):
+        return JsonResponse({'response':False})
+    return JsonResponse({'response':True,'medico':medicos}, safe=False)
+
+
+@csrf_exempt
+def consultaConsultaFiltro(request):
     import datetime as dt
-    start_date = dt.date(2016, 7, 10)
-    end_date = dt.date(2020, 7, 11)
-    laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=2,data_hora__range=(start_date,end_date))] 
-    return JsonResponse({'laudo':laudos}, safe=False)
-@csrf_exempt
-def laudoSearch(request):
-    l = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=2)]
-    laudos = list(l)
-    return JsonResponse({'laudo':laudos}, safe=False)
+
+    print(request.POST.get("filtro"))
+
+    print('Entrou Laudo!')
+    temp = str(request.POST.get("id"));
+    id = int(temp)
+    data1 = str(request.POST.get("data1"));
+    data2 = str(request.POST.get("data2"));
+    filtro = str(request.POST.get("filtro"));
+    usuario = str(request.POST.get("usuario"));
+   
+    print(data2+"  Data 1");
+   
+    start_date = dt.date(int(data1.split("/")[2]), int(data1.split("/")[1]), int(data1.split("/")[0]))
+    end_date = dt.date(int(data2.split("/")[2]), int(data2.split("/")[1]), int(data2.split("/")[0]))
+    if usuario=="paciente":
+        consultas = [obj.get_json() for obj in Consulta.objects.filter(id_paciente=id,id_medico__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
+    else:
+        consultas = [obj.get_json() for obj in Consulta.objects.filter(id_medico=id,id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
+    if(len(c)==0):
+        return JsonResponse({"response":False})
+    return JsonResponse({"response":True,"consultas":c}, safe=False) 
+
 
 @csrf_exempt
-def consultaSearch(request):
+def consultaConsultaAll(request):
+    usuario = str(request.POST.get("usuario"));
+    temp = str(request.POST.get("id"));
+    id = int(temp)
     print("Entrou 1")
-    c = [obj.get_json() for obj in Consulta.objects.filter(id_paciente=2)]
+    if usuario=="paciente":
+        c = [obj.get_json() for obj in Consulta.objects.filter(id_paciente=id)]
+    else:
+        c = [obj.get_json() for obj in Consulta.objects.filter(id_medico=id)] 
    # c = Consulta.objects.filter()
     print(c)
     #print(l)
     print("Entrou 2")
- 
-    return JsonResponse({"consulta":c}, safe=False)
+    if(len(c)==0):
+        return JsonResponse({"response":False})
+    return JsonResponse({"response":True,"consultas":c}, safe=False)
 
 #------------------------------------
 @csrf_exempt
@@ -260,17 +293,27 @@ def loginMedico(request):
 @csrf_exempt
 def consultaLaudoAll(request):
     import datetime as dt
+    usuario = str(request.POST.get("usuario"));
+    temp = str(request.POST.get("id"));
+    id = int(temp)
     print("Entrou Laudo!")
     start_date = dt.date(2000, 7, 10)
     end_date = dt.date(2020, 7, 11)
-    laudos = [obj.get_json() for obj in Laudo.objects.filter(data_hora__range=(start_date,end_date))] 
-    print(laudos);
-    return JsonResponse({'laudos':laudos}, safe=False)   
+    if usuario=="paciente":
+        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=id,data_hora__range=(start_date,end_date))] 
+    else:
+        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico=id,data_hora__range=(start_date,end_date))] 
+    print(laudos)
+    if(len(laudos)==0):
+        return JsonResponse({'response':False}, safe=False)
+    return JsonResponse({'response':True,'laudos':laudos}, safe=False)   
 
 @csrf_exempt
 def consultaLaudoFiltro(request):
     import datetime as dt
-
+    usuario = str(request.POST.get("usuario"));
+    temp = str(request.POST.get("id"));
+    id = int(temp)
     print(request.POST.get("filtro"))
 
     print('Entrou Laudo!')
@@ -282,9 +325,17 @@ def consultaLaudoFiltro(request):
    
     start_date = dt.date(int(data1.split("/")[2]), int(data1.split("/")[1]), int(data1.split("/")[0]))
     end_date = dt.date(int(data2.split("/")[2]), int(data2.split("/")[1]), int(data2.split("/")[0]))
-
-    laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
+    if usuario=="paciente":
+        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=id,id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
+        if (len(laudos)==0):
+            laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=id,descricao__icontains = filtro, data_hora__range=(start_date,end_date))] 
+        print(laudos);
+    else:
+        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico=id,id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
+        if(len(laudos)==0):
+            laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico=id,descricao__icontains = filtro, data_hora__range=(start_date,end_date))] 
+        print(laudos);
+    
     if(len(laudos)==0):
-       laudos = [obj.get_json() for obj in Laudo.objects.filter(descricao__icontains = filtro, data_hora__range=(start_date,end_date))] 
-    print(laudos);
-    return JsonResponse({'laudos':laudos}, safe=False) 
+        return JsonResponse({'response':False}, safe=False)
+    return JsonResponse({'response':True,'laudos':laudos}, safe=False)   

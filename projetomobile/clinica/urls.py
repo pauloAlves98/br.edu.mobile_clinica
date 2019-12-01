@@ -16,10 +16,10 @@ urlpatterns = [
     path('conversaSaveEdit',views.conversaSaveEdit, name='conversaSaveEdit'),
     path('contatoSaveEdit',views.contatoSaveEdit, name='contatoSaveEdit'),
     path('consultaSaveEdit',views.consultaSaveEdit, name='consultaSaveEdit'),
-    path('consultaSearch',views.consultaSearch, name='consultaSearch'),
-    path('laudoSearch',views.laudoSearch,name='laudoSearch'),
-    path('medicoSearch',views.madicoSearch,name='medicoSearch'),
-    path('laudoSearchDataNome',views.laudoSearchDataNome,name='laudoSearchDataNome'),
+    path('consultaConsultaAll',views.consultaConsultaAll, name='consultaConsultaAll'),
+    path('consultaConsultaFiltro',views.consultaConsultaFiltro,name='consultaConsultaFiltro'),
     path('consultaLaudoAll',views.consultaLaudoAll, name='consultaLaudoAll'),
-     path('consultaLaudoFiltro',views.consultaLaudoFiltro, name='consultaLaudoFiltro')
+    path('consultaLaudoFiltro',views.consultaLaudoFiltro, name='consultaLaudoFiltro'),
+    path('consultaMedicoAll',views.consultaMedicoAll,name='consultaMedicoAll'),
+    path('consultaMedicoFiltro',views.consultaMedicoFiltro,name='consultaMedicoFiltro')
 ]

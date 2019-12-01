@@ -1,5 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
+import 'package:projeto_mobile_clinica/model/bin/Medico.dart';
 import 'package:projeto_mobile_clinica/model/utils/ConversaTask.dart';
 
  List<ConversasTask> conversasTasks = new List<ConversasTask>();
@@ -11,16 +14,14 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   //List<ConversasTask> conversasTasks = new List<ConversasTask>();
-
+  TextEditingController filtroController = new TextEditingController();
+  DateFormat f = DateFormat("HH:mm");
+  List<Medico> medicos = new List<Medico>();
 @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    conversasTasks.add(new ConversasTask("Felipe Antonio","15:30","Genecologista",Colors.black));
-    conversasTasks.add(new ConversasTask("Antonio","15:30","Dermatologista",Colors.blue));
-    conversasTasks.add(new ConversasTask("Gessica","15:30","Radiologista",Colors.red));
-    conversasTasks.add(new ConversasTask("Flavia","15:30","Ondotologista",Colors.orange));
-    conversasTasks.add(new ConversasTask("Julio","15:30","Nutricionista",Colors.green));
+    
   }
 
   @override
@@ -76,9 +77,14 @@ class _ChatPageState extends State<ChatPage> {
                       borderRadius: BorderRadius.all(Radius.circular(100))
                     ),
                     ),)),
-                    IconButton(icon: Icon(Icons.search),
-                      onPressed: (){
-
+                    IconButton(icon: Icon(Icons.search,color: Colors.white,),
+                      onPressed: () async*{
+                          String filtro = filtroController.text.trim();
+                          if(filtro.length<=0){
+                            medicos = await WebService.consultaMedicoAll();
+                          }else{
+                            medicos = await WebService.consultaMedicoFiltro(filtro);
+                          }
                       },
                     )      
                  ]))),
@@ -97,9 +103,9 @@ class _ChatPageState extends State<ChatPage> {
                 height:MediaQuery.of(context).size.height/1.95 ,
                 child:ListView.builder(
                   dragStartBehavior:DragStartBehavior.start,
-                  itemCount: conversasTasks.length,
+                  itemCount: medicos.length,
                   itemBuilder: (context,position){
-                    return listConversas(conversasTasks[position].nome, conversasTasks[position].tempo,conversasTasks[position].status, conversasTasks[position].tema);
+                    return listConversas(medicos[position],f.format(DateTime.now()));
                   
             // return Dismissible(
             //   key: Key(tasks[position].toString()),
@@ -128,7 +134,7 @@ class _ChatPageState extends State<ChatPage> {
         
     );
   }
-  Widget listConversas(String nome,String tempo,String status,Color tema){
+  Widget listConversas(Medico medico,String tempo){
     return  Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black26)
@@ -146,11 +152,11 @@ class _ChatPageState extends State<ChatPage> {
              Container(
             child: Row(
               children: <Widget>[
-                Container(
+                /* Container(
                   width: 10,
                   height: 94,
                   color: tema,
-                ),
+                ), */
                 Padding(padding: EdgeInsets.only(left:4),),
                 Container(
                   alignment: Alignment.topLeft,
@@ -169,13 +175,13 @@ class _ChatPageState extends State<ChatPage> {
                         Align(
                           alignment: Alignment.topLeft,
                           child: Container(
-                            child: Text(nome,style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+                            child: Text(medico.nome,style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
                           ),
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            child: Text(status,style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black87)),
+                            child: Text(medico.area,style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black87)),
                           ),
                         ),
                         
@@ -200,40 +206,5 @@ class _ChatPageState extends State<ChatPage> {
             
     );
   }
-   Widget _background(Color cor){
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      color: cor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              icon: Icon(Icons.delete,color: Colors.white,),
-              onPressed: (){
-
-              },
-              )
-          
-          ),
-            Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              icon: Icon(Icons.archive,color: Colors.white,),
-              onPressed: (){
-
-              },
-              )
-          
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _listContainers(String medico,String tempo,String area, String endereco,Color tema){
-    
-  }
-
+  
 }

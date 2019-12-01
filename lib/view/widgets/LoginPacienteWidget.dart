@@ -3,6 +3,7 @@ import 'package:projeto_mobile_clinica/WebService/EnderecoUrls.dart';
 import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
 import 'package:projeto_mobile_clinica/model/bin/Contato.dart';
+import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
 import 'package:projeto_mobile_clinica/model/bin/Paciente.dart';
 import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
 
@@ -214,18 +215,19 @@ class LoginPacienteWidget {
     print("Login:"+login.toString());
     print("senha:"+senha.toString());
 
-    //Paciente p = await WebService.getPacienteLoginSenha(login, senha);
-    Contato c = Contato();
+    Paciente p = await WebService.getPacienteLoginSenha(login, senha);
+    /* Contato c = Contato();
     c.email="12221@gmail.com";
     c.fone1="1222";
     c.fone2="199";
-    await WebService.classeSaveEdit(c, EnderecoUrls.CONTATO_SAVE_EDIT);
+    await WebService.classeSaveEdit(c, EnderecoUrls.CONTATO_SAVE_EDIT); */
     print("Passou contato");
-    // if(p!=null){
+    if(p!=null){
     //   print("Nome: "+p.nome_usuario);
-    //   Navigator.pushNamed(context, '/pacienteHomePage'); //Mudar
-    // }else{
-    //   print("Não Achou!");
-    // }
+      Corrente.pacienteCorrente=p;       
+      Navigator.pushNamed(context, '/pacienteHomePage'); //Mudar
+    }else{
+       print("Não Achou!");
+    }
   }
 }

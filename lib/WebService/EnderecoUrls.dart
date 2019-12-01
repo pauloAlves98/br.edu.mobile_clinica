@@ -8,6 +8,10 @@ class EnderecoUrls{
   static final String MEDICO_SAVE_EDIT= '/clinica/medicoSaveEdit';
   static final String CONSULTA_LAUDO_FILTRO = '/clinica/consultaLaudoFiltro';
   static final String CONSULTA_LAUDO_ALL =  '/clinica/consultaLaudoAll';
+  static final String CONSULTA_CONSULTA_ALL = '/clinica/consultaConsultaAll';
+  static final String CONSULTA_CONSULTA_FILTRO ='/clinica/consultaConsultaFiltro';
+  static final String CONSULTA_MEDICO_ALL='/clinica/consultaMedicoAll';
+  static final String CONSULTA_MEDICO_FILTRO ='/clinica/consultaMedicoFiltro';
   static final String LOGIN_MEDICO  = '/clinica/loginMedico';
   static final String LOGIN_PACIENTE  = '/clinica/login';
 }

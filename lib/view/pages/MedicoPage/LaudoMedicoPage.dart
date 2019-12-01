@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
 import 'package:projeto_mobile_clinica/model/bin/Laudo.dart';
 import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
@@ -206,30 +207,30 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
               print(campoData2);
               print(filtro+ " Filtro");
               if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length<=0){
-                 laudos = await WebService.consultaLaudoAll();
+                 laudos = await WebService.consultaLaudoAll(Corrente.medicoCorrente.id,Corrente.usuarioMedico);
               }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 ){
                 campoData2 = "01/12/2200";
                 campoData1 = "01/01/1900";
                 print("Cond 2");
-                laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+                laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.medicoCorrente.id,Corrente.usuarioMedico);
                 
                       //Datas padroes.
               }
               else if(campoData2.trim().length<=0){
                        campoData2 = "01/12/2200";
                        print("Cond 3");
-                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.medicoCorrente.id,Corrente.usuarioMedico);
               }else if(campoData1.trim().length<=0){
                       campoData1 = "01/01/1900";
                       print("Cond 4");
-                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.medicoCorrente.id,Corrente.usuarioMedico);
               }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length!=0){
                        campoData1 = "01/01/1900";
                        campoData2 = "01/12/2200";
-                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.medicoCorrente.id,Corrente.usuarioMedico);
                        print("Cond 5");
               }else
-                 laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+                 laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro,Corrente.medicoCorrente.id,Corrente.usuarioMedico);
 
               if(laudos.length<=0){
                     laudos.add(new Laudo());//pra movvimentar o len
