@@ -7,6 +7,7 @@ urlpatterns = [
     # ex: /polls/
     path('', views.index, name='index'),
     path('login', views.login, name='login'),
+    path('loginMedico', views.loginMedico, name='loginMedico'),
     path('pacienteSaveEdit', views.pacienteSaveEdit, name='pacienteSaveEdit'),
     path('mensagemSaveEdit',views.mensagemSaveEdit, name='mensagemSaveEdit'),
     path('medicoSaveEdit',views.medicoSaveEdit, name='medicoSaveEdit'),
@@ -18,5 +19,7 @@ urlpatterns = [
     path('consultaSearch',views.consultaSearch, name='consultaSearch'),
     path('laudoSearch',views.laudoSearch,name='laudoSearch'),
     path('medicoSearch',views.madicoSearch,name='medicoSearch'),
-    path('laudoSearchDataNome',views.laudoSearchDataNome,name='laudoSearchDataNome')
+    path('laudoSearchDataNome',views.laudoSearchDataNome,name='laudoSearchDataNome'),
+    path('consultaLaudoAll',views.consultaLaudoAll, name='consultaLaudoAll'),
+     path('consultaLaudoFiltro',views.consultaLaudoFiltro, name='consultaLaudoFiltro')
 ]

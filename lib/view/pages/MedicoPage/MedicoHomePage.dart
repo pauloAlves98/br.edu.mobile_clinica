@@ -9,6 +9,8 @@ import 'LaudoMedicoPage.dart';
 
 
 class MedicoHomePage extends StatefulWidget {
+  static String nome = "";
+  static String especialidade = "";
   @override
   _MedicoHomePageState createState() => _MedicoHomePageState();
 }
@@ -118,14 +120,14 @@ class _MedicoHomePageState extends State<MedicoHomePage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 new Text(
-                  'Dr. Zé Leite',
+                  MedicoHomePage.nome,
                   style: new TextStyle(
                       fontSize: 26.0,
                       color: Colors.white,
                       fontWeight: FontWeight.w400),
                 ),
                 new Text(
-                  'Clinico Geral',
+                  MedicoHomePage.especialidade,
                   style: new TextStyle(
                       fontSize: 14.0,
                       color: Colors.white,

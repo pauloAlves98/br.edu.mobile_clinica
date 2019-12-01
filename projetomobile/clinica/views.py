@@ -117,15 +117,24 @@ def laudoSaveEdit(request):
 def medicoSaveEdit(request):
     print(request)
     if request.method == 'POST':#para get so mudar aqui
-        form = MedicoForm(request.POST)
         print("Entrou")
-        if form.is_valid():
-            print("Salva")
-            form.save()
-        else:
-              return JsonResponse({'response': False})
-
+        pac_dict = json.loads(request.POST.get("Medico"))
+        if(pac_dict is None):
+           return JsonResponse({'response': False})
+        print("Vai salvar")
+        c = Contato()
+        e = Endereco()
+        e.from_json(pac_dict['id_endereco'])
+        c.from_json(pac_dict['id_contato'])
+        e.save()
+        c.save()
+        print(pac_dict['id_contato'])
+        pa = Medico(nome='killer', id_contato = c, id_endereco= e)
+        pa.from_json(pac_dict)
+        pa.save()
+        print("Salvou")
         return JsonResponse({'response': True})
+
 @csrf_exempt
 def pacienteSaveEdit(request):
     print(request)
@@ -192,7 +201,7 @@ def login(request):
 
     return JsonResponse({'response': False})
 
-csrf_exempt
+@csrf_exempt
 def madicoSearch(request):
     m = [obj.get_json() for obj in Medico.objects.filter()]
     medicos = list(m)
@@ -221,3 +230,61 @@ def consultaSearch(request):
     print("Entrou 2")
  
     return JsonResponse({"consulta":c}, safe=False)
+
+#------------------------------------
+@csrf_exempt
+def loginMedico(request):
+
+    print(request)
+    if request.method == 'POST':#para get so mudar aqui.
+        login = request.POST.get('login')#para get so mudar aqui.
+        senha = request.POST.get('senha')#para get so mudar aqui.
+        crm = request.POST.get('crm')#para get so mudar aqui.
+        print("Login"+login);
+        print("Senha:"+senha);
+        print("Senha:"+crm);
+
+        if login and senha and crm:
+            usuario = Medico.objects.filter(nome_usuario=login, senha=senha, crm = crm)
+            if usuario.exists():
+                print("Usuario:")
+                #print(usuario.first().get_json())
+                return JsonResponse({'response': True, 'medico': usuario.first().get_json()})
+
+
+    # if request.method == 'GET':
+    #     pass
+
+    return JsonResponse({'response': False})
+
+@csrf_exempt
+def consultaLaudoAll(request):
+    import datetime as dt
+    print("Entrou Laudo!")
+    start_date = dt.date(2000, 7, 10)
+    end_date = dt.date(2020, 7, 11)
+    laudos = [obj.get_json() for obj in Laudo.objects.filter(data_hora__range=(start_date,end_date))] 
+    print(laudos);
+    return JsonResponse({'laudos':laudos}, safe=False)   
+
+@csrf_exempt
+def consultaLaudoFiltro(request):
+    import datetime as dt
+
+    print(request.POST.get("filtro"))
+
+    print('Entrou Laudo!')
+    data1 = str(request.POST.get("data1"));
+    data2 = str(request.POST.get("data2"));
+    filtro = str(request.POST.get("filtro"));
+   
+    print(data2+"  Data 1");
+   
+    start_date = dt.date(int(data1.split("/")[2]), int(data1.split("/")[1]), int(data1.split("/")[0]))
+    end_date = dt.date(int(data2.split("/")[2]), int(data2.split("/")[1]), int(data2.split("/")[0]))
+
+    laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
+    if(len(laudos)==0):
+       laudos = [obj.get_json() for obj in Laudo.objects.filter(descricao__icontains = filtro, data_hora__range=(start_date,end_date))] 
+    print(laudos);
+    return JsonResponse({'laudos':laudos}, safe=False) 

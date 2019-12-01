@@ -30,6 +30,7 @@ dependencies:
   http: ^0.12.0+2
   sqflite: any
   json_annotation: ^2.0.0
+  masked_text: ^0.0.6
 
 dev_dependencies:
   flutter_test:

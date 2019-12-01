@@ -17,7 +17,11 @@ class _MedicoCadastroPageState extends State<MedicoCadastroPage> {
   double _altura = 0;
   List<String> introItems = [" P1", "P2", "P3", "P4","P5"]; //4 paginas!
   final SwiperController _controller = SwiperController();
-  
+  SobreContaPage sobreContaPage = SobreContaPage();
+  EnderecoPage enderecoPage = EnderecoPage();
+  ContatoPage contatoPage = ContatoPage();
+  PessoalPage pessoalPage = PessoalPage();
+  ProfissionalPage profissionalPage = ProfissionalPage();
   @override
   void initState() {
     
@@ -100,13 +104,55 @@ class _MedicoCadastroPageState extends State<MedicoCadastroPage> {
                 autoplayDelay: 5000,
                 index: currentIndex,
                 onIndexChanged: (index) {
-                   _modificaAltura(index);
-                  setState(() {
-                    print("A exceção 1");
+                 setState(() {
+                  print("A exceção 1");
+                  int parte = index;
+                  print("Parte:"+parte.toString());
+                  print("Current "+currentIndex.toString());
+                  if(currentIndex>=parte){//caso seja voltando
                     currentIndex = index;
-                    _modificaAltura(currentIndex);
-                     print("A exceção 2");
-                  });
+                    sobreContaPage.preencherCampos();
+                    enderecoPage.preencherCampos();
+                    pessoalPage.preencherCampos();
+                    contatoPage.preencherCampos();
+                    profissionalPage.preencherCampos();
+                    return;
+                  }
+                  if (parte == 1) {
+                    if(!sobreContaPage.validarCampos())
+                      
+                      currentIndex = index > 0 ? index - 1 : 0;//NA IDA!
+                    else
+                    currentIndex = index;
+                  } 
+                  else if (parte == 3) {
+                     if(!profissionalPage.validarCampos())
+                       currentIndex = index > 0 ? index - 1 : 0;
+                     else
+                     currentIndex = index;
+                    // builderCadastroPacienteBuilder(
+                    //     context, "Pessoal", builderFieldListP2);
+                  }
+                  else if (parte == 2) {
+                     if(!pessoalPage.validarCampos())
+                 
+                       currentIndex = index > 0 ? index - 1 : 0;
+                     else
+                     currentIndex = index;
+                    // builderCadastroPacienteBuilder(
+                    //     context, "Pessoal", builderFieldListP2);
+                  } else if (parte == 4 ) {
+                    if(!enderecoPage.validarCampos())
+                      currentIndex = index > 0 ? index - 1 : 0;
+                    else
+                    currentIndex = index;
+                    // builderCadastroPacienteBuilder(
+                    //     context, "Endereço", builderFieldListP3);
+                  }else
+                    currentIndex = index;
+                  _modificaAltura(currentIndex);
+                  print("A exceção 2");
+                });
 
                 },
                 itemBuilder: (context, index) {
@@ -130,7 +176,7 @@ class _MedicoCadastroPageState extends State<MedicoCadastroPage> {
                       activeSize: 12.0),
                 ),
                 loop: false,
-                autoplayDisableOnInteraction: false,
+                autoplayDisableOnInteraction: true,
               ),),
           
 
@@ -184,6 +230,20 @@ class _MedicoCadastroPageState extends State<MedicoCadastroPage> {
   }
 
   Widget _buildPage(BuildContext context, int index) {//index é o nº da pagina atual
-    return CadastroMedicoWidget.builderCadastroMedico(context, index);
+    int parte = index;
+    if(parte == 0){
+      return sobreContaPage;
+    }else if(parte == 1){
+      return  pessoalPage;
+    }
+     else if(parte == 2){
+      return  profissionalPage;
+    }
+    else if(parte == 3){
+      return  enderecoPage;
+    }
+    else if(parte == 4){
+      return  contatoPage;
+    }
   }
 }

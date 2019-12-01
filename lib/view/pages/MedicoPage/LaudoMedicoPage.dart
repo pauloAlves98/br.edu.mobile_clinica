@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/model/bin/Laudo.dart';
 import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
 class LaudoMedicoPage extends StatefulWidget {
@@ -9,10 +12,12 @@ class LaudoMedicoPage extends StatefulWidget {
 
 class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
   List<String> _laudos = ["1", "2", "3", "4", "4", "4", "4"];
+  List<Laudo>laudos = List<Laudo>();
   int _paginaBotton = 0;
+  bool vazio = false;
+  String campoData1=" ", campoData2="";
+  TextEditingController filtroController = new TextEditingController();
 
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +62,12 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
-                        onPressed: () {
-                        setState(() {
-                          selectDate(context, DateTime.now());
+                        onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),campodata: campoData1);
+                        setState(()  {
+                        print(d);
+                        DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
+                          campoData1 = f.format(d);
                         });
                       },
                       icon: Icon(
@@ -71,9 +79,11 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                 ),
                 Expanded(
                   flex: 2,
-                  child: Container(
+                  child: 
+                  Container(
+                    
                     child: Text(
-                      'dd/MM/YYYY',
+                      campoData1,
                       style: TextStyle(color: Colors.white),
                     ),
                     // )
@@ -95,9 +105,12 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
-                       onPressed: () {
-                        setState(() {
-                          selectDate(context, DateTime.now());
+                      onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),campodata: campoData2);
+                        setState(()  {
+                        print(d);
+                        DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
+                          campoData2 = f.format(d);
                         });
                       },
                       //data 2
@@ -112,7 +125,7 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                   flex: 2,
                   child: Container(
                     child: Text(
-                      'dd/MM/YYYY',
+                      campoData2,
                       style: TextStyle(color: Colors.white),
                     ),
                     // )
@@ -142,6 +155,7 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                         hintColor: Colors.blueGrey[100],
                       ),
                       child: TextField(
+                        controller: filtroController,
                         autofocus: false,
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
@@ -186,8 +200,48 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
           child: FlatButton(
             textColor: Colors.white,
             child: Icon(Icons.search),
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, '/'), //Mudar
+            onPressed: ()async{
+              String filtro = filtroController.text.trim();
+              print(campoData1);
+              print(campoData2);
+              print(filtro+ " Filtro");
+              if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length<=0){
+                 laudos = await WebService.consultaLaudoAll();
+              }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 ){
+                campoData2 = "01/12/2200";
+                campoData1 = "01/01/1900";
+                print("Cond 2");
+                laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+                
+                      //Datas padroes.
+              }
+              else if(campoData2.trim().length<=0){
+                       campoData2 = "01/12/2200";
+                       print("Cond 3");
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+              }else if(campoData1.trim().length<=0){
+                      campoData1 = "01/01/1900";
+                      print("Cond 4");
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+              }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length!=0){
+                       campoData1 = "01/01/1900";
+                       campoData2 = "01/12/2200";
+                       laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+                       print("Cond 5");
+              }else
+                 laudos = await WebService.consultaLaudoFiltro(campoData1,campoData2,filtro);
+
+              if(laudos.length<=0){
+                    laudos.add(new Laudo());//pra movvimentar o len
+                    vazio = true;
+                }
+              setState(() {
+                laudos;
+              });
+              
+              //Navigator.pushReplacementNamed(context, '/'); //Mudar
+            }
+               
           ),
         ),
       ),
@@ -195,6 +249,7 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
   }
 
   Widget _builderListaLaudos(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
@@ -202,12 +257,24 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: _laudos.length,
+          itemCount: laudos.length,
           //gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (context, index) {
+            print("Chamou Biluder");
+            var obj;
+            if(laudos.length>0 && vazio == false)
+              obj = _builderCardLaudos(index, laudos[index]);
+            else{
+              obj = Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Nenhum Laudo disponivel"),
+              );
+              vazio = false;
+              laudos.clear();
+            }
             return Padding(
               padding: const EdgeInsets.all(3.0),
-              child: _builderCardLaudos(index),
+              child: obj,
             );
           },
         ),
@@ -215,8 +282,9 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
     );
   }
 
-  Widget _builderCardLaudos(int index) {
+  Widget _builderCardLaudos(int index, Laudo l) {
     String idd = index.toString();
+    DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');//yyyy-MM-dd hh:mm                  
     return Container(
       width: 300,
       child: Card(
@@ -232,11 +300,11 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
               leading: Icon(Icons.library_books, size: 40, color: Colors.white),
               title: Text('Paciente', style: TextStyle(color: Colors.white)),
               subtitle: 
-                  Text("Kakashi hatake $idd",
+                  Text(l.id_paciente.nome,
                   style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
                 
                  
-              trailing: Text("ID: $idd", style: TextStyle(color: Colors.white)),
+              trailing: Text("ID:"+l.id.toString(), style: TextStyle(color: Colors.white)),
             ),
             Container(
               decoration: BoxDecoration(
@@ -246,7 +314,7 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
               height: 50,
               child: Row(
                 children: <Widget>[
-                  Expanded(flex:2, child: Text("Data: 28/09/2019",
+                  Expanded(flex:2, child: Text("Data:"+f.format(l.data_hora),
                   style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
                   
                    Expanded(

@@ -63,9 +63,9 @@ class Medico(models.Model):
         ("N", "Nenhuma das opções")
     )
 
-    cpf = models.IntegerField( null=False, blank=False)
+    cpf = models.CharField(max_length=14)
     crm = models.IntegerField()#Na vdd eh 7
-    rg = models.IntegerField( null=False, blank=False)
+    rg = models.CharField(max_length=22)
     nome_usuario = models.CharField(max_length=100)
     nome = models.CharField(max_length=100)
     data_nascimento = models.DateField()
@@ -78,7 +78,20 @@ class Medico(models.Model):
 
     def __str__(self):
         return self.nome
-
+    def from_json(self, dit):
+        self.pk = dit['id']
+        self.cpf = dit['cpf']
+        self.rg = dit['rg']
+        self.nome_usuario = dit['nome_usuario']
+        self.nome = dit['nome']
+        self.data_nascimento = date.today()
+        self.senha = dit['senha']
+        self.sexo = dit['sexo']
+        self.crm = dit['crm']
+        self.area = dit['area']
+        self.especialidade = dit['especialidade']
+        # self.id_contato = Contato().from_json(dit['contato'])
+        # self.id_endereco = Endereco().from_json(dit['endereco'])
     def get_json(self):
         return dict(
             id=self.pk,
@@ -99,8 +112,8 @@ class Medico(models.Model):
 
 class Paciente(models.Model):
 
-    cpf = models.IntegerField(null=False, blank=False)
-    rg = models.IntegerField(null=False, blank=False)
+    cpf = models.CharField(max_length=14)
+    rg = models.CharField(max_length=22)
     nome_usuario = models.CharField(max_length=100)
     nome = models.CharField(max_length=100)
     data_nascimento = models.DateField()
@@ -168,7 +181,7 @@ class Laudo(models.Model):
     id_medico = models.ForeignKey(Medico,  on_delete=models.SET_NULL, null=True)
     descricao = models.TextField()
     def __str__(self):
-        return self.data_hora
+        return self.descricao
 
     def get_json(self):
         return dict(

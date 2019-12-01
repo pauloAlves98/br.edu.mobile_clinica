@@ -34,14 +34,10 @@ class _LoginPageState extends State<LoginPage>
   
   TextEditingController _pacienteEmailField = new TextEditingController();
   TextEditingController _pacientePasswordField = new TextEditingController();
+  LoginMedicoWidgetPage loginMedicoPage = new LoginMedicoWidgetPage();
 
   bool _obscureTextPaciente = true;
-  bool _obscureTextMedico = true;
-  bool _obscureTextMedicoConfirm = true;
-
-  TextEditingController _medicoEmailField = new TextEditingController();
-  TextEditingController _medicoCrmField = new TextEditingController();
-  TextEditingController _medicoPasswordField = new TextEditingController();
+ 
 
   PageController _pageController;
 
@@ -106,8 +102,7 @@ class _LoginPageState extends State<LoginPage>
                         children: <Widget>[
                           LoginPacienteWidget.buildLoginPaciente(context,_pacienteEmailField,_pacientePasswordField,myFocusNodePassword,
                           _obscureTextPaciente,_toggleLoginPaciente),
-                          LoginMedicoWidget.buildLoginMedico(context,_medicoEmailField,_medicoCrmField,_medicoPasswordField,myFocusNodePassword,
-                          _obscureTextMedico,_toggleLoginMedico)
+                          loginMedicoPage
                         ],
                       ),
                     ),
@@ -206,18 +201,6 @@ class _LoginPageState extends State<LoginPage>
   void _toggleLoginPaciente() {
     setState(() {
       _obscureTextPaciente = !_obscureTextPaciente;
-    });
-  }
-
-  void _toggleLoginMedico() {
-    setState(() {
-      _obscureTextMedico = !_obscureTextMedico;
-    });
-  }
-
-  void _toggleSignupConfirm() {
-    setState(() {
-      _obscureTextMedicoConfirm = !_obscureTextMedicoConfirm;
     });
   }
 }
