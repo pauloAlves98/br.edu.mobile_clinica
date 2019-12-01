@@ -3,6 +3,14 @@ import 'package:projeto_mobile_clinica/model/utils/Task.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
 
+final Map<DateTime, List> _holidays = {
+  DateTime(2019, 1, 1): ['New Year\'s Day'],
+  DateTime(2019, 1, 6): ['Epiphany'],
+  DateTime(2019, 2, 14): ['Valentine\'s Day'],
+  DateTime(2019, 4, 21): ['Easter Sunday'],
+  DateTime(2019, 4, 22): ['Easter Monday'],
+};
+
 class AgendarConsultaPage extends StatefulWidget {
   @override
   _AgendarConsultaPageState createState() => _AgendarConsultaPageState();
@@ -12,10 +20,18 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
   CalendarController _calendarController;
    List<Widget> _containers = new List<Widget>(); 
   List<Task> medicosModel = new List<Task>();
+  List _cities =
+  ["Cluj-Napoca", "Bucuresti", "Timisoara", "Brasov", "Constanta"];
+
+   List<DropdownMenuItem<String>> _dropDownMenuItems;
+  String _currentCity;
   @override
   void initState() {
+
     // TODO: implement initState
     super.initState();
+    _dropDownMenuItems = getDropDownMenuItems();
+    _currentCity = _dropDownMenuItems[0].value;
     medicosModel.add(new Task("Felipe Antonio","15:30","Genecologista","Carnaiba,Rua  nova, N° Sala 17",Colors.black));
     medicosModel.add(new Task("Antonio","15:30","Dermatologista","Carnaiba,Rua  nova, N° Sala 17",Colors.blue));
     medicosModel.add(new Task("Gessica","15:30","Radiologista","Carnaiba,Rua  nova, N° Sala 17",Colors.red));
@@ -28,6 +44,7 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blue,
           title: Text("Agendar Consulta"),
           leading: Builder(
           builder: (BuildContext context) {
@@ -55,78 +72,53 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
           child:Stack(
             children: <Widget>[
               Positioned(
-                top: 0,
-                child:Container(
-          //color: Colors.blue,
-          width: MediaQuery.of(context).size.width,
-          height: 50,
-          child:Material(
-            //color: Colors.blue,
-            elevation: 14,
-            shadowColor:Color(0x802196F3),
-            child:Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [ Colors.blue,Color(0xFF6CD8F0),],
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomRight,
-                    stops: [0.3, 1],
-                  ),
-              ),
-            child: Padding(
-              padding: EdgeInsets.only(left: 8,right: 8),
-              child:Padding(
-                padding: EdgeInsets.only(top: 4),
-                child:Row(
-                 children:<Widget>[
-                
-                    Expanded(
-                      flex: 3,
-                      child:Center(
-                        child:Container(
-                          height: 40,
-                          child:Center(
-                            child:TextField(
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                          
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(),
-                                hintText: "Nome"
-                              ),
-                            ),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(100))
-                        ),
-                      ),
-                    )
-                  ),
-                  IconButton(icon: Icon(Icons.search),
-                     onPressed: (){
-
-                    },
-                  )
-
-                 ]
-                 )
-                 )
-                 ),
-               
-          ),
-          ))),
-              Positioned(
-                top: 51,
+                top: -10,
                 child:Container( 
                   width: MediaQuery.of(context).size.width,
                   height:MediaQuery.of(context).size.height/1.25 ,
-                  child:ListView.builder(
-                    itemCount:medicosModel.length,
-                    itemBuilder: (context,index){
-                      return _container(medicosModel[index].medico, medicosModel[index].area, medicosModel[index].endereco);
-                    },
+                  child:TableCalendar(
+                    holidays: _holidays,                 
+                    calendarController: _calendarController,
+                    locale: 'pt-br',
+            
+                    calendarStyle: CalendarStyle(
+                      selectedColor: Colors.black45,
+                      todayColor: Colors.orange,
+                      markersColor: Colors.green,
+                      outsideDaysVisible: false,
+                    ),
+                    headerStyle: HeaderStyle(
+                      centerHeaderTitle: true,
+                      formatButtonVisible: false,
+                      formatButtonTextStyle:TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
+                      formatButtonDecoration: BoxDecoration(
+                        color: Colors.deepOrange[400],
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
+
+           
+                    onDaySelected: (DateTime data, List<dynamic> list){
+                        
+                    }, 
                   ),
+                  
+                  /*
+                  ), */
+                )
+              ),
+              Positioned(
+                top: 312,
+                child:Container( 
+                 
+                  width: MediaQuery.of(context).size.width,
+                  height:MediaQuery.of(context).size.height/2.95,
+                  child:ListView.builder(
+                      itemCount:medicosModel.length,
+                      itemBuilder: (context,index){
+                        return _container(medicosModel[index].medico, medicosModel[index].area, medicosModel[index].endereco,index);
+                      },
+                  )
                 )
               )
             ]
@@ -136,127 +128,129 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
             
     );
   }
-  Widget _container(String nome,String area,String endereco){
+  Widget _container(String nome,String area,String endereco,int i){
     return Material(
       shadowColor: Colors.black38,
       elevation: 14,
       child:Container(
         decoration: BoxDecoration(
-          border: Border.all(color:Colors.black45)
+          border: Border.all(color:Colors.black45),
+          gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomRight,
+                stops: [0.3, 1], //de acordo com o numero de cores!
+                colors: [Color(0xFF6CD8F0), blueLogin1],
+              ),
         ),
+                    
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: <Widget>[
+          Padding(padding: EdgeInsets.only(top:4),),
           Row(
             children: <Widget>[
               Expanded(
                 flex: 1,
                 child: Container(
-                  width: 100,
-                  height: 100,
-                  child: CircleAvatar(
-                    radius: 80,
-                  ),
+                  width: 80,
+                  height: 80,
+                  child:Center(
+                   child:CircleAvatar(
+                    radius: 50,
+                  ),)
                 ),
               ),
-              Expanded(
-                flex: 3,
-                child:Container(
-                 padding: EdgeInsets.only(left: 10,top: 3),
-                 width: 100,
-                 height: 80,
-                 alignment: Alignment.topLeft,
-                  child:Column(
-                    
-                    children: <Widget>[
-                        Row(children: <Widget>[
-                          Text(nome,style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold ),),
+             
+                  ],
+              ),
+              
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+                          Text(nome+"("+area+")",style: TextStyle(fontSize: 14,fontWeight:FontWeight.bold,color: Colors.white ),),
                         ],),
-                        Row(children: <Widget>[
-                          Text(area,style: TextStyle(fontSize: 15,fontStyle: FontStyle.italic,color: Colors.black45),),
-                        ],), 
-                       
-                        
-                          Container(
-                            alignment: Alignment.topCenter,
-                            padding: EdgeInsets.only(top: 10),
-                            height: 35,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomRight,
-                                stops: [0.3, 1], //de acordo com o numero de cores!
-                                colors: [Color(0xFF6CD8F0), blueLogin1],
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(100))
-                            ),
-                            child:Center(
-                              child: Text("Ver preço",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),textDirection: TextDirection.ltr,),),
-                          )
-                        
-                    ],
-                  )
-                ) 
-              )
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              
+              Icon(Icons.location_on,color: Colors.white,),
+
+              Align(
+                 alignment: Alignment.centerLeft,
+                 child:Text(endereco,style: TextStyle(color: Colors.white),),
+                )
               
             ],
           ),
-          Divider(
-            color: Colors.black54,
-          ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Expanded(
-                flex: 1,
-                child:Align(
-                 alignment: Alignment.centerLeft,
-                 child:Icon(Icons.location_on),
-                )
-              ),
-              Expanded(
-                flex: 4,
-                child:Align(
-                 alignment: Alignment.centerLeft,
-                 child:Text(endereco),
-                )
-              ),
+               Container(
+                 width: 140,
+                 height: 40,
+                 child: Center(
+                   child:new DropdownButton(
+                value: _currentCity,
+                items: _dropDownMenuItems,
+                onChanged: changedDropDownItem,
+                iconEnabledColor: Colors.white,
+                iconDisabledColor: Colors.white,
+              ))
+               ),
+              Container(
+                height: 30,
+                
+              child:RaisedButton(
+                onPressed: (){
+                    setState(() {
+                      
+                    });
+
+                },
+                color: Colors.black,
+                child: Text("Preco",style: TextStyle(color: Colors.white),),
+                ))
             ],
           ),
-          Divider(
-            color: Colors.black54,
-          ),
-          TableCalendar(
-            initialCalendarFormat: CalendarFormat.twoWeeks,
-            calendarController: _calendarController,
-            locale: 'pt-br',
-            
-            
-
-            headerStyle: HeaderStyle(
-              centerHeaderTitle: true,
-              formatButtonVisible: false,
-            ),
-            onDaySelected: (DateTime data, List<dynamic> list){
-                
-            }, 
-          ),
           Padding(
-            padding: EdgeInsets.only(left: 5,right: 5),
+            padding: EdgeInsets.only(left: 5,right: 5,bottom: 5),
             child:Row(children: <Widget>[
             Expanded(
-              child: RaisedButton(
+              child:Container(
+                height: 30,
+               child:RaisedButton(
                 onPressed: (){
                     setState(() {
                       
                     });
                 },
-                color: Colors.blue,
-                child: Text("Agendar consulta"),) )
+                color: Colors.white,
+                child: Text("Agendar consulta",style: TextStyle(color: Colors.blue),),) ))
           ],)),
-            
-          Padding(padding: EdgeInsets.only(bottom: 5),)
+
+          
         ],
       ),
     ));
+  }
+
+  List<DropdownMenuItem<String>> getDropDownMenuItems() {
+    List<DropdownMenuItem<String>> items = new List();
+    for (String city in _cities) {
+      items.add(new DropdownMenuItem(
+          value: city,
+          child: new Text(city)
+      ));
+    }
+    return items;
+  }
+
+   void changedDropDownItem(String selectedCity) {
+    setState(() {
+      _currentCity = selectedCity;
+    });
   }
 }

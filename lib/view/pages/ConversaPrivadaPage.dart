@@ -25,25 +25,34 @@ class _ConversaPrivadaPageState extends State<ConversaPrivadaPage> {
     return Scaffold(
       body: Column(
           children: <Widget>[
-            Row(
+            Container(
+            decoration: BoxDecoration(
+              color: Colors.blue
+            ),
+            child:Row(
+             // crossAxisAlignment: CrossAxisAlignment.baseline,
+             // mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
+                ),
                 CircleAvatar(
                       radius: 25,
                 ),
                 Expanded(
                 child:ListTile(
-                  title: Text("Felipe Antonio",style:TextStyle(color:Colors.white,fontSize: 15),),
+                  title: Text("Felipe Antonio",style:TextStyle(color:Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),
                   subtitle: Text("Online",style:TextStyle(color:Colors.white)),
                 ),
                 ),
                 IconButton(
-                  icon:Icon(Icons.exit_to_app),
+                  icon:Icon(Icons.exit_to_app,color: Colors.white,),
                   onPressed: (){
-
+                      Navigator.pop(context);
                   },
                   )  
               ],
-            ),
+            )),
             Expanded(
               child:Padding(
                 padding: EdgeInsets.only(top:4),
