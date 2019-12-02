@@ -1,7 +1,15 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as prefix0;
+import 'package:projeto_mobile_clinica/WebService/EnderecoUrls.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
 import "dart:io";
+import 'package:intl/intl.dart';
+import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
+import 'package:projeto_mobile_clinica/model/bin/Medico.dart';
+import 'package:masked_text/masked_text.dart';
+import 'package:projeto_mobile_clinica/view/pages/MedicoPage/MedicoHomePage.dart';
 
 class MedicoPerfilPage extends StatefulWidget {
   @override
@@ -9,7 +17,7 @@ class MedicoPerfilPage extends StatefulWidget {
 }
 
 class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
-  
+  static DateFormat   f = new DateFormat('dd/MM/yyyy');
   String _path = '';
   String title = 'Dados Pessoais';
   int op=0;
@@ -24,7 +32,7 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
   
   @override
   Widget build(BuildContext context) {
-    preencher();
+    preencher(Corrente.medicoCorrente);
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -93,7 +101,7 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
                 backgroundColor: Colors.white,
                 radius: 25,
                 child:Center(child: IconButton(
-              icon:Icon(Icons.camera_alt,size: 25,textDirection: TextDirection.ltr,color: Colors.blue,),
+              icon:Icon(Icons.camera_alt,size: 25,color: Colors.blue,),
               onPressed: (){
                 
               },
@@ -199,15 +207,18 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
       );
     
   }
-  void editDados(IconData icone, String title){
+  void editDados(IconData icone, String title, String valor){
+      TextEditingController field = new TextEditingController();
+      field.text=valor;
      showDialog(
+
         context: context, 
         builder: (BuildContext context){
                     return Stack(
                             children: <Widget>[ 
                                          Positioned(
                                           left: -30,
-                                          top:foco ? MediaQuery.of(context).size.height-460 :MediaQuery.of(context).size.height-220,
+                                          top:MediaQuery.of(context).size.height-440,
                                           child: Padding(
                                             padding:  EdgeInsets.all(8.0),
                                             child: Container(
@@ -225,7 +236,7 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
                                                borderRadius: BorderRadius.all(new Radius.circular(100))
                                               ),
                                               width:MediaQuery.of(context).size.width-39,
-                                              height: 60,
+                                              height: 81,
                                               
                                               child: Column(
                                                 children: <Widget>[
@@ -235,17 +246,30 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
                                                     padding: EdgeInsets.only(left: 10)
                                                   ),
                                                   Expanded(
-                                                    child: TextField(
-                                                      decoration: InputDecoration(
-                                                        labelText: title
+                                                    child:new MaskedTextField(
+                                                      maskedTextFieldController: field,
+                                                      escapeCharacter: '#',
+                                                      mask: title=="Data de Nascimento"
+                                                            ?"##/##/####":title=="CPF"? "###.###.###-##":
+                                                            title=="Telefone 1"?"(##) # ####-####":
+                                                            title=="Telefone 2"?"(##) # ####-####":
+                                                            title=="CEP"?"##.###-###":"",
+                                                      
+                                                      keyboardType:title=="Telefone 1"?TextInputType.number:
+                                                                   title=="Telefone 2"?TextInputType.number:
+                                                                   title=="RG"?TextInputType.number:
+                                                                   title=="CPF"?TextInputType.number:
+                                                                   title=="Numero"?TextInputType.number:
+                                                                   title=="CEP"?TextInputType.number:
+                                                                   title=="Data de Nascimento"?TextInputType.number:
+                                                                   title=="CRM"?TextInputType.number:TextInputType.text,
+                                                      inputDecoration: InputDecoration(
+                                                         
+                                                         labelText: title
                                                       ),
-                                                      onTap: (){
-                                                          setState(() {
-                                                           foco=true; 
-                                                          });
-                                                      },
+                                                     
                                                     ),
-                                                  ),
+                                                  )
                                                   ],)
                                                   
                                                 ],
@@ -254,7 +278,55 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
                                             actions: <Widget>[
                                               FlatButton(child: Text("Salvar"),
                                               onPressed: (){
-
+                                                    if(title=="Nome"){
+                                                      Corrente.medicoCorrente.nome=field.text;
+                                                    }else if(title=="RG"){
+                                                      Corrente.medicoCorrente.rg = field.text;
+                                                    }else if(title=="CPF"){
+                                                      Corrente.medicoCorrente.cpf = field.text;
+                                                    }else if(title=="Data de Nascimento"){
+                                                      Corrente.medicoCorrente.data_nascimento=DateTime(int.parse(field.text.split("/")[2]), int.parse(field.toString().split("/")[1]), int.parse(field.toString().split("/")[0]));
+                                                    }else if(title=="Sexo"){
+                                                      Corrente.medicoCorrente.sexo=field.text;
+                                                    }else if(title=="Telefone 1"){
+                                                      Corrente.medicoCorrente.id_contato.fone1=field.text;
+                                                    }else if(title=="Telefone 2"){
+                                                      Corrente.medicoCorrente.id_contato.fone2=field.text;
+                                                    }else if(title=="Rua"){
+                                                      Corrente.medicoCorrente.id_endereco.rua=field.text;
+                                                    }else if(title=="Numero"){
+                                                      Corrente.medicoCorrente.id_endereco.numero=int.parse(field.text);
+                                                    }else if(title=="Bairro"){
+                                                      Corrente.medicoCorrente.id_endereco.bairro=field.text;
+                                                    }else if(title=="Complemento"){
+                                                      Corrente.medicoCorrente.id_endereco.complemento=field.text;
+                                                    }else if(title=="CEP"){
+                                                      Corrente.medicoCorrente.id_endereco.cep=field.text;
+                                                    }else if(title=="Estado"){
+                                                      Corrente.medicoCorrente.id_endereco.estado=field.text;
+                                                    }else if(title=="Cidade"){
+                                                      Corrente.medicoCorrente.id_endereco.cidade=field.text;
+                                                    }else if(title=="Login"){
+                                                      Corrente.medicoCorrente.nome_usuario=field.text;
+                                                    }else if(title=="Senha"){
+                                                      Corrente.medicoCorrente.senha=field.text;
+                                                    }else if(title=="e-mail"){
+                                                      Corrente.medicoCorrente.id_contato.email=field.text;
+                                                    }else if(title=="CRM"){
+                                                      Corrente.medicoCorrente.crm=int.parse(field.text);
+                                                    }else if(title=="Area de Atuação"){
+                                                      Corrente.medicoCorrente.area=field.text;
+                                                    }else if(title=="Especialide"){
+                                                      Corrente.medicoCorrente.especialidade=field.text;
+                                                    }
+                                                    WebService.medicoSaveEdit(Corrente.medicoCorrente,EnderecoUrls.MEDICO_SAVE_EDIT);
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      MedicoHomePage.nome=Corrente.medicoCorrente.nome;
+                                                      MedicoHomePage.especialidade=Corrente.medicoCorrente.especialidade;
+                                                      opcoes.clear();
+                                                      preencher(Corrente.medicoCorrente);
+                                                    });   
                                               },
                                               )
                                             ],
@@ -266,7 +338,7 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
                                     }
                                   );
   }
-  Widget preencher(){
+  Widget preencher(Medico medico){
      opcoes.add(
       Positioned(
               top: 220.0,
@@ -285,7 +357,7 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
                             Expanded(
                               child:GestureDetector(
                                 onTap:(){
-                                  editDados(Icons.person, 'Nome');
+                                  editDados(Icons.person, 'Nome',medico.nome);
                                 
                                 },
                                 child:Row(
@@ -297,7 +369,7 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Nome",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("Felipe Antonio",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.nome,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -326,7 +398,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.perm_identity, 'RG');
+                                  editDados(Icons.perm_identity, 'RG',medico.rg);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -337,7 +409,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("RG",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("9.634.379",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.rg,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -362,7 +434,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                 editDados(Icons.picture_in_picture, 'CPF');
+                                 editDados(Icons.picture_in_picture, 'CPF',medico.cpf);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -373,7 +445,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("CPF",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("057.439.634-79",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.cpf,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -398,7 +470,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.date_range, 'Data de Nascimento');
+                                  editDados(Icons.date_range, 'Data de Nascimento',f.format(medico.data_nascimento));
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -409,7 +481,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Data de Nascimento",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("13/06/1999",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(f.format(medico.data_nascimento),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -434,7 +506,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                editDados(Icons.person, 'Sexo');
+                                editDados(Icons.person, 'Sexo',medico.sexo);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -445,7 +517,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Sexo",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("Masculino",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.sexo,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -467,7 +539,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.phone, 'Telefone 1');
+                                  editDados(Icons.phone, 'Telefone 1',medico.id_contato.fone1);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -478,7 +550,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Telefone 1",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("(87) 9 9819-9559",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_contato.fone1,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -503,7 +575,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.phone, 'Telefone 2');
+                                  editDados(Icons.phone, 'Telefone 2',medico.id_contato.fone2);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -514,7 +586,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Telefone 2",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("(87) 9 9856-8765",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_contato.fone2,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -552,7 +624,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.streetview, 'Rua');
+                                  editDados(Icons.streetview, 'Rua',medico.id_endereco.rua);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -563,7 +635,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Rua",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("Saturnino Bezerra",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_endereco.rua,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -592,7 +664,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.format_list_numbered_rtl, 'Numero');
+                                  editDados(Icons.format_list_numbered_rtl, 'Numero',medico.id_endereco.numero.toString());
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -603,7 +675,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Numero",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("9.634",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_endereco.numero.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -628,7 +700,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.location_on, 'Bairro');
+                                  editDados(Icons.location_on, 'Bairro',medico.id_endereco.bairro);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -639,7 +711,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Bairro",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("os bolas",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_endereco.bairro,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -664,7 +736,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.home, 'Complemento');
+                                  editDados(Icons.home, 'Complemento',medico.id_endereco.complemento);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -675,7 +747,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Complemento",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("simbora",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_endereco.complemento,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -700,7 +772,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.location_on, 'CEP');
+                                  editDados(Icons.location_on, 'CEP',medico.id_endereco.cep);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -711,7 +783,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("CEP",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("56820-000",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_endereco.cep,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -734,7 +806,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.picture_in_picture, 'Estado');
+                                  editDados(Icons.picture_in_picture, 'Estado',medico.id_endereco.estado);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -745,7 +817,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Estado",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("Pernambuco",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_endereco.estado,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -770,7 +842,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.location_city, 'Cidade');
+                                  editDados(Icons.location_city, 'Cidade',medico.id_endereco.cidade);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -781,7 +853,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Cidade",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("Carnaiba",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_endereco.cidade,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -820,7 +892,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.sim_card, 'CRM');
+                                  editDados(Icons.sim_card, 'CRM',medico.crm.toString());
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -831,7 +903,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("CRM",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("12345",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.crm.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -860,7 +932,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.work, 'Area de Atuação');
+                                  editDados(Icons.work, 'Area de Atuação',medico.area);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -871,7 +943,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Area de Atuação",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("Cardiaca",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.area,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -896,7 +968,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.local_hospital, 'Especialidade');
+                                  editDados(Icons.local_hospital, 'Especialidade',medico.especialidade);
                                 },
                                 child:Row(
                                 
@@ -908,7 +980,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Especialidade",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("Cardiologia",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.especialidade,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -949,7 +1021,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.person, 'Login');
+                                  editDados(Icons.person, 'Login',medico.nome_usuario);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -960,7 +1032,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Login",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("Felipe Antonio",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.nome_usuario,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -989,7 +1061,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.lock, 'Senha');
+                                  editDados(Icons.lock, 'Senha',medico.senha);
                                 },
                                 child:Row(
                                   children: <Widget>[
@@ -1000,7 +1072,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("Senha",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("123",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.senha,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
@@ -1025,7 +1097,7 @@ Padding(
                             Expanded(
                               child:GestureDetector(
                                 onTap: (){
-                                  editDados(Icons.email, 'e-mail');
+                                  editDados(Icons.email, 'e-mail',medico.id_contato.email);
                                 },
                                 child:Row(
                                 
@@ -1037,7 +1109,7 @@ Padding(
                                           child:  Column(
                                             children: <Widget>[
                                               Row(children: <Widget>[Text("e-mail",style: TextStyle(fontSize: 15),),],), 
-                                              Row(children: <Widget>[Text("lipe6330@gmail.com",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
+                                              Row(children: <Widget>[Text(medico.id_contato.email,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)])
                                             ],
                                           ),
                                         )
