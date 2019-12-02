@@ -6,12 +6,16 @@ import 'package:projeto_mobile_clinica/view/pages/ChatPage.dart';
 import 'package:projeto_mobile_clinica/view/pages/LaudosPage.dart';
 import 'package:projeto_mobile_clinica/view/pages/consustasPage.dart';
 import 'package:projeto_mobile_clinica/model/utils/round_clipper.dart';
+
+
 class PacienteHomePage extends StatefulWidget {
+  static String nome = "";
   @override
   _PacienteHomePageState createState() => _PacienteHomePageState();
 }
 
 class _PacienteHomePageState extends State<PacienteHomePage> {
+ 
   var path = "";
   final double _imageHeight = 200.0;
   final double _alturaTabBar = 35;
@@ -158,7 +162,7 @@ class _PacienteHomePageState extends State<PacienteHomePage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 new Text(
-                  'Paulo Alves',
+                  PacienteHomePage.nome,
                   style: new TextStyle(
                       fontSize: 26.0,
                       color: Colors.white,

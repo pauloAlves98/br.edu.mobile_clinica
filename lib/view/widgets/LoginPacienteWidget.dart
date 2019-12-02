@@ -6,6 +6,7 @@ import 'package:projeto_mobile_clinica/model/bin/Contato.dart';
 import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
 import 'package:projeto_mobile_clinica/model/bin/Paciente.dart';
 import 'package:projeto_mobile_clinica/view/pages/LoginPage.dart';
+import 'package:projeto_mobile_clinica/view/pages/PacienteHomePage.dart';
 
 class LoginPacienteWidget {
   
@@ -224,7 +225,8 @@ class LoginPacienteWidget {
     print("Passou contato");
     if(p!=null){
     //   print("Nome: "+p.nome_usuario);
-      Corrente.pacienteCorrente=p;       
+      Corrente.pacienteCorrente=p;  
+      PacienteHomePage.nome=p.nome;     
       Navigator.pushNamed(context, '/pacienteHomePage'); //Mudar
     }else{
        print("Não Achou!");
