@@ -13,7 +13,8 @@ class WebService {
   //static final String URL = "http://172.24.40.74:8000";
   //static final String URL = 'http://192.168.0.105:8000';
   
-  static final String URL = 'http://192.168.137.1:8000';
+ static final String URL = 'http://192.168.137.1:8000';
+  //static final String URL = 'http://192.168.0.104:8000';
 
   static Future<Paciente> getPacienteLoginSenha(
       String login, String senha) async {
@@ -133,6 +134,24 @@ class WebService {
       return false;
     }
   }
+  static Future<bool> consultaSaveEdit(Consulta c, String src) async {//
+    print(c.toString()+ " String");
+    String d = json.encode(c);
+    print(d+ "Encode");
+    print(c.toJson());
+    //flutter pub run build_runner watch comando para criar os serialzier json
+    try {
+      http.Response responser = await http.post(URL + src.toString(),
+        body:{"Consulta":d});
+      String body = responser.body;
+      Map valueMap = json.decode(body);
+      print(valueMap['response']);
+      return valueMap['response'];
+    } catch (e) {
+      print("Exceccao!" + e.toString());
+      return false;
+    }
+  }
   static Future<List<Laudo>> consultaLaudoAll(int id,String usuario
       ) async {
     try {
@@ -197,13 +216,13 @@ print("Response KK");
   static Future<List<Consulta>> consultaConsultaFiltro(String data1, String data2, String filtro,int id,String usuario
       ) async {
     try {
-      http.Response responser = await http.post(URL + (EnderecoUrls.CONSULTA_LAUDO_FILTRO).toString(),
-          body: {'data1':data1, 'data2':data2, 'filtro':filtro, 'id':id,'usuario':usuario});
+      http.Response responser = await http.post(URL + (EnderecoUrls.CONSULTA_CONSULTA_FILTRO).toString(),
+          body: {'data1':data1, 'data2':data2, 'filtro':filtro, 'id':id.toString(),'usuario':usuario});
       //print("RESPOSER" + responser.toString());
       String body = responser.body;
       Map valueMap = json.decode(body);
      //print(valueMap['response']);
-      print("Response KK");
+      print("Consulta Filtro");
       if (valueMap['response']==false) {
         print("Response False");
         return  List<Consulta>();
@@ -289,7 +308,7 @@ static Future<List<Medico>> consultaMedicoAll(
       ) async {
     try {
       http.Response responser = await http.post(URL + EnderecoUrls.CONSULTA_CONSULTA_ALL,
-          body: {'id':id,'usuario':usuario});
+          body: {'id':id.toString(),'usuario':usuario});
       //print("RESPOSER" + responser.toString());
       String body = responser.body;
       Map valueMap = json.decode(body);

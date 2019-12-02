@@ -71,7 +71,10 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                         setState(()  {
                         print(d);
                         DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
-                          campoData1 = f.format(d);
+                          if(d==null)
+                            campoData1 = f.format(DateTime.now());
+                            else
+                             campoData1 = f.format(d);
                         });
                       },
                       icon: Icon(
@@ -114,7 +117,10 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                         setState(()  {
                         print(d);
                         DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
-                          campoData2 = f.format(d);
+                          if(d==null)
+                            campoData2 = f.format(DateTime.now());
+                            else
+                             campoData2 = f.format(d);
                         });
                       },
                       //data 2

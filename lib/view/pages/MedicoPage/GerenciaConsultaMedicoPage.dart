@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_mobile_clinica/WebService/EnderecoUrls.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/model/bin/Consulta.dart';
 
 class GerenciaConsultaMedicoPage extends StatefulWidget {
-  String texto = "";
+  static String hora = " ";
+  static String data = " ";
+  static String situacao = " ";
+  static String tipo = " ";
+  static String nomePaciente = " ";
+
+  //static TextEditingController descricao = new TextEditingController();
+  static String cod = " ";
+  static Consulta consultaAtual = Consulta();
+
   @override
   _GerenciaConsultaMedicoPageState createState() =>
       _GerenciaConsultaMedicoPageState();
@@ -15,14 +27,19 @@ class _GerenciaConsultaMedicoPageState
   //String texto
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.greenAccent,
-        child: Icon(Icons.save_alt, color: Colors.white),
-        onPressed: () {
-          Navigator.pop(context,); //Mudar
+        child: Icon(Icons.save, color: Colors.white),
+        onPressed: () async {
+          GerenciaConsultaMedicoPage.consultaAtual.situacao = GerenciaConsultaMedicoPage.situacao;
+          bool l = await saveEdit( GerenciaConsultaMedicoPage.consultaAtual);
+          if (l) {
+            print("Navega");
+            Navigator.pop(context); //Muda
+          }
+          print("Passou " + l.toString());
         },
       ),
       bottomNavigationBar: BottomAppBar(
@@ -75,49 +92,62 @@ class _GerenciaConsultaMedicoPageState
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const ListTile(
+                  ListTile(
                     leading:
                         Icon(Icons.date_range, size: 50, color: Colors.white),
                     title: Text('Data da Consulta',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('28/09/2019',
+                    subtitle: Text(GerenciaConsultaMedicoPage.data,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
                   ),
                   _divisor(),
                   ListTile(
-                    leading:
-                        Icon(Icons.timer, size: 50, color: Colors.white),
+                    leading: Icon(Icons.timer, size: 50, color: Colors.white),
                     title: Text('Horario',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('19:00 h',
+                    subtitle: Text(GerenciaConsultaMedicoPage.hora + " h",
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
                   ),
                   _divisor(),
                   ListTile(
-                    leading:
-                        Icon(Icons.label, size: 50, color: Colors.white),
+                    leading: Icon(Icons.label, size: 50, color: Colors.white),
                     title: Text('Tipo de Consulta',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('Retorno',
+                    subtitle: Text(GerenciaConsultaMedicoPage.tipo,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
                   ),
                   _divisor(),
-                   ListTile(
-                    leading:
-                        Icon(Icons.warning, size: 50, color: Colors.white),
+                  ListTile(
+                    trailing: IconButton(
+                      icon: Icon(Icons.near_me, size: 25, color: Colors.white),
+                      onPressed: () {
+                       if(GerenciaConsultaMedicoPage.situacao.toUpperCase() =="AGENDADA")
+                          GerenciaConsultaMedicoPage.situacao = "FINALIZADA";
+                       else if(GerenciaConsultaMedicoPage.situacao.toUpperCase() =="FINALIZADA")
+                          GerenciaConsultaMedicoPage.situacao = "CANCELADA";
+                       else if(GerenciaConsultaMedicoPage.situacao.toUpperCase() =="CANCELADA")
+                          GerenciaConsultaMedicoPage.situacao = "AGENDADA";
+                      setState(() {
+                         GerenciaConsultaMedicoPage.situacao;
+                      });
+                      },
+                    ),
+                    leading: Icon(Icons.warning, size: 50, color: Colors.white),
+                      
+                  
                     title: Text('Situação da Consulta',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('Agendada',
+                    subtitle: Text(GerenciaConsultaMedicoPage.situacao,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
@@ -128,7 +158,7 @@ class _GerenciaConsultaMedicoPageState
                     title: Text('Paciente',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('Kakashi Hatake',
+                    subtitle: Text(GerenciaConsultaMedicoPage.nomePaciente,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     trailing: IconButton(
@@ -140,25 +170,9 @@ class _GerenciaConsultaMedicoPageState
                     ),
                   ),
                   _divisor(),
-                  ListTile(
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.info,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
-                    ),
-                    leading: Icon(
-                      Icons.book,
-                      size: 45,
-                      color: Colors.white,
-                    ),
-                    title: Text('Laudo',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w600)),
-                  ),
+                  
                   Container(
-                    height: 40,
+                    height: 70,
                     //width: 110,
                   ),
                 ],
@@ -193,5 +207,12 @@ class _GerenciaConsultaMedicoPageState
         color: Colors.white,
       ),
     );
+  }
+  Future<bool> saveEdit(Consulta  p) async {
+    print("Iserir");
+    bool l = await WebService.consultaSaveEdit(p, EnderecoUrls.CONSULTA_SAVE_EDIT);
+    print("Passou Consulta");
+    print(l);
+    return l;
   }
 }

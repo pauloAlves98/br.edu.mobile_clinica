@@ -161,7 +161,12 @@ class Consulta(models.Model):
 
     def __str__(self):
         return self.situacao
-
+    def from_json(self, dit):
+        self.pk = dit['id']
+        self.tipo = dit['tipo']
+        self.situacao = dit['situacao']
+        self.valor = dit['valor']
+        self.data_hora = dit['data_hora']
     def get_json(self):
         return dict(
             id = self.pk,

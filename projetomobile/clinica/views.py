@@ -63,16 +63,24 @@ def clinicaSaveEdit(request):
 
 @csrf_exempt
 def consultaSaveEdit(request):
-    print(request)
-    if request.method == 'POST':#para get so mudar aqui
-        form = ConsultaForm(request.POST)
+   if request.method == 'POST':#para get so mudar aqui
         print("Entrou")
-        if form.is_valid():
-            print("Salva")
-            form.save()
-        else:
-              return JsonResponse({'response': False})
-
+        pac_dict = json.loads(request.POST.get("Consulta"))
+        if(pac_dict is None):
+           return JsonResponse({'response': False})
+        print("Vai salvar Consulta")
+        p = Paciente()
+        m = Medico()
+        p.from_json(pac_dict['id_paciente'])
+        m.from_json(pac_dict['id_medico'])
+        if(p.id == None and m.id==None):
+            p.save()
+            m.save()
+        print(pac_dict['id_medico'])
+        pa = Consulta(id_paciente = p, id_medico = m)
+        pa.from_json(pac_dict)
+        pa.save()
+        print("Salvou")
         return JsonResponse({'response': True})
 @csrf_exempt
 def conversaSaveEdit(request):
@@ -100,6 +108,7 @@ def enderecoSaveEdit(request):
               return JsonResponse({'response': False})
 
         return JsonResponse({'response': True})
+        
 @csrf_exempt
 def laudoSaveEdit(request):
     if request.method == 'POST':#para get so mudar aqui
@@ -154,11 +163,11 @@ def pacienteSaveEdit(request):
         print("Vai salvar")
         c = Contato()
         e = Endereco(estado="PERNAMBUCO")
-        e.from_json(pac_dict['endereco'])
-        c.from_json(pac_dict['contato'])
+        e.from_json(pac_dict['id_endereco'])
+        c.from_json(pac_dict['id_contato'])
         e.save()
         c.save()
-        print(pac_dict['contato'])
+        print(pac_dict['id_contato'])
         pa = Paciente(nome='killer', id_contato = c, id_endereco= e)
         pa.from_json(pac_dict)
         pa.save()
@@ -215,7 +224,7 @@ def consultaMedicoAll(request):
     
     if(len(medicos)==0):
         return JsonResponse({'response':False})
-    return JsonResponse({'response':True,'medico':medicos}, safe=False)
+    return JsonResponse({'response':True,'medicos':medicos}, safe=False)
 
 @csrf_exempt
 def consultaMedicoFiltro(request):
@@ -224,7 +233,7 @@ def consultaMedicoFiltro(request):
     
     if(len(medicos)==0):
         return JsonResponse({'response':False})
-    return JsonResponse({'response':True,'medico':medicos}, safe=False)
+    return JsonResponse({'response':True,'medicos':medicos}, safe=False)
 
 
 @csrf_exempt
@@ -233,9 +242,9 @@ def consultaConsultaFiltro(request):
 
     print(request.POST.get("filtro"))
 
-    print('Entrou Laudo!')
+    print('Entrou Consulta!')
     temp = str(request.POST.get("id"));
-    id = int(temp)
+    id_c = int(temp)
     data1 = str(request.POST.get("data1"));
     data2 = str(request.POST.get("data2"));
     filtro = str(request.POST.get("filtro"));
@@ -246,9 +255,9 @@ def consultaConsultaFiltro(request):
     start_date = dt.date(int(data1.split("/")[2]), int(data1.split("/")[1]), int(data1.split("/")[0]))
     end_date = dt.date(int(data2.split("/")[2]), int(data2.split("/")[1]), int(data2.split("/")[0]))
     if usuario=="paciente":
-        consultas = [obj.get_json() for obj in Consulta.objects.filter(id_paciente=id,id_medico__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
+        c = [obj.get_json() for obj in Consulta.objects.filter(id_paciente__id=id_c,id_medico__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
     else:
-        consultas = [obj.get_json() for obj in Consulta.objects.filter(id_medico=id,id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
+        c = [obj.get_json() for obj in Consulta.objects.filter(id_medico__id=id_c,id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
     if(len(c)==0):
         return JsonResponse({"response":False})
     return JsonResponse({"response":True,"consultas":c}, safe=False) 
@@ -256,21 +265,22 @@ def consultaConsultaFiltro(request):
 
 @csrf_exempt
 def consultaConsultaAll(request):
+    import datetime as dt
     usuario = str(request.POST.get("usuario"));
     temp = str(request.POST.get("id"));
-    id = int(temp)
-    print("Entrou 1")
+    id_u = int(temp)
+    print("Entrou Consulta!")
+    start_date = dt.date(1990, 7, 10)
+    
+    end_date = dt.date(2020, 7, 11)
     if usuario=="paciente":
-        c = [obj.get_json() for obj in Consulta.objects.filter(id_paciente=id)]
+        c = [obj.get_json() for obj in Consulta.objects.filter(id_paciente__id=id_u,data_hora__range=(start_date,end_date))] 
     else:
-        c = [obj.get_json() for obj in Consulta.objects.filter(id_medico=id)] 
-   # c = Consulta.objects.filter()
+        c = [obj.get_json() for obj in Consulta.objects.filter(id_medico__id=id_u,data_hora__range=(start_date,end_date))] 
     print(c)
-    #print(l)
-    print("Entrou 2")
     if(len(c)==0):
-        return JsonResponse({"response":False})
-    return JsonResponse({"response":True,"consultas":c}, safe=False)
+        return JsonResponse({'response':False}, safe=False)
+    return JsonResponse({'response':True,'consultas':c}, safe=False)  
 
 #------------------------------------
 @csrf_exempt
@@ -305,13 +315,13 @@ def consultaLaudoAll(request):
     temp = str(request.POST.get("id"));
     id_u = int(temp)
     print("Entrou Laudo!")
-    start_date = dt.date(2000, 7, 10)
+    start_date = dt.date(1990, 7, 10)
     
     end_date = dt.date(2020, 7, 11)
     if usuario=="paciente":
-        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=id_u,data_hora__range=(start_date,end_date))] 
+        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente__id=id_u,data_hora__range=(start_date,end_date))] 
     else:
-        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico=id_u,data_hora__range=(start_date,end_date))] 
+        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico__id=id_u,data_hora__range=(start_date,end_date))] 
     print(laudos)
     if(len(laudos)==0):
         return JsonResponse({'response':False}, safe=False)

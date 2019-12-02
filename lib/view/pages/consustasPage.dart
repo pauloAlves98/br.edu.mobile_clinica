@@ -291,8 +291,11 @@ class _ConsultaPageState extends State<ConsultaPage> {
                         DateTime d = await selectDate(context, DateTime.now(),campodata: campoData1);
                         setState(()  {
                         print(d);
-                        DateFormat  f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
-                          campoData1 = f.format(d);
+                        DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
+                          if(d==null)
+                            campoData1 = f.format(DateTime.now());
+                            else
+                             campoData1 = f.format(d);
                         });
                       },
                       icon: Icon(
@@ -335,7 +338,10 @@ class _ConsultaPageState extends State<ConsultaPage> {
                         setState(()  {
                         print(d);
                         DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
-                          campoData2 = f.format(d);
+                          if(d==null)
+                            campoData2 = f.format(DateTime.now());
+                            else
+                             campoData2 = f.format(d);
                         });
                       },
                       //data 2
@@ -377,7 +383,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
                     flex: 2,
                     child: new Theme(
                       data: new ThemeData(
-                        hintColor: Colors.blue,
+                        hintColor: Colors.blueGrey[100],
                       ),
                       child: TextField(
                         controller: filtroController,

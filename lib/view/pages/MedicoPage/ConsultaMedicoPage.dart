@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/model/bin/Consulta.dart';
+import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
+import 'package:projeto_mobile_clinica/model/bin/Laudo.dart';
+import 'package:projeto_mobile_clinica/model/bin/Laudo.dart';
+import 'package:projeto_mobile_clinica/model/bin/Laudo.dart';
 import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
+import 'GerenciaConsultaMedicoPage.dart';
+
 class ConsultaMedicoPage extends StatefulWidget {
+  static DateFormat f = new DateFormat('dd/MM/yyyy hh:mm'); //yyyy-MM-dd hh:mm
   @override
   _ConsultaMedicoPageState createState() => _ConsultaMedicoPageState();
 }
 
 class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
   DateTime selectedDate = DateTime.now();
-  List<String> _laudos = ["1", "2", "3", "4", "4", "4", "4"];
   int _paginaBotton = 0;
+  List<String> _laudos = ["1", "2", "3", "4", "4", "4", "4"];
+
+  List<Consulta> consultas = List<Consulta>();
+
+  bool vazio = false;
+  String campoData1 = " ", campoData2 = "";
+  TextEditingController filtroController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +35,7 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
       body: Stack(
         children: <Widget>[
           _builderCabecarioBusca(),
-          _builderListaLaudos(context),
+          _builderListaConsulta(context),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -55,10 +72,17 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
-                      //Data Inicial
-                      onPressed: () {
+                      onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),
+                            campodata: campoData1);
                         setState(() {
-                          selectDate(context, selectedDate);
+                          print(d);
+                          DateFormat f =
+                              new DateFormat('dd/MM/yyyy'); //yyyy-MM-dd hh:mm
+                          if (d == null)
+                            campoData1 = f.format(DateTime.now());
+                          else
+                            campoData1 = f.format(d);
                         });
                       },
                       icon: Icon(
@@ -72,7 +96,7 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                   flex: 2,
                   child: Container(
                     child: Text(
-                      'dd/MM/YYYY',
+                      campoData1,
                       style: TextStyle(color: Colors.white),
                     ),
                     // )
@@ -94,14 +118,21 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
-                      onPressed:() {
+                      onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),
+                            campodata: campoData2);
                         setState(() {
-                          selectDate(context, selectedDate);
+                          print(d);
+                          DateFormat f =
+                              new DateFormat('dd/MM/yyyy'); //yyyy-MM-dd hh:mm
+                          if (d == null)
+                            campoData2 = f.format(DateTime.now());
+                          else
+                            campoData2 = f.format(d);
                         });
                       },
                       //data 2
                       icon: Icon(
-                        //data final
                         Icons.date_range,
                         color: Colors.white,
                       ),
@@ -112,7 +143,7 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                   flex: 2,
                   child: Container(
                     child: Text(
-                      'dd/MM/YYYY',
+                      campoData2,
                       style: TextStyle(color: Colors.white),
                     ),
                     // )
@@ -142,6 +173,7 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                         hintColor: Colors.blueGrey[100],
                       ),
                       child: TextField(
+                        controller: filtroController,
                         autofocus: false,
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
@@ -184,17 +216,87 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
         ),
         child: SizedBox.expand(
           child: FlatButton(
-            textColor: Colors.white,
-            child: Icon(Icons.search),
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, '/'), //Mudar
-          ),
+              textColor: Colors.white,
+              child: Icon(Icons.search),
+              onPressed: () async {
+                String filtro = filtroController.text.trim();
+                print(campoData1);
+                print(campoData2);
+                print(filtro + " Filtro");
+                try {
+                  if (campoData2.trim().length <= 0 &&
+                      campoData1.trim().length <= 0 &&
+                      filtro.length <= 0) {
+                    consultas = await WebService.consultaConsultaAll(
+                        Corrente.medicoCorrente.id, Corrente.usuarioMedico);
+                  } else if (campoData2.trim().length <= 0 &&
+                      campoData1.trim().length <= 0) {
+                    campoData2 = "01/12/2200";
+                    campoData1 = "01/01/1900";
+                    print("Cond 2");
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.medicoCorrente.id,
+                        Corrente.usuarioMedico);
+                    //Datas padroes.
+                  } else if (campoData2.trim().length <= 0) {
+                    campoData2 = "01/12/2200";
+                    print("Cond 3");
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.medicoCorrente.id,
+                        Corrente.usuarioMedico);
+                  } else if (campoData1.trim().length <= 0) {
+                    campoData1 = "01/01/1900";
+                    print("Cond 4");
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.medicoCorrente.id,
+                        Corrente.usuarioMedico);
+                  } else if (campoData2.trim().length <= 0 &&
+                      campoData1.trim().length <= 0 &&
+                      filtro.length != 0) {
+                    campoData1 = "01/01/1900";
+                    campoData2 = "01/12/2200";
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.medicoCorrente.id,
+                        Corrente.usuarioMedico);
+                    print("Cond 5");
+                  } else
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.medicoCorrente.id,
+                        Corrente.usuarioMedico);
+
+                  if (consultas.length <= 0) {
+                    consultas.add(Consulta()); //pra movvimentar o len
+                    vazio = true;
+                  }
+                  setState(() {
+                    consultas;
+                  });
+                } catch (e) {
+                  print("Excecao!");
+                }
+                //Navigator.pushReplacementNamed(context, '/'); //Mudar
+              }),
         ),
       ),
     );
   }
 
-  Widget _builderListaLaudos(BuildContext context) {
+  Widget _builderListaConsulta(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
@@ -202,12 +304,24 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: _laudos.length,
+          itemCount: consultas.length,
           //gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (context, index) {
+            print("Chamou Biluder");
+            var obj;
+            if (consultas.length > 0 && vazio == false)
+              obj = _builderCardConsulta(index, consultas[index]);
+            else {
+              obj = Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Nenhuma Consulta disponivel"),
+              );
+              vazio = false;
+              consultas.clear();
+            }
             return Padding(
               padding: const EdgeInsets.all(3.0),
-              child: _builderCardLaudos(index),
+              child: obj,
             );
           },
         ),
@@ -215,8 +329,9 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
     );
   }
 
-  Widget _builderCardLaudos(int index) {
+  Widget _builderCardConsulta(int index, Consulta c) {
     String idd = index.toString();
+    DateFormat f = new DateFormat('dd/MM/yyyy hh:mm'); //yyyy-MM-dd hh:mm
     return Container(
       width: 300,
       child: Card(
@@ -255,25 +370,27 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
               leading: Icon(Icons.person_add, size: 40, color: Colors.white),
               title: Text('Paciente', style: TextStyle(color: Colors.white)),
               subtitle: Text(
-                "Kakashi hatake $idd",
+                c.id_paciente.nome,
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
                 textAlign: TextAlign.left,
               ),
-              trailing: Text("ID: $idd", style: TextStyle(color: Colors.white)),
+              trailing: Text("ID:" + c.id.toString(),
+                  style: TextStyle(color: Colors.white)),
             ),
 
             //Divider(),
             ListTile(
               leading: Icon(Icons.date_range, size: 40, color: Colors.white),
-              title: Text('28/09/2019', style: TextStyle(color: Colors.white)),
+              title: Text(f.format(c.data_hora).toString().split(" ")[0],
+                  style: TextStyle(color: Colors.white)),
               subtitle: Text(
-                "19:00 h",
+                f.format(c.data_hora).toString().split(" ")[1],
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
                 textAlign: TextAlign.left,
               ),
-              trailing: Text("Agendada", style: TextStyle(color: Colors.white)),
+              trailing: Text(c.situacao, style: TextStyle(color: Colors.white)),
             ),
             Container(
               decoration: BoxDecoration(
@@ -302,6 +419,7 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
                         ],
                       ),
                       onPressed: () {
+                        atualizarGerenciaConsulta(c);
                         Navigator.pushNamed(
                             context, "/gerenciaConsultaMedicoPage");
                       },
@@ -314,5 +432,18 @@ class _ConsultaMedicoPageState extends State<ConsultaMedicoPage> {
         ),
       ),
     );
+  }
+
+  void atualizarGerenciaConsulta(Consulta la) {
+    GerenciaConsultaMedicoPage.data =
+        ConsultaMedicoPage.f.format(la.data_hora).toString().split(" ")[0];
+    GerenciaConsultaMedicoPage.hora =
+        ConsultaMedicoPage.f.format(la.data_hora).toString().split(" ")[1];
+    GerenciaConsultaMedicoPage.cod = la.id.toString();
+    GerenciaConsultaMedicoPage.tipo = la.tipo;
+    GerenciaConsultaMedicoPage.situacao = la.situacao;
+    //GerenciaLaudoMedicoPage.descricao.text = la.descricao;
+    GerenciaConsultaMedicoPage.nomePaciente = la.id_paciente.nome;
+    GerenciaConsultaMedicoPage.consultaAtual = la;
   }
 }

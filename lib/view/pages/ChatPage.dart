@@ -64,6 +64,7 @@ class _ChatPageState extends State<ChatPage> {
                         height: 40,
                         child:Center(child: 
                     TextField(
+                      controller: filtroController,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         
@@ -78,13 +79,16 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     ),)),
                     IconButton(icon: Icon(Icons.search,color: Colors.white,),
-                      onPressed: () async*{
+                      onPressed: () async{
                           String filtro = filtroController.text.trim();
                           if(filtro.length<=0){
                             medicos = await WebService.consultaMedicoAll();
                           }else{
                             medicos = await WebService.consultaMedicoFiltro(filtro);
                           }
+                          setState(() {
+                            medicos;
+                          });
                       },
                     )      
                  ]))),
@@ -157,7 +161,7 @@ class _ChatPageState extends State<ChatPage> {
                   height: 94,
                   color: tema,
                 ), */
-                Padding(padding: EdgeInsets.only(left:4),),
+                Padding(padding: EdgeInsets.only(left:4,top:5),),
                 Container(
                   alignment: Alignment.topLeft,
                   width: 60,
