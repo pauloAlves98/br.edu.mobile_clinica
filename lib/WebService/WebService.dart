@@ -13,7 +13,7 @@ class WebService {
   //static final String URL = "http://172.24.40.74:8000";
   //static final String URL = 'http://192.168.0.105:8000';
   
-  static final String URL = "http://192.168.0.108:8000";
+  static final String URL = 'http://192.168.137.1:8000';
 
   static Future<Paciente> getPacienteLoginSenha(
       String login, String senha) async {
@@ -115,11 +115,29 @@ class WebService {
       return false;
     }
   }
+    static Future<bool> laudoSaveEdit(Laudo c, String src) async {//
+    print(c.toString()+ " String");
+    String d = json.encode(c);
+    print(d+ "Encode");
+    print(c.toJson());
+    //flutter pub run build_runner watch comando para criar os serialzier json
+    try {
+      http.Response responser = await http.post(URL + src.toString(),
+        body:{"Laudo":d});
+      String body = responser.body;
+      Map valueMap = json.decode(body);
+      print(valueMap['response']);
+      return valueMap['response'];
+    } catch (e) {
+      print("Exceccao!" + e.toString());
+      return false;
+    }
+  }
   static Future<List<Laudo>> consultaLaudoAll(int id,String usuario
       ) async {
     try {
       http.Response responser = await http.post(URL + EnderecoUrls.CONSULTA_LAUDO_ALL,
-          body: {'id':id,'usuario':usuario});
+          body: {'id':id.toString(),'usuario':usuario});
       //print("RESPOSER" + responser.toString());
       String body = responser.body;
       Map valueMap = json.decode(body);
@@ -129,7 +147,7 @@ class WebService {
         print("Response False");
         return  List<Laudo>();
       } else {
-
+        print("Entrou Else");
         print(valueMap['laudos'][0]);
         List<Laudo> listl = new List<Laudo>();
         for(var i=0;i<valueMap['laudos'].length;i++){
@@ -147,7 +165,7 @@ class WebService {
       ) async {
     try {
       http.Response responser = await http.post(URL + (EnderecoUrls.CONSULTA_LAUDO_FILTRO).toString(),
-          body: {'data1':data1, 'data2':data2, 'filtro':filtro, 'id':id,'usuario':usuario});
+          body: {'data1':data1, 'data2':data2, 'filtro':filtro, 'id':id.toString(),'usuario':usuario});
       //print("RESPOSER" + responser.toString());
       String body = responser.body;
       Map valueMap = json.decode(body);

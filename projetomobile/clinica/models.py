@@ -182,7 +182,10 @@ class Laudo(models.Model):
     descricao = models.TextField()
     def __str__(self):
         return self.descricao
-
+    def from_json(self, dit):
+        self.pk = dit['id']
+        self.descricao = dit['descricao']
+        self.data_hora = dit['data_hora']
     def get_json(self):
         return dict(
             id = self.pk,

@@ -6,7 +6,10 @@ import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
 import 'package:projeto_mobile_clinica/model/bin/Laudo.dart';
 import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
+import 'GerenciaLaudoMedicoPage.dart';
+
 class LaudoMedicoPage extends StatefulWidget {
+  static DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');//yyyy-MM-dd hh:mm 
   @override
   _LaudoMedicoPageState createState() => _LaudoMedicoPageState();
 }
@@ -329,7 +332,10 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                           )
                         ],
                       ),
-                      onPressed: () { Navigator.pushNamed(context, "/gerenciaLaudoMedicoPage");},
+                      onPressed: () { 
+                        atualizarGerencialaudo (l);
+                        Navigator.pushNamed(context, "/gerenciaLaudoMedicoPage");
+                        },
                     ), 
                    ),
                    
@@ -358,5 +364,14 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
         ),
       ),
     );
+  }
+
+  void atualizarGerencialaudo (Laudo la){
+    GerenciaLaudoMedicoPage.data_emissao = LaudoMedicoPage.f.format(la.data_hora).toString().split(" ")[0];
+    GerenciaLaudoMedicoPage.hora_emissao = LaudoMedicoPage.f.format(la.data_hora).toString().split(" ")[1];
+    GerenciaLaudoMedicoPage.cod = la.id.toString();
+    //GerenciaLaudoMedicoPage.descricao.text = la.descricao;
+    GerenciaLaudoMedicoPage.nomePaciente = la.id_paciente.nome;
+    GerenciaLaudoMedicoPage.laudoAtual = la;
   }
 }

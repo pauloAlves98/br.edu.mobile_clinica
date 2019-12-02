@@ -1,8 +1,6 @@
 import 'package:projeto_mobile_clinica/Sqlite/SQLUtil.dart';
 import 'package:projeto_mobile_clinica/Sqlite/SqLite.dart';
 import 'package:sqflite/sqlite_api.dart';
-import 'Contato.dart';
-import 'Endereco.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'Medico.dart';
@@ -29,7 +27,7 @@ class Consulta {
   }
 
 
-factory Consulta.fromJson(Map<String, dynamic> json) => _$ConsultaFromJson(json);
+ factory Consulta.fromJson(Map<String, dynamic> json) => _$ConsultaFromJson(json);
 
  Map<String, dynamic> toJson() => _$ConsultaToJson(this);
 

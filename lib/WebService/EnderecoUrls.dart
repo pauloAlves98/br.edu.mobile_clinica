@@ -6,6 +6,7 @@ class EnderecoUrls{
   static final String ENDERECO_SAVE_EDIT= '/clinica/enderecoSaveEdit';
   static final String PACIENTE_SAVE_EDIT= '/clinica/pacienteSaveEdit';
   static final String MEDICO_SAVE_EDIT= '/clinica/medicoSaveEdit';
+  static final String LAUDO_SAVE_EDIT= '/clinica/laudoSaveEdit';
   static final String CONSULTA_LAUDO_FILTRO = '/clinica/consultaLaudoFiltro';
   static final String CONSULTA_LAUDO_ALL =  '/clinica/consultaLaudoAll';
   static final String CONSULTA_CONSULTA_ALL = '/clinica/consultaConsultaAll';

@@ -19,17 +19,17 @@ Paciente _$PacienteFromJson(Map<String, dynamic> json) {
         : DateTime.parse(json['data_nascimento'] as String)
     ..senha = json['senha'] as String
     ..sexo = json['sexo'] as String
-    ..id_contato = json['contato'] == null
+    ..id_contato = json['id_contato'] == null
         ? null
-        : Contato.fromJson(json['contato'] as Map<String, dynamic>)
-    ..id_endereco = json['endereco'] == null
+        : Contato.fromJson(json['id_contato'] as Map<String, dynamic>)
+    ..id_endereco = json['id_endereco'] == null
         ? null
-        : Endereco.fromJson(json['endereco'] as Map<String, dynamic>);
+        : Endereco.fromJson(json['id_endereco'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$PacienteToJson(Paciente instance) => <String, dynamic>{
       'id': instance.id,
-      //'ativo': instance.ativo,
+      'ativo': instance.ativo,
       'cpf': instance.cpf,
       'rg': instance.rg,
       'nome_usuario': instance.nome_usuario,
@@ -37,6 +37,6 @@ Map<String, dynamic> _$PacienteToJson(Paciente instance) => <String, dynamic>{
       'data_nascimento': instance.data_nascimento?.toIso8601String(),
       'senha': instance.senha,
       'sexo': instance.sexo,
-      'contato': instance.id_contato,
-      'endereco': instance.id_endereco
+      'id_contato': instance.id_contato?.toJson(),
+      'id_endereco': instance.id_endereco?.toJson()
     };

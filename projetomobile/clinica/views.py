@@ -102,16 +102,24 @@ def enderecoSaveEdit(request):
         return JsonResponse({'response': True})
 @csrf_exempt
 def laudoSaveEdit(request):
-    print(request)
     if request.method == 'POST':#para get so mudar aqui
-        form = LaudoForm(request.POST)
         print("Entrou")
-        if form.is_valid():
-            print("Salva")
-            form.save()
-        else:
-              return JsonResponse({'response': False})
-
+        pac_dict = json.loads(request.POST.get("Laudo"))
+        if(pac_dict is None):
+           return JsonResponse({'response': False})
+        print("Vai salvar")
+        p = Paciente()
+        m = Medico()
+        p.from_json(pac_dict['id_paciente'])
+        m.from_json(pac_dict['id_medico'])
+        if(p.id == None and m.id==None):
+            p.save()
+            m.save()
+        print(pac_dict['id_medico'])
+        pa = Laudo(id_paciente = p, id_medico = m)
+        pa.from_json(pac_dict)
+        pa.save()
+        print("Salvou")
         return JsonResponse({'response': True})
 @csrf_exempt
 def medicoSaveEdit(request):
@@ -295,14 +303,15 @@ def consultaLaudoAll(request):
     import datetime as dt
     usuario = str(request.POST.get("usuario"));
     temp = str(request.POST.get("id"));
-    id = int(temp)
+    id_u = int(temp)
     print("Entrou Laudo!")
     start_date = dt.date(2000, 7, 10)
+    
     end_date = dt.date(2020, 7, 11)
     if usuario=="paciente":
-        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=id,data_hora__range=(start_date,end_date))] 
+        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=id_u,data_hora__range=(start_date,end_date))] 
     else:
-        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico=id,data_hora__range=(start_date,end_date))] 
+        laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico=id_u,data_hora__range=(start_date,end_date))] 
     print(laudos)
     if(len(laudos)==0):
         return JsonResponse({'response':False}, safe=False)
