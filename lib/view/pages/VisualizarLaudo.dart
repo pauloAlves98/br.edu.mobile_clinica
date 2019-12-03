@@ -69,7 +69,7 @@ class _VisualizarLaudoState extends State<VisualizarLaudo> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      const ListTile(
+                      ListTile(
                         leading:
                             Icon(Icons.date_range, size: 50, color: Colors.white),
                         title: Text('Data da Emissão',
@@ -83,24 +83,24 @@ class _VisualizarLaudoState extends State<VisualizarLaudo> {
                         trailing: Text('18:00 h', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
                       ),
                     _divisor(),
-                      const ListTile(
+                      ListTile(
                         leading:
                             Icon(Icons.person, size: 50, color: Colors.white),
                         title: Text('Paciente',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600)),
-                        subtitle: Text('Kakashi Hatake',
+                        subtitle: Text(VisualizarLaudo.nomePaciente,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w300)),
-                        trailing: Text('ID:1',
+                        /* trailing: Text('ID:1',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.w600)),
+                                fontWeight: FontWeight.w600)), */
                       ),
                     _divisor(),
-                      const ListTile(
+                      ListTile(
                         leading: Icon(
                           Icons.mode_edit,
                           size: 50,
@@ -120,7 +120,7 @@ class _VisualizarLaudoState extends State<VisualizarLaudo> {
                           child: SingleChildScrollView(
                             child:Container(
                               width: 400,
-                              child:  new Text("descricao",
+                              child:  new Text(VisualizarLaudo.descricao,
                             textWidthBasis: TextWidthBasis.longestLine,
                             maxLines: null,
                             )
