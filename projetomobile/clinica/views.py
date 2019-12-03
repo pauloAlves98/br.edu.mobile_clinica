@@ -228,8 +228,8 @@ def consultaMedicoAll(request):
 
 @csrf_exempt
 def consultaMedicoFiltro(request):
-    nome = str(request.POST.get("filtro"))
-    medicos = [obj.get_json() for obj in Medico.objects.filter(nome__icontains=nome)]
+    n = str(request.POST.get("filtro"))
+    medicos = [obj.get_json() for obj in Medico.objects.filter(nome__icontains=n)]
     
     if(len(medicos)==0):
         return JsonResponse({'response':False})

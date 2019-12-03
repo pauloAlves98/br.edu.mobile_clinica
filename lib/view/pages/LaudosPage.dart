@@ -367,8 +367,8 @@ Widget _builderListaLaudos(BuildContext context) {
                       ),
                       onPressed: () { 
                         //DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
-                        VisualizarLaudo.data_emissao = f.format(l.data_hora)[0];
-                        VisualizarLaudo.hora_emissao = f.format(l.data_hora)[1];
+                        VisualizarLaudo.data_emissao = f.format(l.data_hora).split(" ")[0];
+                        VisualizarLaudo.hora_emissao = f.format(l.data_hora).split(" ")[1];
                         VisualizarLaudo.descricao = l.descricao;
                         //VisualizarLaudo.nomeMedico = l.id_medico.nome;
                         VisualizarLaudo.nomePaciente = l.id_paciente.nome;

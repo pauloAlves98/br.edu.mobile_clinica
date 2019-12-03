@@ -8,6 +8,12 @@ class VizualisarEditarConsultaPage extends StatefulWidget {
 
 class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaPage> {
  bool foco = false;
+ static String hora_emissao = " ";
+  static String data_emissao = " ";
+  //static String nomeMedico = " ";
+  static String nomePaciente = " ";
+  static String descricao = " ";
+  static String cod = " ";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
