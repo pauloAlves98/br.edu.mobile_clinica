@@ -10,10 +10,10 @@ import 'package:projeto_mobile_clinica/model/bin/Paciente.dart';
 import 'EnderecoUrls.dart';
 
 class WebService {
-  //static final String URL = "http://172.24.40.74:8000";
+  static final String URL = "http://172.24.242.72:8000";
   //static final String URL = 'http://192.168.0.105:8000';
   
- static final String URL = 'http://192.168.0.106:8000';
+ //static final String URL = 'http://192.168.0.106:8000';
   //static final String URL = 'http://192.168.0.104:8000';
 
   static Future<Paciente> getPacienteLoginSenha(

@@ -12,7 +12,7 @@ class VizualisarEditarConsultaPage extends StatefulWidget {
 
 class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaPage> {
  bool foco = false;
-DateFormat   f = new DateFormat('dd/MM/yyyy');
+DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,26 +188,6 @@ DateFormat   f = new DateFormat('dd/MM/yyyy');
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
                   ),
-                  _divisor(),
-                  ListTile(
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.info,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        
-                      },
-                    ),
-                    leading: Icon(
-                      Icons.book,
-                      size: 45,
-                      color: Colors.white,
-                    ),
-                    title: Text('Laudo',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w600)),
-                  ),
                   Container(
                     height: 60,
                     //width: 110,
@@ -309,6 +289,7 @@ DateFormat   f = new DateFormat('dd/MM/yyyy');
                                               WebService.consultaSaveEdit(VizualisarEditarConsultaPage.c,EnderecoUrls.CONSULTA_SAVE_EDIT);
                                               setState(() {
                                                 VizualisarEditarConsultaPage.c;
+                                                Navigator.pop(context);
                                               });
                                             },
                                             )
