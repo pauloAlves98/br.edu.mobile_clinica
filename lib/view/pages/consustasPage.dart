@@ -6,6 +6,7 @@ import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
 import 'package:projeto_mobile_clinica/model/utils/Task.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
 import 'package:projeto_mobile_clinica/view/pages/AgendarConsulta.dart';
+import 'package:projeto_mobile_clinica/view/pages/VizualisarEditarConsultaPage.dart';
 import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
 class ConsultaPage extends StatefulWidget {
@@ -437,6 +438,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
                         ],
                       ),
                       onPressed: () {
+                          VizualisarEditarConsultaPage.c=c;
                           vizualizarConsulta();
 
                       },

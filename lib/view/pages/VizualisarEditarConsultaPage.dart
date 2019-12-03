@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_mobile_clinica/WebService/EnderecoUrls.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
-
+import 'package:projeto_mobile_clinica/model/bin/Consulta.dart';
+import 'package:intl/intl.dart';
 class VizualisarEditarConsultaPage extends StatefulWidget {
+  static Consulta c = new Consulta();
   @override
   _VizualisarEditarConsultaPageState createState() => _VizualisarEditarConsultaPageState();
 }
 
 class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaPage> {
  bool foco = false;
- static String hora_emissao = " ";
-  static String data_emissao = " ";
-  //static String nomeMedico = " ";
-  static String nomePaciente = " ";
-  static String descricao = " ";
-  static String cod = " ";
+DateFormat   f = new DateFormat('dd/MM/yyyy');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,13 +114,6 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                    ListTile(
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
-                    ),
                     leading:
                         CircleAvatar(
                           backgroundColor: Colors.white,
@@ -130,49 +122,33 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                     title: Text('Medico',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('Ana Paula',
+                    subtitle: Text(VizualisarEditarConsultaPage.c.id_medico.nome,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
                   ),
                   _divisor(),
                    ListTile(
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                      onPressed:(){
-                        editDados(Icons.date_range,'Data da Consulta');
-                      },
-                    ),
+                    
                     leading:
                         Icon(Icons.date_range, size: 50, color: Colors.white),
                     title: Text('Data da Consulta',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('28/09/2019',
+                    subtitle: Text(f.format(VizualisarEditarConsultaPage.c.data_hora).split(" ")[0],
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
                   ),
                   _divisor(),
                   ListTile(
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        editDados(Icons.timer,'Horario');
-                      },
-                    ),
+                   
                     leading:
                         Icon(Icons.timer, size: 50, color: Colors.white),
                     title: Text('Horario',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('19:00 h',
+                    subtitle: Text(f.format(VizualisarEditarConsultaPage.c.data_hora).split(" ")[1]+' h',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
@@ -180,21 +156,13 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                    _divisor(),
                   
                   ListTile(
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        editDados(Icons.label, 'Tipo de Consulta');
-                      },
-                    ),
+                   
                     leading:
                         Icon(Icons.label, size: 50, color: Colors.white),
                     title: Text('Tipo de Consulta',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('Retorno',
+                    subtitle: Text(VizualisarEditarConsultaPage.c.tipo,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
@@ -207,7 +175,7 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        editDados(Icons.warning,'Situação da Consulta');
+                        editDados(Icons.warning,'Situação da Consulta',VizualisarEditarConsultaPage.c.situacao);
                       },
                     ),
                     leading:
@@ -215,7 +183,7 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                     title: Text('Situação da Consulta',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w600)),
-                    subtitle: Text('Agendada',
+                    subtitle: Text(VizualisarEditarConsultaPage.c.situacao,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
                     //trailing: Text('ID:1', style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)),
@@ -290,15 +258,16 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
     );   
     
   }
-  void editDados(IconData icone, String title){
+  void editDados(IconData icone, String title,String filtro){
+     TextEditingController filtroController = new TextEditingController();
+     filtroController.text=filtro;
      showDialog(
         context: context,
                                     builder: (BuildContext context){
                                         return Stack(children: <Widget>[ 
                                         Positioned(
                                           left: -39,
-                                          top:foco ?MediaQuery.of(context).size.height-460 :MediaQuery.of(context).size.height-220,
-                                          child:Container(
+                                          top:MediaQuery.of(context).size.height-460,                                       child:Container(
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.all(new Radius.circular(360))
                                             ),
@@ -316,6 +285,7 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                                                 ),
                                                 Expanded(
                                                   child: TextField(
+                                                    controller: filtroController,
                                                     decoration: InputDecoration(
                                                       labelText: title
                                                     ),
@@ -334,7 +304,12 @@ class _VizualisarEditarConsultaPageState extends State<VizualisarEditarConsultaP
                                           actions: <Widget>[
                                             FlatButton(child: Text("Salvar"),
                                             onPressed: (){
-
+                                              
+                                              VizualisarEditarConsultaPage.c.situacao=filtroController.text;
+                                              WebService.consultaSaveEdit(VizualisarEditarConsultaPage.c,EnderecoUrls.CONSULTA_SAVE_EDIT);
+                                              setState(() {
+                                                VizualisarEditarConsultaPage.c;
+                                              });
                                             },
                                             )
                                           ],
