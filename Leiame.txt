@@ -1,0 +1,10 @@
+Login Medico: besama senha:123 crm: 123
+
+Paciente Login: admin senha: admin
+
+
+Apagar pasta biuld e depois executar com f5.
+
+
+
+

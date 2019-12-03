@@ -203,8 +203,8 @@ def login(request):
     if request.method == 'POST':#para get so mudar aqui.
         login = request.POST.get('login')#para get so mudar aqui.
         senha = request.POST.get('senha')#para get so mudar aqui.
-        print("Login"+login);
-        print("Senha:"+senha);
+        print("Login"+login)
+        print("Senha:"+senha)
         if login and senha:
             usuario = Paciente.objects.filter(nome_usuario=login, senha=senha)
             if usuario.exists():
@@ -237,8 +237,8 @@ def consultaMedicoFiltro(request):
 #---------------------------03/12
 @csrf_exempt
 def consultaPacienteFiltro(request):
-    filtro = str(request.POST.get("filtro"));
-    print(filtro);
+    filtro = str(request.POST.get("filtro"))
+    print(filtro)
     pacientes = [obj.get_json() for obj in Paciente.objects.filter(nome__icontains=filtro)]
     if(len(pacientes)==0):
         return JsonResponse({'response':False})
@@ -250,15 +250,15 @@ def consultaConsultaFiltro(request):
     print(request.POST.get("filtro"))
 
     print('Entrou Consulta!')
-    temp = str(request.POST.get("id"));
+    temp = str(request.POST.get("id"))
     id_c = int(temp)
-    data1 = str(request.POST.get("data1"));
-    data2 = str(request.POST.get("data2"));
-    filtro = str(request.POST.get("filtro"));
-    usuario = str(request.POST.get("usuario"));
+    data1 = str(request.POST.get("data1"))
+    data2 = str(request.POST.get("data2"))
+    filtro = str(request.POST.get("filtro"))
+    usuario = str(request.POST.get("usuario"))
    
-    print(data2+"  Data 1");
-   
+    print(data2+"  Data 1")
+
     start_date = dt.date(int(data1.split("/")[2]), int(data1.split("/")[1]), int(data1.split("/")[0]))
     end_date = dt.date(int(data2.split("/")[2]), int(data2.split("/")[1]), int(data2.split("/")[0]))
     if usuario=="paciente":
@@ -273,8 +273,8 @@ def consultaConsultaFiltro(request):
 @csrf_exempt
 def consultaConsultaAll(request):
     import datetime as dt
-    usuario = str(request.POST.get("usuario"));
-    temp = str(request.POST.get("id"));
+    usuario = str(request.POST.get("usuario"))
+    temp = str(request.POST.get("id"))
     id_u = int(temp)
     print("Entrou Consulta!")
     start_date = dt.date(1990, 7, 10)
@@ -298,9 +298,9 @@ def loginMedico(request):
         login = request.POST.get('login')#para get so mudar aqui.
         senha = request.POST.get('senha')#para get so mudar aqui.
         crm = request.POST.get('crm')#para get so mudar aqui.
-        print("Login"+login);
-        print("Senha:"+senha);
-        print("Senha:"+crm);
+        print("Login"+login)
+        print("Senha:"+senha)
+        print("Senha:"+crm)
 
         if login and senha and crm:
             usuario = Medico.objects.filter(nome_usuario=login, senha=senha, crm = crm)
@@ -318,8 +318,8 @@ def loginMedico(request):
 @csrf_exempt
 def consultaLaudoAll(request):
     import datetime as dt
-    usuario = str(request.POST.get("usuario"));
-    temp = str(request.POST.get("id"));
+    usuario = str(request.POST.get("usuario"))
+    temp = str(request.POST.get("id"))
     id_u = int(temp)
     print("Entrou Laudo!")
     start_date = dt.date(1990, 7, 10)
@@ -337,17 +337,17 @@ def consultaLaudoAll(request):
 @csrf_exempt
 def consultaLaudoFiltro(request):
     import datetime as dt
-    usuario = str(request.POST.get("usuario"));
-    temp = str(request.POST.get("id"));
+    usuario = str(request.POST.get("usuario"))
+    temp = str(request.POST.get("id"))
     id = int(temp)
     print(request.POST.get("filtro"))
 
     print('Entrou Laudo!')
-    data1 = str(request.POST.get("data1"));
-    data2 = str(request.POST.get("data2"));
-    filtro = str(request.POST.get("filtro"));
+    data1 = str(request.POST.get("data1"))
+    data2 = str(request.POST.get("data2"))
+    filtro = str(request.POST.get("filtro"))
    
-    print(data2+"  Data 1");
+    print(data2+"  Data 1")
    
     start_date = dt.date(int(data1.split("/")[2]), int(data1.split("/")[1]), int(data1.split("/")[0]))
     end_date = dt.date(int(data2.split("/")[2]), int(data2.split("/")[1]), int(data2.split("/")[0]))
@@ -355,12 +355,12 @@ def consultaLaudoFiltro(request):
         laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=id,id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
         if (len(laudos)==0):
             laudos = [obj.get_json() for obj in Laudo.objects.filter(id_paciente=id,descricao__icontains = filtro, data_hora__range=(start_date,end_date))] 
-        print(laudos);
+        print(laudos)
     else:
         laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico=id,id_paciente__nome__icontains = filtro, data_hora__range=(start_date,end_date))] 
         if(len(laudos)==0):
             laudos = [obj.get_json() for obj in Laudo.objects.filter(id_medico=id,descricao__icontains = filtro, data_hora__range=(start_date,end_date))] 
-        print(laudos);
+        print(laudos)
     
     if(len(laudos)==0):
         return JsonResponse({'response':False}, safe=False)

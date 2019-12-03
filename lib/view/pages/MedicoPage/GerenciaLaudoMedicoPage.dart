@@ -279,7 +279,7 @@ class _GerenciaLaudoMedicoPageState extends State<GerenciaLaudoMedicoPage> {
               return Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: ListTile(
-                  leading: Icon(Icons.person, size: 40, color: Colors.black),
+                  leading: Icon(Icons.person, size:30, color: Colors.black),
                   title: Text(GerenciaLaudoMedicoPage.pacientes[index].nome,
                       style: TextStyle(color: Colors.black)),
                   subtitle: Text(
