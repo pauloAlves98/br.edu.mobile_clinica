@@ -16,4 +16,7 @@ class EnderecoUrls{
   static final String LOGIN_MEDICO  = '/clinica/loginMedico';
   static final String LOGIN_PACIENTE  = '/clinica/login';
   static final String CONSULTA_SAVE_EDIT = '/clinica/consultaSaveEdit';
+
+
+  static final String CONSULTA_PACIENTE_FILTRO ='/clinica/consultaPacienteFiltro';
 }

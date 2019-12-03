@@ -3,9 +3,14 @@ import 'package:intl/intl.dart';
 
 import '../../../WebService/EnderecoUrls.dart';
 import '../../../WebService/WebService.dart';
+import '../../../model/bin/Corrente.dart';
 import '../../../model/bin/Laudo.dart';
+import '../../../model/bin/Paciente.dart';
 
 class GerenciaLaudoMedicoPage extends StatefulWidget {
+  GerenciaLaudoMedicoPage() {}
+
+  static String tipo = "EDITAR";
   String texto = "";
   static String hora_emissao = " ";
   static String data_emissao = " ";
@@ -13,7 +18,8 @@ class GerenciaLaudoMedicoPage extends StatefulWidget {
   static TextEditingController descricao = new TextEditingController();
   static String cod = " ";
   static Laudo laudoAtual = Laudo();
-
+  static List<Paciente> pacientes = List<Paciente>();
+  static Paciente paciente = Paciente();
   @override
   _GerenciaLaudoMedicoPageState createState() =>
       _GerenciaLaudoMedicoPageState();
@@ -23,7 +29,8 @@ class _GerenciaLaudoMedicoPageState extends State<GerenciaLaudoMedicoPage> {
   int _paginaBotton = 0;
   @override
   void initState() {
-    GerenciaLaudoMedicoPage.descricao.text = GerenciaLaudoMedicoPage.laudoAtual.descricao;
+    GerenciaLaudoMedicoPage.descricao.text =
+        GerenciaLaudoMedicoPage.laudoAtual.descricao;
     super.initState();
   }
 
@@ -36,10 +43,19 @@ class _GerenciaLaudoMedicoPageState extends State<GerenciaLaudoMedicoPage> {
         backgroundColor: Colors.greenAccent,
         child: Icon(Icons.save_alt, color: Colors.white),
         onPressed: () async {
-          GerenciaLaudoMedicoPage.laudoAtual.descricao = GerenciaLaudoMedicoPage.descricao.text;
+              GerenciaLaudoMedicoPage.laudoAtual.descricao =
+              GerenciaLaudoMedicoPage.descricao.text;
+            if(GerenciaLaudoMedicoPage.tipo=="INSERIR"){
+              DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
+              GerenciaLaudoMedicoPage.laudoAtual.id_paciente = GerenciaLaudoMedicoPage.paciente;
+              GerenciaLaudoMedicoPage.laudoAtual.id_medico = Corrente.medicoCorrente;
+              GerenciaLaudoMedicoPage.laudoAtual.data_hora = f.parse(GerenciaLaudoMedicoPage.data_emissao+" "+GerenciaLaudoMedicoPage.hora_emissao);
+            }
+              
           bool l = await saveEdit(GerenciaLaudoMedicoPage.laudoAtual);
           if (l) {
             print("Navega");
+            GerenciaLaudoMedicoPage.tipo = "EDITAR";
             Navigator.pop(context); //Mudar
 
           }
@@ -120,9 +136,24 @@ class _GerenciaLaudoMedicoPageState extends State<GerenciaLaudoMedicoPage> {
                         GerenciaLaudoMedicoPage.nomePaciente.toString(),
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w300)),
-                    trailing: Text(GerenciaLaudoMedicoPage.cod,
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w600)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.near_me, size: 25, color: Colors.white),
+                      onPressed: () {
+                        if (GerenciaLaudoMedicoPage.tipo == "EDITAR") return;
+                         showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return buscarPaciente(context);
+                              ;
+                            },
+                          );
+                        setState(() {
+                         
+
+                          print("Inserir");
+                        });
+                      },
+                    ),
                   ),
                   _divisor(),
                   const ListTile(
@@ -199,6 +230,91 @@ class _GerenciaLaudoMedicoPageState extends State<GerenciaLaudoMedicoPage> {
   //           ),
   //           ),
   //        ),
+
+  Widget buscarPaciente(BuildContext context) {
+    TextEditingController c = new TextEditingController();
+    FocusNode fo = new FocusNode();
+    fo.unfocus();
+    // configura o button
+    Widget okButton = FlatButton(
+      child: Text("Buscar"),
+      onPressed: () async {
+        
+        print("Buscou  " + c.text);
+        GerenciaLaudoMedicoPage.pacientes =
+            await WebService.consultaPacienteFiltro(c.text);
+        print(GerenciaLaudoMedicoPage.pacientes.length);
+        setState(() {
+           fo.unfocus();
+           FocusScope.of(context).requestFocus(fo);
+          GerenciaLaudoMedicoPage.pacientes;
+
+          print("Set State!");
+        });
+        //Navigator.pop(context);
+      },
+    );
+    // configura o  AlertDialog
+
+    AlertDialog alerta = AlertDialog(
+      title: Text("Buscar Paciente"),
+      content: Column(
+        children: <Widget>[
+          TextField(
+            focusNode: fo,
+            controller: c,
+            style: TextStyle(color: Colors.black),
+            decoration: InputDecoration(
+              hintText: "Filtro",
+            ),
+          ),
+          ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: GerenciaLaudoMedicoPage.pacientes.length,
+            //gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemBuilder: (context, index) {
+              print("Chamou Biluder");
+
+              return Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: ListTile(
+                  leading: Icon(Icons.person, size: 40, color: Colors.black),
+                  title: Text(GerenciaLaudoMedicoPage.pacientes[index].nome,
+                      style: TextStyle(color: Colors.black)),
+                  subtitle: Text(
+                    GerenciaLaudoMedicoPage.pacientes[index].rg,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w300),
+                    textAlign: TextAlign.left,
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.navigate_next),
+                    onPressed: () {
+                      print("Escolheu!");
+                      Navigator.pop(context);
+                      GerenciaLaudoMedicoPage.paciente = GerenciaLaudoMedicoPage.pacientes[index];
+                      GerenciaLaudoMedicoPage.pacientes = List<Paciente>();
+                      GerenciaLaudoMedicoPage.nomePaciente = GerenciaLaudoMedicoPage.paciente.nome;
+
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+    // exibe o dialog
+
+    print("FIm");
+    return alerta;
+  }
+
   Future<bool> saveEdit(Laudo p) async {
     print("Iserir");
     bool l = await WebService.laudoSaveEdit(p, EnderecoUrls.LAUDO_SAVE_EDIT);

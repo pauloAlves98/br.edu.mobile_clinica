@@ -316,7 +316,7 @@ class _MedicoPerfilPageState extends State<MedicoPerfilPage> {
                                                       Corrente.medicoCorrente.crm=int.parse(field.text);
                                                     }else if(title=="Area de Atuação"){
                                                       Corrente.medicoCorrente.area=field.text;
-                                                    }else if(title=="Especialide"){
+                                                    }else if(title=="Especialidade"){
                                                       Corrente.medicoCorrente.especialidade=field.text;
                                                     }
                                                     WebService.medicoSaveEdit(Corrente.medicoCorrente,EnderecoUrls.MEDICO_SAVE_EDIT);

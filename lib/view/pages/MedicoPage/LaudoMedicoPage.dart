@@ -32,6 +32,26 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
           _builderListaLaudos(context),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.greenAccent,
+        child: Icon(Icons.add, color: Colors.white),
+        onPressed: () async {
+          GerenciaLaudoMedicoPage.tipo="INSERIR";
+          atualizarGerencialaudoInserir();
+         
+
+          Navigator.pushNamed(context, "/gerenciaLaudoMedicoPage");
+        //   GerenciaLaudoMedicoPage.laudoAtual.descricao = GerenciaLaudoMedicoPage.descricao.text;
+        //   bool l = await saveEdit(GerenciaLaudoMedicoPage.laudoAtual);
+        //   if (l) {
+        //     print("Navega");
+        //     Navigator.pop(context); //Mudar
+
+        //   }
+        //   print("Passou " + l.toString());
+        },
+      ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.blueGrey[600],
         child: Container(height: 20),
@@ -340,6 +360,7 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
                       ),
                       onPressed: () { 
                         atualizarGerencialaudo (l);
+                        GerenciaLaudoMedicoPage.tipo="EDITAR";
                         Navigator.pushNamed(context, "/gerenciaLaudoMedicoPage");
                         },
                     ), 
@@ -372,6 +393,14 @@ class _LaudoMedicoPageState extends State<LaudoMedicoPage> {
     );
   }
 
+void atualizarGerencialaudoInserir (){
+    GerenciaLaudoMedicoPage.data_emissao = LaudoMedicoPage.f.format(DateTime.now()).toString().split(" ")[0];
+    GerenciaLaudoMedicoPage.hora_emissao = LaudoMedicoPage.f.format(DateTime.now()).toString().split(" ")[1];
+    GerenciaLaudoMedicoPage.cod = " ";
+    GerenciaLaudoMedicoPage.descricao.text = " ";
+    GerenciaLaudoMedicoPage.nomePaciente = " ";
+    GerenciaLaudoMedicoPage.laudoAtual = new Laudo();
+  }
   void atualizarGerencialaudo (Laudo la){
     GerenciaLaudoMedicoPage.data_emissao = LaudoMedicoPage.f.format(la.data_hora).toString().split(" ")[0];
     GerenciaLaudoMedicoPage.hora_emissao = LaudoMedicoPage.f.format(la.data_hora).toString().split(" ")[1];

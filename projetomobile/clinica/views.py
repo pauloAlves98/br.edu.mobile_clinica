@@ -234,8 +234,15 @@ def consultaMedicoFiltro(request):
     if(len(medicos)==0):
         return JsonResponse({'response':False})
     return JsonResponse({'response':True,'medicos':medicos}, safe=False)
-
-
+#---------------------------03/12
+@csrf_exempt
+def consultaPacienteFiltro(request):
+    filtro = str(request.POST.get("filtro"));
+    print(filtro);
+    pacientes = [obj.get_json() for obj in Paciente.objects.filter(nome__icontains=filtro)]
+    if(len(pacientes)==0):
+        return JsonResponse({'response':False})
+    return JsonResponse({'response':True,'pacientes':pacientes}, safe=False)
 @csrf_exempt
 def consultaConsultaFiltro(request):
     import datetime as dt

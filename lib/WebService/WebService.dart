@@ -332,7 +332,40 @@ static Future<List<Medico>> consultaMedicoAll(
       return  List<Consulta>();
     }
   }
+//03/12/2019
+  static Future<List<Paciente>> consultaPacienteFiltro(String filtro
+      ) async {
+    try {
+      http.Response responser = await http.post(URL + EnderecoUrls.CONSULTA_PACIENTE_FILTRO,
+          body: {'filtro':filtro});
+      //print("RESPOSER" + responser.toString());
+      String body = responser.body;
+      Map valueMap = json.decode(body);
+      print(valueMap['response']);
+
+      if (valueMap['response'] == false) {
+        print("Response False");
+        return  List<Paciente>();
+      } else {
+
+        print(valueMap['pacientes'][0]);
+        List<Paciente> listl = new List<Paciente>();
+        for(var i=0;i<valueMap['pacientes'].length;i++){
+          listl.add(Paciente.fromJson(valueMap['pacientes'][i]));
+       }
+        return listl;
+       // Medico.fromJson(valueMap['medico']);
+      }
+    } catch (e) {
+      print("Exceccao!" + e.toString());
+      return  List<Paciente>();
+    }
+  }
 }
+
+
+
+
 
 
 

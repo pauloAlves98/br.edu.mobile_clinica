@@ -21,5 +21,7 @@ urlpatterns = [
     path('consultaLaudoAll',views.consultaLaudoAll, name='consultaLaudoAll'),
     path('consultaLaudoFiltro',views.consultaLaudoFiltro, name='consultaLaudoFiltro'),
     path('consultaMedicoAll',views.consultaMedicoAll,name='consultaMedicoAll'),
-    path('consultaMedicoFiltro',views.consultaMedicoFiltro,name='consultaMedicoFiltro')
+    path('consultaMedicoFiltro',views.consultaMedicoFiltro,name='consultaMedicoFiltro'),
+    path('consultaPacienteFiltro',views.consultaPacienteFiltro,name='  consultaPacienteFiltro'),
+  
 ]
