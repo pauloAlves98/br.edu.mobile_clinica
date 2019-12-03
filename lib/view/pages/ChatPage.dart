@@ -28,6 +28,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
+      
         body: Stack(
           children: <Widget>[
             Positioned(

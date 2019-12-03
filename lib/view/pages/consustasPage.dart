@@ -14,54 +14,28 @@ class ConsultaPage extends StatefulWidget {
 }
 
 class _ConsultaPageState extends State<ConsultaPage> {
-  List<Consulta> consultas = List<Consulta>();
-  
   DateTime selectedDate = DateTime.now();
-   bool vazio = false;
-  String campoData1=" ", campoData2="";
+  int _paginaBotton = 0;
+  List<String> _laudos = ["1", "2", "3", "4", "4", "4", "4"];
+
+  List<Consulta> consultas = List<Consulta>();
+
+  bool vazio = false;
+  String campoData1 = " ", campoData2 = "";
   TextEditingController filtroController = new TextEditingController();
-  List<Task> tasks = new List<Task>();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    tasks.add(new Task("Ana Paula","13:00","Genecologista","Recife-PE",Colors.red));
-    tasks.add(new Task("Rafael","15:00","Dermatologista","Recife-PE",Colors.blue));
-    tasks.add(new Task("Ana Paula","13:00","Genecologista","Recife-PE",Colors.red));
-    tasks.add(new Task("Rafael","15:00","Dermatologista","Recife-PE",Colors.blue));
-    tasks.add(new Task("Ana Paula","13:00","Genecologista","Recife-PE",Colors.red));
-    tasks.add(new Task("Rafael","15:00","Dermatologista","Recife-PE",Colors.blue));
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: Stack(children:<Widget>[ 
-      _builderCabecarioBusca(),
-
-      Positioned(
-      top: 90,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height:MediaQuery.of(context).size.height/2.55 ,
-        child:ListView.builder(
-              itemCount: consultas.length,
-              itemBuilder: (context,position){
-              if(consultas.length>0){
-                return _builderCardLaudos(consultas[position],position);//_listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
-              }else{
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child:Center(child:Text("Nenhuma consulta disponivel")),
-                );
-              }
-            },
-
-          )
+      body: Stack(
+        children: <Widget>[
+          _builderCabecarioBusca(),
+          _builderListaConsulta(context),
+        ],
       ),
-    )]
-    ),
-    floatingActionButton: FloatingActionButton(
+      
+      floatingActionButton: FloatingActionButton(
           onPressed: () async{
             AgendarConsultaPage.medicos=await WebService.consultaMedicoAll();
             Navigator.pushNamed(context, '/agendarConsulta');
@@ -85,142 +59,16 @@ class _ConsultaPageState extends State<ConsultaPage> {
       ),
     ),
     );
-  }
-  Widget _background(Color cor){
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      color: cor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              icon: Icon(Icons.delete,color: Colors.white,),
-              onPressed: (){
 
-              },
-              )
-          
-          ),
-            Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              icon: Icon(Icons.archive,color: Colors.white,),
-              onPressed: (){
-
-              },
-              )
-          
-          )
-        ],
-      ),
-    );
+    
   }
 
- 
-   Widget _builderCardLaudos(Consulta consulta,int index) {
-    String idd = index.toString();
-    DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        color: Colors.white,
-        elevation: 10,
-        child:Row(children: <Widget>[
-          
-          Expanded(
-         
-          child:Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-              Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(10),bottomLeft: Radius.circular(10)),
-                color: Colors.blueGrey,
-              ),
-              height: 20,
-              child: Row(
-                children: <Widget>[
-                  Expanded(flex:2, child: Text("Consulta",
-                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
-                ],
-              ),
-
-            ),
-            ListTile(
-              leading: Icon(Icons.person_add, size: 40, color: Colors.blue),
-              title: Text('Medico', style: TextStyle(color: Colors.blue)),
-              subtitle: 
-                  Text(consulta.id_medico.nome,
-                  style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w300),textAlign: TextAlign.left,),
-                
-                 
-              trailing: Text(consulta.id_medico.area, style: TextStyle(color: Colors.blue)),
-            ),
-            
-            //Divider(),
-             ListTile(
-              leading: Icon(Icons.date_range, size: 40, color: Colors.blue),
-              title: Text(f.format(consulta.data_hora), style: TextStyle(color: Colors.blue)),     
-                 
-              trailing: Text(consulta.situacao, style: TextStyle(color: Colors.blue)),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(90),bottomLeft: Radius.circular(0), bottomRight: Radius.circular(10)),
-                color: Colors.blueGrey,
-              ),
-              height: 50,
-              child: Row(
-                children: <Widget>[
-                  // Expanded(flex:2, child: Text("Data: 28/09/2019",
-                  // style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
-                  
-                   Expanded(
-                     flex: 2,
-                     child: FlatButton(
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            'Ver/Editar',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
-                      ),
-                      onPressed: () { vizualizarConsulta();
-},
-                    ), 
-                   ),
-                   
-                  
-                ],
-              ),
-        
-             
-            )
-          ],
-        )),
-        ],)
-         
-      ),
-    );
-  }
-  void vizualizarConsulta(){
-    Navigator.pushNamed(context, '/vizualisarEditarConsulta');
-  }
-
-   
- Widget _builderCabecarioBusca() {
+  Widget _builderCabecarioBusca() {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Container(
         height: 140, //MediaQuery.of(context).size.height/2,
-        color: Colors.blueGrey[600],
+        color: Colors.blue,
         child: Column(
           children: <Widget>[
             Container(
@@ -242,15 +90,17 @@ class _ConsultaPageState extends State<ConsultaPage> {
                   child: Container(
                     width: 20,
                     child: IconButton(
-                        onPressed: () async {
-                        DateTime d = await selectDate(context, DateTime.now(),campodata: campoData1);
-                        setState(()  {
-                        print(d);
-                        DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
-                          if(d==null)
+                      onPressed: () async {
+                        DateTime d = await selectDate(context, DateTime.now(),
+                            campodata: campoData1);
+                        setState(() {
+                          print(d);
+                          DateFormat f =
+                              new DateFormat('dd/MM/yyyy'); //yyyy-MM-dd hh:mm
+                          if (d == null)
                             campoData1 = f.format(DateTime.now());
-                            else
-                             campoData1 = f.format(d);
+                          else
+                            campoData1 = f.format(d);
                         });
                       },
                       icon: Icon(
@@ -262,9 +112,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
                 ),
                 Expanded(
                   flex: 2,
-                  child: 
-                  Container(
-                    
+                  child: Container(
                     child: Text(
                       campoData1,
                       style: TextStyle(color: Colors.white),
@@ -289,14 +137,16 @@ class _ConsultaPageState extends State<ConsultaPage> {
                     width: 20,
                     child: IconButton(
                       onPressed: () async {
-                        DateTime d = await selectDate(context, DateTime.now(),campodata: campoData2);
-                        setState(()  {
-                        print(d);
-                        DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
-                          if(d==null)
+                        DateTime d = await selectDate(context, DateTime.now(),
+                            campodata: campoData2);
+                        setState(() {
+                          print(d);
+                          DateFormat f =
+                              new DateFormat('dd/MM/yyyy'); //yyyy-MM-dd hh:mm
+                          if (d == null)
                             campoData2 = f.format(DateTime.now());
-                            else
-                             campoData2 = f.format(d);
+                          else
+                            campoData2 = f.format(d);
                         });
                       },
                       //data 2
@@ -325,7 +175,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    color: Colors.blueGrey[600],
+                    color: Colors.blue,
                     child: Icon(
                       Icons.find_in_page,
                       color: Colors.white,
@@ -338,7 +188,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
                     flex: 2,
                     child: new Theme(
                       data: new ThemeData(
-                        hintColor: Colors.blueGrey[100],
+                        hintColor: Colors.white,
                       ),
                       child: TextField(
                         controller: filtroController,
@@ -362,6 +212,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
       ),
     );
   }
+
   Widget _buttomBuscar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -383,51 +234,224 @@ class _ConsultaPageState extends State<ConsultaPage> {
         ),
         child: SizedBox.expand(
           child: FlatButton(
-            textColor: Colors.white,
-            child: Icon(Icons.search),
-            onPressed: ()async{
-              String filtro = filtroController.text.trim();
-              print(campoData1);
-              print(campoData2);
-              print(filtro+ " Filtro");
-              if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length<=0){
-                 consultas = await WebService.consultaConsultaAll(Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
-              }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 ){
-                campoData2 = "01/12/2200";
-                campoData1 = "01/01/1900";
-                print("Cond 2");
-                consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
-                
-                      //Datas padroes.
-              }
-              else if(campoData2.trim().length<=0){
-                       campoData2 = "01/12/2200";
-                       print("Cond 3");
-                       consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
-              }else if(campoData1.trim().length<=0){
-                      campoData1 = "01/01/1900";
-                      print("Cond 4");
-                      consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
-              }else if(campoData2.trim().length<=0 && campoData1.trim().length<=0 && filtro.length!=0){
-                       campoData1 = "01/01/1900";
-                       campoData2 = "01/12/2200";
-                       consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
-                       print("Cond 5");
-              }else{
-                 consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
+              textColor: Colors.white,
+              child: Icon(Icons.search),
+              onPressed: () async {
+                String filtro = filtroController.text.trim();
+                print(campoData1);
+                print(campoData2);
+                print(filtro + " Filtro");
+                try {
+                  if (campoData2.trim().length <= 0 &&
+                      campoData1.trim().length <= 0 &&
+                      filtro.length <= 0) {
+                    consultas = await WebService.consultaConsultaAll(
+                        Corrente.pacienteCorrente.id, Corrente.usuarioPaciente);
+                  } else if (campoData2.trim().length <= 0 &&
+                      campoData1.trim().length <= 0) {
+                    campoData2 = "01/12/2200";
+                    campoData1 = "01/01/1900";
+                    print("Cond 2");
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.pacienteCorrente.id,
+                        Corrente.usuarioPaciente);
+                    //Datas padroes.
+                  } else if (campoData2.trim().length <= 0) {
+                    campoData2 = "01/12/2200";
+                    print("Cond 3");
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.pacienteCorrente.id,
+                        Corrente.usuarioPaciente);
+                  } else if (campoData1.trim().length <= 0) {
+                    campoData1 = "01/01/1900";
+                    print("Cond 4");
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.pacienteCorrente.id,
+                        Corrente.usuarioPaciente);
+                  } else if (campoData2.trim().length <= 0 &&
+                      campoData1.trim().length <= 0 &&
+                      filtro.length != 0) {
+                    campoData1 = "01/01/1900";
+                    campoData2 = "01/12/2200";
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.pacienteCorrente.id,
+                        Corrente.usuarioPaciente);
+                    print("Cond 5");
+                  } else
+                    consultas = await WebService.consultaConsultaFiltro(
+                        campoData1,
+                        campoData2,
+                        filtro,
+                        Corrente.pacienteCorrente.id,
+                        Corrente.usuarioPaciente);
 
-              }
-              setState(() {
-                consultas;
-              });
-              
-              //Navigator.pushReplacementNamed(context, '/'); //Mudar
-            }
-               
-          ),
+                  if (consultas.length <= 0) {
+                    consultas.add(Consulta()); //pra movvimentar o len
+                    vazio = true;
+                  }
+                  setState(() {
+                    consultas;
+                  });
+                } catch (e) {
+                  print("Excecao!");
+                }
+                //Navigator.pushReplacementNamed(context, '/'); //Mudar
+              }),
         ),
       ),
     );
+  }
+
+  Widget _builderListaConsulta(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        margin: EdgeInsets.only(top: 140),
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: consultas.length,
+          //gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemBuilder: (context, index) {
+            print("Chamou Biluder");
+            var obj;
+            if (consultas.length > 0 && vazio == false)
+              obj = _builderCardConsulta(index, consultas[index]);
+            else {
+              obj = Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Nenhuma Consulta disponivel"),
+              );
+              vazio = false;
+              consultas.clear();
+            }
+            return Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: obj,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _builderCardConsulta(int index, Consulta c) {
+    String idd = index.toString();
+    DateFormat f = new DateFormat('dd/MM/yyyy hh:mm'); //yyyy-MM-dd hh:mm
+    return Container(
+      width: 300,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        color: Colors.white,
+        elevation: 10,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10)),
+                color: Colors.blueGrey,
+              ),
+              height: 20,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      flex: 2,
+                      child: Text(
+                        "Consulta",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12),
+                        textAlign: TextAlign.center,
+                      )),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.person_add, size: 40, color: Colors.blue),
+              title: Text('Medico', style: TextStyle(color: Colors.blue)),
+              subtitle: Text(
+                c.id_medico.nome,
+                style:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.w300),
+                textAlign: TextAlign.left,
+              ),
+              trailing: Text("ID:" + c.id.toString(),
+                  style: TextStyle(color: Colors.white)),
+            ),
+
+            //Divider(),
+            ListTile(
+              leading: Icon(Icons.date_range, size: 40, color: Colors.blue),
+              title: Text(f.format(c.data_hora).toString().split(" ")[0],
+                  style: TextStyle(color: Colors.blue)),
+              subtitle: Text(
+                f.format(c.data_hora).toString().split(" ")[1],
+                style:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.w300),
+                textAlign: TextAlign.left,
+              ),
+              trailing: Text(c.situacao, style: TextStyle(color: Colors.blue)),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(90),
+                    bottomLeft: Radius.circular(0),
+                    bottomRight: Radius.circular(10)),
+                color: Colors.blueGrey,
+              ),
+              height: 50,
+              child: Row(
+                children: <Widget>[
+                  // Expanded(flex:2, child: Text("Data: 28/09/2019",
+                  // style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 12),textAlign: TextAlign.center,)),
+
+                  Expanded(
+                    flex: 2,
+                    child: FlatButton(
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            'Ver/Editar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                      onPressed: () {
+                          vizualizarConsulta();
+
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+void vizualizarConsulta(){
+    Navigator.pushNamed(context, '/vizualisarEditarConsulta');
   }
 
 }

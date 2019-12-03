@@ -73,7 +73,7 @@ class _LaudosPageState extends State<LaudosPage> {
       padding: const EdgeInsets.all(0),
       child: Container(
         height: 140, //MediaQuery.of(context).size.height/2,
-        color: Colors.blueGrey[600],
+        color: Colors.blue,
         child: Column(
           children: <Widget>[
             Container(
@@ -178,7 +178,7 @@ class _LaudosPageState extends State<LaudosPage> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    color: Colors.blueGrey[600],
+                    color: Colors.blue,
                     child: Icon(
                       Icons.find_in_page,
                       color: Colors.white,
@@ -191,7 +191,7 @@ class _LaudosPageState extends State<LaudosPage> {
                     flex: 2,
                     child: new Theme(
                       data: new ThemeData(
-                        hintColor: Colors.blueGrey[100],
+                        hintColor: Colors.white,
                       ),
                       child: TextField(
                         controller: filtroController,
@@ -334,7 +334,7 @@ Widget _builderListaLaudos(BuildContext context) {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.library_books, size: 40, color: Colors.white),
+              leading: Icon(Icons.library_books, size: 40, color: Colors.blue),
               title: Text('Medico', style: TextStyle(color: Colors.blue)),
               subtitle: 
                   Text(l.id_medico.nome,
