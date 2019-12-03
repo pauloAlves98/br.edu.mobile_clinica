@@ -5,6 +5,7 @@ import 'package:projeto_mobile_clinica/model/bin/Consulta.dart';
 import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
 import 'package:projeto_mobile_clinica/model/utils/Task.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:projeto_mobile_clinica/view/pages/AgendarConsulta.dart';
 import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 
 class ConsultaPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class ConsultaPage extends StatefulWidget {
 
 class _ConsultaPageState extends State<ConsultaPage> {
   List<Consulta> consultas = List<Consulta>();
+  
   DateTime selectedDate = DateTime.now();
    bool vazio = false;
   String campoData1=" ", campoData2="";
@@ -32,9 +34,10 @@ class _ConsultaPageState extends State<ConsultaPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Stack(children:<Widget>[ 
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      body: Stack(children:<Widget>[ 
       _builderCabecarioBusca(),
-      
 
       Positioned(
       top: 90,
@@ -42,20 +45,26 @@ class _ConsultaPageState extends State<ConsultaPage> {
         width: MediaQuery.of(context).size.width,
         height:MediaQuery.of(context).size.height/2.55 ,
         child:ListView.builder(
-          itemCount: consultas.length,
-          itemBuilder: (context,position){
-              return _builderCardLaudos(consultas[position],position);//_listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
-              
-            
-          },
+              itemCount: consultas.length,
+              itemBuilder: (context,position){
+              if(consultas.length>0){
+                return _builderCardLaudos(consultas[position],position);//_listContainers(tasks[position].medico,tasks[position].tempo , tasks[position].area, tasks[position].endereco, tasks[position].tema),
+              }else{
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:Center(child:Text("Nenhuma consulta disponivel")),
+                );
+              }
+            },
 
-        )
+          )
       ),
     )]
     ),
     floatingActionButton: FloatingActionButton(
-          onPressed: () {
-             Navigator.pushNamed(context, '/agendarConsulta');
+          onPressed: () async{
+            AgendarConsultaPage.medicos=await WebService.consultaMedicoAll();
+            Navigator.pushNamed(context, '/agendarConsulta');
            },
           child: Icon(Icons.add),
           backgroundColor: Colors.blue,
@@ -109,62 +118,7 @@ class _ConsultaPageState extends State<ConsultaPage> {
     );
   }
 
-  Widget _listContainers(String medico,String tempo,String area, String endereco,Color tema){
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child:GestureDetector(
-        onTap: (){
-          vizualizarConsulta();
-        }, 
-      child:Container(
-        height: 80,
-        child: Material(
-          color: Colors.white,
-          elevation: 14,
-          shadowColor: Color(0x802196F3),
-          child: Container(
-            child: Row(
-              children: <Widget>[
-                
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            child: Text(medico+"("+area+")",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            child: Text(endereco,style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black87)),
-                          ),
-                        ),
-                        
-                      ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    child: Text(tempo,style:TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.lightGreen)),
-                  ),
-                ),
-                Padding(
-                          padding: EdgeInsets.only(right: 8),
-                        )
-              ],
-            ),
-          ),
-        )
-      ),
-    ));
-  }
+ 
    Widget _builderCardLaudos(Consulta consulta,int index) {
     String idd = index.toString();
     DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
@@ -260,7 +214,8 @@ class _ConsultaPageState extends State<ConsultaPage> {
     Navigator.pushNamed(context, '/vizualisarEditarConsulta');
   }
 
-   Widget _builderCabecarioBusca() {
+   
+ Widget _builderCabecarioBusca() {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Container(
@@ -407,7 +362,6 @@ class _ConsultaPageState extends State<ConsultaPage> {
       ),
     );
   }
-
   Widget _buttomBuscar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -459,13 +413,10 @@ class _ConsultaPageState extends State<ConsultaPage> {
                        campoData2 = "01/12/2200";
                        consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
                        print("Cond 5");
-              }else
+              }else{
                  consultas = await WebService.consultaConsultaFiltro(campoData1,campoData2,filtro,Corrente.pacienteCorrente.id,Corrente.usuarioPaciente);
 
-              if(consultas.length<=0){
-                    consultas.add(new Consulta());//pra movvimentar o len
-                    vazio = true;
-                }
+              }
               setState(() {
                 consultas;
               });

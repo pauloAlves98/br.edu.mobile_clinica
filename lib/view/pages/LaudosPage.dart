@@ -4,6 +4,7 @@ import 'package:projeto_mobile_clinica/WebService/WebService.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
 import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
 import 'package:projeto_mobile_clinica/model/bin/Laudo.dart';
+import 'package:projeto_mobile_clinica/view/pages/VisualizarLaudo.dart';
 import 'package:projeto_mobile_clinica/view/widgets/ShowDateWidget.dart';
 class LaudosPage extends StatefulWidget {
   @override
@@ -24,7 +25,9 @@ class _LaudosPageState extends State<LaudosPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Stack(children:<Widget>[ 
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      body: Stack(children:<Widget>[ 
       _builderCabecarioBusca(),   
       _builderListaLaudos(context)
     ]
@@ -70,7 +73,7 @@ class _LaudosPageState extends State<LaudosPage> {
       padding: const EdgeInsets.all(0),
       child: Container(
         height: 140, //MediaQuery.of(context).size.height/2,
-        color: Colors.blue,
+        color: Colors.blueGrey[600],
         child: Column(
           children: <Widget>[
             Container(
@@ -97,7 +100,10 @@ class _LaudosPageState extends State<LaudosPage> {
                         setState(()  {
                         print(d);
                         DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
-                          campoData1 = f.format(d);
+                          if(d==null)
+                            campoData1 = f.format(DateTime.now());
+                            else
+                             campoData1 = f.format(d);
                         });
                       },
                       icon: Icon(
@@ -140,7 +146,10 @@ class _LaudosPageState extends State<LaudosPage> {
                         setState(()  {
                         print(d);
                         DateFormat   f = new DateFormat('dd/MM/yyyy');//yyyy-MM-dd hh:mm
-                          campoData2 = f.format(d);
+                          if(d==null)
+                            campoData2 = f.format(DateTime.now());
+                            else
+                             campoData2 = f.format(d);
                         });
                       },
                       //data 2
@@ -206,7 +215,6 @@ class _LaudosPageState extends State<LaudosPage> {
       ),
     );
   }
-
   Widget _buttomBuscar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -296,7 +304,7 @@ Widget _builderListaLaudos(BuildContext context) {
             else{
               obj = Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Nenhum Laudo disponivel"),
+                child:Center(child:Text("Nenhum Laudo disponivel")),
               );
               vazio = false;
               laudos.clear();
@@ -357,7 +365,14 @@ Widget _builderListaLaudos(BuildContext context) {
                           )
                         ],
                       ),
-                      onPressed: () { Navigator.pushNamed(context, "/vizualisarLaudo");},
+                      onPressed: () { 
+                        //DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
+                        VisualizarLaudo.data_emissao = f.format(l.data_hora)[0];
+                        VisualizarLaudo.hora_emissao = f.format(l.data_hora)[1];
+                        VisualizarLaudo.descricao = l.descricao;
+                        //VisualizarLaudo.nomeMedico = l.id_medico.nome;
+                        VisualizarLaudo.nomePaciente = l.id_paciente.nome;
+                        Navigator.pushNamed(context, "/vizualisarLaudo");},
                     ), 
                    ),
                    

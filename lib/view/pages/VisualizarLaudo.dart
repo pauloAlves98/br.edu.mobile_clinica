@@ -1,12 +1,20 @@
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class VisualizarLaudo extends StatefulWidget {
+  static String hora_emissao = " ";
+  static String data_emissao = " ";
+  static String nomeMedico = " ";
+  static String nomePaciente = " ";
+  static String descricao = " ";
+  static String cod = " ";
   @override
   _VisualizarLaudoState createState() => _VisualizarLaudoState();
 }
 
 class _VisualizarLaudoState extends State<VisualizarLaudo> {
+  DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +51,7 @@ class _VisualizarLaudoState extends State<VisualizarLaudo> {
       );
     },
   ) ,
-        title: Text("Gerenciamento de Laudo",style: TextStyle(fontSize: 15),),
+        title: Text("Visualizar de Laudo",style: TextStyle(fontSize: 15),),
         
       ),
       body: SingleChildScrollView(
@@ -68,7 +76,7 @@ class _VisualizarLaudoState extends State<VisualizarLaudo> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600)),
-                        subtitle: Text('28/09/2019',
+                        subtitle: Text(VisualizarLaudo.data_emissao,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w300)),

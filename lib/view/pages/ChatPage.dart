@@ -27,6 +27,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
         body: Stack(
           children: <Widget>[
             Positioned(
@@ -101,7 +102,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
 
             Positioned(
-              top:51,
+              top:30,
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height:MediaQuery.of(context).size.height/1.95 ,
@@ -152,16 +153,22 @@ class _ChatPageState extends State<ChatPage> {
             onTap: (){
                 Navigator.pushNamed(context, '/conversaPrivada');
             },
-            child:Column(children:<Widget>[
+            child:Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:<Widget>[
+              
              Container(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 /* Container(
                   width: 10,
                   height: 94,
                   color: tema,
                 ), */
-                Padding(padding: EdgeInsets.only(left:4,top:5),),
+                Padding(padding: EdgeInsets.only(left:4),),
                 Container(
                   alignment: Alignment.topLeft,
                   width: 60,
@@ -172,7 +179,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left:8,right: 8,top:2,bottom:0),
+                    padding: EdgeInsets.only(left:8,right: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[

@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_mobile_clinica/WebService/EnderecoUrls.dart';
+import 'package:projeto_mobile_clinica/WebService/WebService.dart';
+import 'package:projeto_mobile_clinica/model/bin/Consulta.dart';
+import 'package:projeto_mobile_clinica/model/bin/Corrente.dart';
+import 'package:projeto_mobile_clinica/model/bin/Endereco.dart';
+import 'package:projeto_mobile_clinica/model/bin/Medico.dart';
 import 'package:projeto_mobile_clinica/model/utils/Task.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:projeto_mobile_clinica/model/Cores.dart';
+import 'package:intl/intl.dart';
+
 
 final Map<DateTime, List> _holidays = {
   DateTime(2019, 1, 1): ['New Year\'s Day'],
@@ -12,6 +20,8 @@ final Map<DateTime, List> _holidays = {
 };
 
 class AgendarConsultaPage extends StatefulWidget {
+  
+  static List<Medico> medicos = new List<Medico>();
   @override
   _AgendarConsultaPageState createState() => _AgendarConsultaPageState();
 }
@@ -19,10 +29,10 @@ class AgendarConsultaPage extends StatefulWidget {
 class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
   CalendarController _calendarController;
    List<Widget> _containers = new List<Widget>(); 
-  List<Task> medicosModel = new List<Task>();
+  
   List _cities =
-  ["Cluj-Napoca", "Bucuresti", "Timisoara", "Brasov", "Constanta"];
-
+  ["6:00 h","8 h e 30 min", "10:00 h","11 h e 30 min","15:00 h","16 h e 30 min", "18:00 h"];
+  DateTime data_consulta=DateTime.now();
    List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentCity;
   @override
@@ -32,11 +42,7 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
     super.initState();
     _dropDownMenuItems = getDropDownMenuItems();
     _currentCity = _dropDownMenuItems[0].value;
-    medicosModel.add(new Task("Felipe Antonio","15:30","Genecologista","Carnaiba,Rua  nova, N° Sala 17",Colors.black));
-    medicosModel.add(new Task("Antonio","15:30","Dermatologista","Carnaiba,Rua  nova, N° Sala 17",Colors.blue));
-    medicosModel.add(new Task("Gessica","15:30","Radiologista","Carnaiba,Rua  nova, N° Sala 17",Colors.red));
-    medicosModel.add(new Task("Flavia","15:30","Ondotologista","Carnaiba,Rua  nova, N° Sala 17",Colors.orange));
-    medicosModel.add(new Task("Julio","15:30","Nutricionista","Carnaiba,Rua  nova, N° Sala 17",Colors.green));
+    
     _calendarController = new CalendarController();
   }
 
@@ -99,6 +105,7 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
 
            
                     onDaySelected: (DateTime data, List<dynamic> list){
+                        data_consulta = data;
                         
                     }, 
                   ),
@@ -114,9 +121,9 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
                   width: MediaQuery.of(context).size.width,
                   height:MediaQuery.of(context).size.height/2.95,
                   child:ListView.builder(
-                      itemCount:medicosModel.length,
+                      itemCount:AgendarConsultaPage.medicos.length,
                       itemBuilder: (context,index){
-                        return _container(medicosModel[index].medico, medicosModel[index].area, medicosModel[index].endereco,index);
+                        return _container(AgendarConsultaPage.medicos[index], index);
                       },
                   )
                 )
@@ -128,7 +135,7 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
             
     );
   }
-  Widget _container(String nome,String area,String endereco,int i){
+  Widget _container(Medico m,int i){
     return Material(
       shadowColor: Colors.black38,
       elevation: 14,
@@ -168,9 +175,10 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-                          Text(nome+"("+area+")",style: TextStyle(fontSize: 14,fontWeight:FontWeight.bold,color: Colors.white ),),
+                          Text(m.nome+"("+m.area+")",style: TextStyle(fontSize: 14,fontWeight:FontWeight.bold,color: Colors.white ),),
+                     
                         ],),
-          Row(
+          /* Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -179,11 +187,11 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
 
               Align(
                  alignment: Alignment.centerLeft,
-                 child:Text(endereco,style: TextStyle(color: Colors.white),),
+                 child:Text(endereco.cidade+","+endereco.rua+","+,style: TextStyle(color: Colors.white),),
                 )
               
             ],
-          ),
+          ), */
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +230,33 @@ class _AgendarConsultaPageState extends State<AgendarConsultaPage> {
               child:Container(
                 height: 30,
                child:RaisedButton(
-                onPressed: (){
+                onPressed: () async{
+                    Consulta consulta = new Consulta();
+                    var temp = _currentCity.split(" ");
+                    String hora;
+                    String min;
+                    if(temp.length>2){
+                      hora=temp[0];
+                      
+                      min = temp[3];
+                    }else{
+                      hora=temp[0].split(":")[0];
+                      min=temp[0].split(":")[1];
+                    }
+                    print(min);
+                   
+                    DateFormat   f = new DateFormat('dd/MM/yyyy hh:mm');
+                    data_consulta = f.parse(data_consulta.day.toString()+"/"+data_consulta.month.toString()+"/"+data_consulta.year.toString()+" "
+                                    +hora+":"+min);
+                    consulta.data_hora=data_consulta;
+                    consulta.situacao = "Agendada";
+                    consulta.tipo="Primeira";
+                    consulta.id_paciente=Corrente.pacienteCorrente;
+                    consulta.id_medico=m;
+                    consulta.valor=50;
+                    //consulta.id_medico = 
+                    bool v = await WebService.consultaSaveEdit(consulta, EnderecoUrls.CONSULTA_SAVE_EDIT);
+                    print(v);
                     setState(() {
                       
                     });
