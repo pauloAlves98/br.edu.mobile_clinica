@@ -26,6 +26,15 @@ Mobile Clínica é um aplicativo que permite o gerenciamento de forma ampla de u
 #### Cadastro
 <img src="images/cadastro.png" width="400">
 
+#### Home Page Médico
+<img src="images/Medico.PNG" width="400">
+
+#### Home Page Paciente
+<img src="images/paciente.PNG" width="400">
+
+#### Laudo
+<img src="images/laudo.PNG" width="400">
+
 ## Tecnologias Utilizadas
 
 - <img src="https://img.icons8.com/color/48/000000/flutter.png"/> Flutter
